@@ -1,2 +1,2 @@
-module Api::V1::ApHelper
+module Api::V1::ApiHelper
 end
