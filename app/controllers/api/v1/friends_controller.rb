@@ -7,17 +7,18 @@ class Api::V1::FriendsController < ApplicationController
       return
     end
     ret = {}
-    contacts = params[:contacts]
-    for contact in contacts
+    for contact in params[:contacts]
       numbers = []
-      for contactPhone in contact[:phone_numbers]
-        number = phoneStrip(contactPhone)
-        users = User.find_all_by_phone_number(number)
-        if users != nil and users.length > 0
-          for u in users
-            if u.encrypted_password != params[:auth_token]
-              numbers.push(number)
-              break
+      if contact[:phone_numbers] != nil
+        for contactPhone in contact[:phone_numbers]
+          number = phoneStrip(contactPhone)
+          users = User.find_all_by_phone_number(number)
+          if users != nil and users.length > 0
+            for u in users
+              if u.encrypted_password != params[:auth_token]
+                numbers.push(number)
+                break
+              end
             end
           end
         end
