@@ -1,0 +1,16 @@
+class Api::V1::RegistrationsController < ApplicationController
+  respond_to :json
+  
+  def create
+    user = User.new(:username => params[:username], :password => params[:password], 
+      :phone_number => phoneStrip(params[:phoneNumber]))
+    if user.save
+      render :json=> {:auth_token=>user.encrypted_password, :request=>"sign_up"}, :status=>201
+      return
+    else
+#      warden.custom_failure!
+      render :json=> {:success => "false", :request=>"sign_up"},  :status=>422
+      return
+    end
+  end
+end
