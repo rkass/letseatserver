@@ -4,7 +4,7 @@ class ApplicationController < ActionController::Base
   protected
 
   def validateUser(auth_token)
-    User.find_by_encrypted_password(auth_token)  
+    User.find_by_auth_token(auth_token)  
   end
 
   def phoneStrip(phoneString)
