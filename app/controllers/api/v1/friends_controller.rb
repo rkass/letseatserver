@@ -7,6 +7,7 @@ class Api::V1::FriendsController < ApplicationController
       return
     end
     ret = {}
+    print params[:contacts][0]
     for contact in params[:contacts]
       numbers = []
       for contactPhone in contact[:phone_numbers]
