@@ -7,7 +7,8 @@ class Api::V1::FriendsController < ApplicationController
       return
     end
     ret = {}
-    for contact in params[:contacts]
+    contacts = params[:contacts]
+    for contact in contacts
       numbers = []
       for contactPhone in contact[:phone_numbers]
         number = phoneStrip(contactPhone)
