@@ -13,7 +13,7 @@ class Api::V1::SessionsController < ApplicationController
  
     if resource.valid_password?(params[:password])
       sign_in("user", resource)
-      render :json=> {:auth_token=>resource.encrypted_password, :request=>"login"}
+      render :json=> {:auth_token=>resource.auth_token, :request=>"login"}
       return
     end
     invalid_login_attempt
