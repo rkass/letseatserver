@@ -44,7 +44,11 @@ GEM
       warden (~> 1.2.3)
     erubis (2.7.0)
     execjs (2.0.2)
+    hashie (2.0.5)
     hike (1.2.3)
+    httparty (0.13.0)
+      json (~> 1.8)
+      multi_xml (>= 0.5.2)
     i18n (0.6.9)
     jbuilder (1.5.3)
       activesupport (>= 3.0.0)
@@ -59,8 +63,15 @@ GEM
     mime-types (1.25.1)
     minitest (4.7.5)
     multi_json (1.8.4)
+    multi_xml (0.5.5)
+    nokogiri (1.5.6)
+    oauth (0.4.7)
     orm_adapter (0.5.0)
     pg (0.17.1)
+    places (0.0.1)
+      hashie
+      httparty
+      json
     polyglot (0.3.3)
     rack (1.5.2)
     rack-test (0.6.2)
@@ -127,7 +138,10 @@ DEPENDENCIES
   devise
   jbuilder (~> 1.2)
   jquery-rails
+  nokogiri
+  oauth
   pg
+  places
   rails (= 4.0.2)
   rails_12factor
   sass-rails (~> 4.0.0)
