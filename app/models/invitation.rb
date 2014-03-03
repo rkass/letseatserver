@@ -35,6 +35,7 @@ class Invitation < ActiveRecord::Base
     end
     ret["time"] = self.time.to_formatted_s(:rfc822)
     ret["message"] = self.message
+    ret["id"] = self.id
     ret
   end
 end
