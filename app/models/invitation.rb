@@ -34,6 +34,9 @@ class Invitation < ActiveRecord::Base
       ret["people"].append(user.phone_number)
     end
     ret["time"] = self.time.to_formatted_s(:rfc822)
+    index = ret["time"].index("+")
+    index = ret["time"].index("-") if index == nil
+    ret["time"] = ret["time"][0..index - 2]
     ret["message"] = self.message
     ret["id"] = self.id
     ret
