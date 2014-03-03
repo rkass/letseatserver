@@ -27,4 +27,13 @@ class Invitation < ActiveRecord::Base
   def responded(user)
     self.responses[self.users.index(user)] != nil
   end
+  def serialize
+    ret = {}
+    ret["people"] = []
+    for user in self.users
+      ret["people"].append(user.phone_number)
+    end
+    ret["time"] = self.time.to_formatted_s(:rfc822)
+    ret["message"] = self.message
+  end
 end
