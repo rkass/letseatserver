@@ -20,7 +20,7 @@ class Invitation < ActiveRecord::Base
   def index(user)
     count = 0
     for u in self.users
-      return count if u.id == user
+      return count if u.id == user.id
       count += 1
     end
   end
