@@ -65,6 +65,7 @@ class ::Api::V1::InvitationsController < ApplicationController
       end
     end
     p = Preferences.new(params[:foodList], params[:location], params[:price])
+    puts users.index(User.find_by_auth_token(params[:auth_token]))
     invitation = Invitation.customNew(users, p, makeDateTime(params[:date]), params[:message])
     if invitation.save
       render :json => {:success => true}, :status=>201
