@@ -17,13 +17,14 @@ class Invitation < ActiveRecord::Base
     errors.add(:responses, "Provide a response for all invitees and initialize it to nil") if (self.responses.length != self.users.length)
     errors.add(:time, "Provide a time for the invite") if (self.time == nil)
   end
+  def index(user)
+    count = 0
+    for u in self.users
+      return count if u.id == user
+      count += 1
+    end
   def responded(user)
-    puts "index"
-    puts self.users.index(user)
-    puts "peeps"
-    puts self.users[0].id
-    puts self.users[1].id
-    self.responses[self.users.index(user)] != nil
+    self.responses[self.index(user)] != nil
   end
   def insertPreferences(user, preferences, creator = false)
    self.creator_index = self.users.index if creator
