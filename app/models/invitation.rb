@@ -4,13 +4,10 @@ class Invitation < ActiveRecord::Base
   serialize :responses
   validate :validator
   has_and_belongs_to_many :users
-  def self.customNew(users, creatorPreferences, time, message = nil)
+  def self.customNew(users, time, message = nil)
     i = Invitation.new
     i.users = users
-    if creatorPreferences.kind_of?(Array)
-      i.responses = creatorPreferences
-    else
-      i.responses = [creatorPreferences] + ([nil] * (users.length - 1))
+    i.responses = ([nil] * (users.length))
     end
     i.time = time
     i.message = message
@@ -31,6 +28,9 @@ class Invitation < ActiveRecord::Base
     puts self.users.index(user)
     self.responses[self.users.index(user)] != nil
   end
+  def insertPreferences(user, preferences)
+   self.responses[self.users.index(user)] = preferences
+   self.save 
   def serialize(user)
     ret = {}
     ret["people"] = []
