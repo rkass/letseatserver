@@ -25,6 +25,7 @@ class Invitation < ActiveRecord::Base
     self.users[0]
   end
   def responded(user)
+    puts self.users.index(user)
     self.responses[self.users.index(user)] != nil
   end
   def serialize(user)
