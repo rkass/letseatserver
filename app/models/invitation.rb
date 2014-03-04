@@ -18,14 +18,12 @@ class Invitation < ActiveRecord::Base
     errors.add(:time, "Provide a time for the invite") if (self.time == nil)
   end
   def responded(user)
+    puts "index"
+    self.users.index(user)
     self.responses[self.users.index(user)] != nil
   end
   def insertPreferences(user, preferences, creator = false)
-   if creator
-    self.creator_index = self.users.index(user)
-    puts "index"
-    puts self.creator_index
-   end
+   self.creator_index = self.users.index if creator
    self.responses[self.users.index(user)] = preferences
    self.save 
   end
