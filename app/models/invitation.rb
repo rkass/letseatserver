@@ -30,6 +30,7 @@ class Invitation < ActiveRecord::Base
   def insertPreferences(user, preferences)
    self.responses[self.users.index(user)] = preferences
    self.save 
+  end
   def serialize(user)
     ret = {}
     ret["people"] = []
