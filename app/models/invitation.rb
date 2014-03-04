@@ -25,6 +25,9 @@ class Invitation < ActiveRecord::Base
     self.users[0]
   end
   def responded(user)
+    puts "id"
+    puts self.id
+    puts "index"
     puts self.users.index(user)
     self.responses[self.users.index(user)] != nil
   end

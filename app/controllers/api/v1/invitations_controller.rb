@@ -68,6 +68,7 @@ class ::Api::V1::InvitationsController < ApplicationController
     puts users.index(User.find_by_auth_token(params[:auth_token]))
     invitation = Invitation.customNew(users, p, makeDateTime(params[:date]), params[:message])
     if invitation.save
+      puts invitation.id
       render :json => {:success => true}, :status=>201
     else
       render :json => {:success => false}, :status =>422
