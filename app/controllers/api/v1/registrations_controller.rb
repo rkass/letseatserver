@@ -5,7 +5,7 @@ class Api::V1::RegistrationsController < ApplicationController
     user = User.new(:username => params[:username], :password => params[:password], 
       :phone_number => phoneStrip(params[:phoneNumber]), :auth_token => Digest::SHA1.hexdigest(params[:username] + params[:password]))
     if user.save
-      render :json=> {:auth_token=> user.auth_token, :request=>"sign_up"}, :status=>201
+      render :json=> {:auth_token=> user.auth_token, :phone_number => user.phoneNumber, :request=>"sign_up"}, :status=>201
       return
     else
 #      warden.custom_failure!
