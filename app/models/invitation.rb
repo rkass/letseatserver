@@ -27,7 +27,7 @@ class Invitation < ActiveRecord::Base
   def responded(user)
     self.responses[self.users.index(user)] != nil
   end
-  def serialize
+  def serialize(user)
     ret = {}
     ret["people"] = []
     for user in self.users
@@ -39,6 +39,7 @@ class Invitation < ActiveRecord::Base
     ret["time"] = ret["time"][0..index - 2]
     ret["message"] = self.message
     ret["id"] = self.id
+    ret["iResponded"] = self.responded(user)
     ret
   end
 end

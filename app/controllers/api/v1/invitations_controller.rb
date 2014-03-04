@@ -79,7 +79,7 @@ class ::Api::V1::InvitationsController < ApplicationController
     user = User.find_by_auth_token(params[:auth_token])
     invitations = []
     for invitation in user.invitations
-      invitations.append(invitation.serialize)
+      invitations.append(invitation.serialize(user))
     end
     render :json => {:success => true, :invitations => invitations}
     return
