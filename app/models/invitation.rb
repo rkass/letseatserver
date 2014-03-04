@@ -8,7 +8,6 @@ class Invitation < ActiveRecord::Base
     i = Invitation.new
     i.users = users
     i.responses = ([nil] * (users.length))
-    end
     i.time = time
     i.message = message
     i
