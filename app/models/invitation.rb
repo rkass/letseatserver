@@ -23,6 +23,7 @@ class Invitation < ActiveRecord::Base
       return count if u.id == user
       count += 1
     end
+  end
   def responded(user)
     self.responses[self.index(user)] != nil
   end
