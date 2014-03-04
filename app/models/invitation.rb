@@ -18,6 +18,8 @@ class Invitation < ActiveRecord::Base
     errors.add(:time, "Provide a time for the invite") if (self.time == nil)
   end
   def index(user)
+    puts "usid"
+    user.id
     count = 0
     for u in self.users
       return count if u.id == user.id
@@ -25,6 +27,8 @@ class Invitation < ActiveRecord::Base
     end
   end
   def responded(user)
+    puts "uid"
+    puts user.id
     puts "index"
     puts self.index(user)
     self.responses[self.index(user)] != nil
