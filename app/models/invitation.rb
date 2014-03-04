@@ -21,7 +21,11 @@ class Invitation < ActiveRecord::Base
     self.responses[self.users.index(user)] != nil
   end
   def insertPreferences(user, preferences, creator = false)
-   self.creator_index = self.users.index(user) if creator
+   if creator
+    self.creator_index = self.users.index(user)
+    puts "index"
+    puts self.creator_index
+   end
    self.responses[self.users.index(user)] = preferences
    self.save 
   end
