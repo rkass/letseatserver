@@ -19,7 +19,7 @@ class Invitation < ActiveRecord::Base
   end
   def responded(user)
     puts "index"
-    self.users.index(user)
+    puts self.users.index(user)
     self.responses[self.users.index(user)] != nil
   end
   def insertPreferences(user, preferences, creator = false)
