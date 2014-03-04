@@ -79,7 +79,7 @@ class ::Api::V1::InvitationsController < ApplicationController
   def get
     user = User.find_by_auth_token(params[:auth_token])
     puts "id"
-    user.id
+    puts user.id
     invitations = []
     for invitation in user.invitations
       invitations.append(invitation.serialize(user))
