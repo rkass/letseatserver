@@ -84,6 +84,7 @@ class ::Api::V1::InvitationsController < ApplicationController
     for invitation in user.invitations
       invitations.append(invitation.serialize(user))
     end
+    puts "here"
     render :json => {:success => true, :invitations => invitations}
     return
   end    
