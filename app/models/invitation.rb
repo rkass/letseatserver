@@ -31,6 +31,17 @@ class Invitation < ActiveRecord::Base
     for user in self.users
       ret["people"].append(user.phone_number)
     end
+    ret["responses"] = []
+    count = 0
+    for response in self.responses
+      if count == self.users.index(arguser)
+        ret["responses"].append(true)
+      elsif self.responses[count] == nil
+        ret["responses"].append(nil)
+      else
+        ret["responses"].append(self.responses[count].going)
+      end
+    end
     ret["time"] = self.time.to_formatted_s(:rfc822)
     index = ret["time"].index("+")
     index = ret["time"].index("-") if index == nil
