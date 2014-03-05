@@ -41,6 +41,7 @@ class Invitation < ActiveRecord::Base
       else
         ret["responses"].append(self.responses[count].going)
       end
+      count += 1
     end
     ret["time"] = self.time.to_formatted_s(:rfc822)
     index = ret["time"].index("+")
