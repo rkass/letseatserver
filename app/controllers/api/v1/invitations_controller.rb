@@ -55,7 +55,7 @@ class ::Api::V1::InvitationsController < ApplicationController
   end
 
   def respondNo
-    Invitation.find(params[:id]).respondNo(User.find_by_auth_token(params[:auth_token]))
+    Invitation.find(params[:id]).respondNo(User.find_by_auth_token(params[:auth_token]), params[:message])
     render :json => {:success => true}, :status=>201
     return
   end
