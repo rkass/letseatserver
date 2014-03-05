@@ -22,8 +22,10 @@ class Invitation < ActiveRecord::Base
   end
   def insertPreferences(user, preferences, creator = false)
    puts "creator" if creator
-   puts self.users.index
+   puts self.users.index(user)
    self.creator_index = self.users.index if creator
+   puts "creator index"
+   puts self.creator_index
    self.responses[self.users.index(user)] = preferences
    self.save 
   end
@@ -35,6 +37,8 @@ class Invitation < ActiveRecord::Base
     end
     ret["responses"] = []
     count = 0
+    puts "creator index2"
+    puts self.creator_index
     for response in self.responses
       if count == self.creator_index
         ret["responses"].append("yes")
