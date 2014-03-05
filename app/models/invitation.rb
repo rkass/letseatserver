@@ -35,11 +35,13 @@ class Invitation < ActiveRecord::Base
     count = 0
     for response in self.responses
       if count == self.users.index(arguser)
-        ret["responses"].append(true)
+        ret["responses"].append("yes")
       elsif self.responses[count] == nil
-        ret["responses"].append(nil)
+        ret["responses"].append("undecided")
+      elsif ret["responses"].append(self.responses[count].going)
+        ret["responses"].append("yes")
       else
-        ret["responses"].append(self.responses[count].going)
+        ret["responses"].append("no")
       end
       count += 1
     end
