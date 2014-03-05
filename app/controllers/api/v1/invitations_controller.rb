@@ -52,7 +52,13 @@ class ::Api::V1::InvitationsController < ApplicationController
     year = Date.today.year
     year += 1 if Date.today.month > monthNum
     DateTime.new(year, monthNum, dayOfMonth, hour, minutes)
-  end 
+  end
+
+  def respondNo
+    Invitation.find(params[:id]).respondNo(User.find_by_auth_token(params[:auth_token]))
+    render :json => {:success => true}, :status=>201
+    return
+  end
 
   def create
     users = []

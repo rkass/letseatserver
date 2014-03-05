@@ -14,6 +14,7 @@ Letseatserver::Application.routes.draw do
       post "/get_friends", :to => 'friends#get'
       post "/create_invitation", :to => 'invitations#create'
       post "/get_invitations", :to => 'invitations#get'
+      post "/respond_no", :to => 'invitations#respondNo'
     end
   end
   # The priority is based upon order of creation: first created -> highest priority.

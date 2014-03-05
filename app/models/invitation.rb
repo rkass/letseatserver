@@ -1,4 +1,5 @@
 require Rails.root.join('app', 'models', 'preferences.rb').to_s
+require Rails.root.join('app', 'models', 'response.rb').to_s
 
 class Invitation < ActiveRecord::Base
   serialize :responses
@@ -24,6 +25,10 @@ class Invitation < ActiveRecord::Base
    self.creator_index = self.users.index(user) if creator
    self.responses[self.users.index(user)] = preferences
    self.save 
+  end
+  def respondNo(arguser)
+    self.responses[self.users.index(arguser)] = Response.new(false, nil, nil, nil, nil)
+    self.save
   end
   def serialize(arguser)
     ret = {}
