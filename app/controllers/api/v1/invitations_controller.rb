@@ -68,6 +68,7 @@ class ::Api::V1::InvitationsController < ApplicationController
     invitation = Invitation.customNew(users, makeDateTime(params[:date]), params[:message])
     if invitation.save
       invitation = Invitation.find(invitation.id)
+      puts "Creating invitation"
       invitation.insertPreferences(User.find_by_auth_token(params[:auth_token]), p, creator = true)
       render :json => {:success => true}, :status=>201
     else
@@ -82,7 +83,6 @@ class ::Api::V1::InvitationsController < ApplicationController
     for invitation in user.invitations
       invitations.append(invitation.serialize(user))
     end
-    puts "here"
     render :json => {:success => true, :invitations => invitations}
     return
   end    
