@@ -34,7 +34,7 @@ class Invitation < ActiveRecord::Base
     ret["responses"] = []
     count = 0
     for response in self.responses
-      if count == self.users.index(arguser)
+      if count == self.creator_index
         ret["responses"].append("yes")
       elsif self.responses[count] == nil
         ret["responses"].append("undecided")
