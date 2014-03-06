@@ -45,7 +45,7 @@ class Invitation < ActiveRecord::Base
         ret["responses"].append("yes")
       elsif self.responses[count] == nil
         ret["responses"].append("undecided")
-      elsif ret["responses"][self.responses[count]].going
+      elsif self.responses[count].going
         ret["responses"].append("yes")
       else
         ret["responses"].append("no")
