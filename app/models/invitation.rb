@@ -42,16 +42,12 @@ class Invitation < ActiveRecord::Base
     for response in self.responses
       puts count
       if count == self.creator_index
-        puts "first"
         ret["responses"].append("yes")
       elsif self.responses[count] == nil
-        puts "sec"
         ret["responses"].append("undecided")
-      elsif ret["responses"].append(self.responses[count].going)
-        puts "third"
+      elsif ret["responses"][self.responses[count]].going
         ret["responses"].append("yes")
       else
-        puts "fourth"
         ret["responses"].append("no")
       end
       count += 1
