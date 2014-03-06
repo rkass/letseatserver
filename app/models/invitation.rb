@@ -27,7 +27,9 @@ class Invitation < ActiveRecord::Base
    self.save 
   end
   def respondNo(arguser, message)
-    self.responses[self.users.index(arguser)] = Response.new(false, message, nil, nil, nil)
+    responses = self.responses
+    responses[self.users.index(arguser)] = Response.new(false, message, nil, nil, nil)
+    self.responses = responses
     self.save
   end
   def serialize(arguser)
