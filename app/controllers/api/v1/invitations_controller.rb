@@ -60,6 +60,13 @@ class ::Api::V1::InvitationsController < ApplicationController
     return
   end
 
+  def respondYes
+    r = Response.new(true, nil, params[:foodList], params[:location], params[:price])
+    Invitation.find(params[:id]).respondYes(User.find_by_auth_token(params[:auth_token]), r)
+    render :json => {:success => true}, :status=>201
+    return
+  end
+
   def create
     users = []
     users.append(User.find_by_auth_token(params[:auth_token]))

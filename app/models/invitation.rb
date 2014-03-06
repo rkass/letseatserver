@@ -32,6 +32,12 @@ class Invitation < ActiveRecord::Base
     self.responses = responses
     self.save
   end
+  def respondYes(arguser, response)
+    responses = self.responses
+    responses[self.users.index(arguser)] = response
+    self.responses = responses
+    self.save
+  end
   def serialize(arguser)
     ret = {}
     ret["people"] = []
