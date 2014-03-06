@@ -40,9 +40,7 @@ class Invitation < ActiveRecord::Base
     end
     ret["responses"] = []
     count = 0
-    puts self.id
     for response in self.responses
-      puts count
       if count == self.creator_index
         ret["responses"].append("yes")
       elsif self.responses[count] == nil
