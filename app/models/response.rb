@@ -4,7 +4,8 @@ class Response < Preferences
     @message = message
     @types_list = types_list
     @location = location
-    @price = price
+    @minPrice = minPrice
+    @maxPrice = maxPrice
   end
   def going
     @going

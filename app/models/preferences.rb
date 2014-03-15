@@ -1,8 +1,9 @@
 class Preferences
-  def initialize(types_list, location, price)
+  def initialize(types_list, location, minPrice, maxPrice)
     @types_list = types_list
     @location = location
-    @price = price
+    @minPrice = minPrice
+    @maxPrice = maxPrice
   end
   def types_list
     @types_list
@@ -10,7 +11,10 @@ class Preferences
   def location
     @location
   end
-  def price
-    @price
+  def minPrice
+    @minPrice
+  end
+  def maxPrice
+    @maxPrice
   end
 end
