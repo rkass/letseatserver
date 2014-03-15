@@ -81,7 +81,20 @@ class ::Api::V1::InvitationsController < ApplicationController
       end
     end
     p = Preferences.new(params[:foodList], params[:location], params[:minPrice], params[:maxPrice])
-    invitation = Invitation.customNew(users, makeDateTime(params[:date]), params[:message])
+    scheduleTime = nil
+    if (params[:scheduleAfter] == "15 Minutes")
+      scheduleTime = DateTime.now + 15.minutes
+    elsif (params[:scheduleAfter] == "30 Minutes")
+      scheduleTime = DateTime.now + 30.minutes
+    elsif (params[:scheduleAfter] == "1 Hour")
+      scheduleTime = DateTime.now + 1.hours
+    elsif (params[:scheduleAfter] == "5 Hours")
+      scheduleTime = DateTime.now + 5.hours
+    elsif (params[:scheduleAfter) == "24 Hours")
+      scheduleTime = DateTime.now + 1.days
+    central = false
+    central = true if (params[:central])
+    invitation = Invitation.customNew(users, makeDateTime(params[:date]), scheduleTime,central, params[:message])
     if invitation.save
       invitation = Invitation.find(invitation.id)
       invitation.insertPreferences(User.find_by_auth_token(params[:auth_token]), p, creator = true)

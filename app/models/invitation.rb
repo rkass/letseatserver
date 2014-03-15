@@ -5,11 +5,14 @@ class Invitation < ActiveRecord::Base
   serialize :responses
   validate :validator
   has_and_belongs_to_many :users, :order => :id
-  def self.customNew(users, time, message = nil)
+  def self.customNew(users, time, scheduleTime, central, message = nil)
     i = Invitation.new
     i.users = users
     i.responses = ([nil] * (users.length))
     i.time = time
+    i.scheduleTime = scheduleTime
+    i.central = central
+    i.scheduled = false
     i.message = message
     i
   end
