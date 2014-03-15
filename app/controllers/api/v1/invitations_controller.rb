@@ -90,7 +90,7 @@ class ::Api::V1::InvitationsController < ApplicationController
       scheduleTime = DateTime.now + 1.hours
     elsif (params[:scheduleAfter] == "5 Hours")
       scheduleTime = DateTime.now + 5.hours
-    elsif (params[:scheduleAfter) == "24 Hours")
+    elsif (params[:scheduleAfter] == "24 Hours")
       scheduleTime = DateTime.now + 1.days
     central = false
     central = true if (params[:central])
