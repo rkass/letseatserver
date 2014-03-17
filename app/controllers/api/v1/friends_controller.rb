@@ -1,6 +1,6 @@
 class Api::V1::FriendsController < ApplicationController
 
-  def get
+  def get(negative)
     user = validateUser(params[:auth_token])
     if user == nil
       render :json => {:error=>"Bad Login"}, :status=>422
@@ -13,7 +13,7 @@ class Api::V1::FriendsController < ApplicationController
         for contactPhone in contact[:phone_numbers]
           number = phoneStrip(contactPhone)
           users = User.find_all_by_phone_number(number)
-          if users != nil and users.length > 0
+          if ((users != nil and users.length) == negative)
             for u in users
               if u.encrypted_password != params[:auth_token]
                 numbers.push(number)
@@ -36,6 +36,14 @@ class Api::V1::FriendsController < ApplicationController
     end
     render :json => {:success => "True", :length => ret.length, :friends => ret}
     return
+  end
+
+  def getFriends
+    get(true)
+  end
+
+  def getNonFriends
+    get(false)
   end
 
 end

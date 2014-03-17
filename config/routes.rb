@@ -11,7 +11,8 @@ Letseatserver::Application.routes.draw do
         delete "/sign_out", :to => 'sessions#destroy'
         post "/register", :to => 'registrations#create'
       end
-      post "/get_friends", :to => 'friends#get'
+      post "/get_friends", :to => 'friends#getFriends'
+      post "/get_non_friends", :to => 'friends#getNonFriends'
       post "/create_invitation", :to => 'invitations#create'
       post "/get_invitations", :to => 'invitations#get'
       post "/respond_no", :to => 'invitations#respondNo'
