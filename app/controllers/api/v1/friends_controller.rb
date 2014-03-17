@@ -14,8 +14,10 @@ class Api::V1::FriendsController < ApplicationController
           number = phoneStrip(contactPhone)
           users = User.find_all_by_phone_number(number)
           if ((users != nil and users.length) == negative)
+            puts "in here"
             for u in users
               if u.encrypted_password != params[:auth_token]
+                puts "in there"
                 numbers.push(number)
                 break
               end
