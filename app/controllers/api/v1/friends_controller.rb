@@ -13,6 +13,8 @@ class Api::V1::FriendsController < ApplicationController
         for contactPhone in contact[:phone_numbers]
           number = phoneStrip(contactPhone)
           users = User.find_all_by_phone_number(number)
+          puts "users: "
+          puts users
           if ((users != nil and users.length) == negative)
             puts "in here"
             for u in users
