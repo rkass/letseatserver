@@ -69,6 +69,7 @@ class Invitation < ActiveRecord::Base
     ret["id"] = self.id
     ret["iResponded"] = self.responded(arguser)
     ret["creatorIndex"] = self.creator_index
+    ret["central"] = self.central
     ret
   end
 end
