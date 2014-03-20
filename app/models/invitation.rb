@@ -63,7 +63,11 @@ class Invitation < ActiveRecord::Base
     end
     ret["preferences"] = []
     for response in self.responses
-      ret["preferences"].append(response.types_list)
+      if response == nil
+        ret["preferences"].append([]) 
+      else
+        ret["preferences"].append(response.types_list)
+      end
     end
     ret["time"] = self.time.to_formatted_s(:rfc822)
     index = ret["time"].index("+")
