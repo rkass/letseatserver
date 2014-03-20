@@ -3,6 +3,7 @@ require Rails.root.join('app', 'models', 'response.rb').to_s
 
 class Invitation < ActiveRecord::Base
   serialize :responses
+  serialize :votes
   validate :validator
   has_and_belongs_to_many :users, :order => :id
   def self.customNew(users, time, scheduleTime, central, message = nil)
