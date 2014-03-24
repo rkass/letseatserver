@@ -85,6 +85,10 @@ class ::Api::V1::InvitationsController < ApplicationController
     puts "cats"
     puts invitash.categories[0]
     restaurants = Yelp.getResults(loc, invitash.categories[0])
+    puts "restaurants length"
+    puts restaurants.length
+    puts "restaurants"
+    puts restaurants
     count = 0
     ret = []
     while count < 15
