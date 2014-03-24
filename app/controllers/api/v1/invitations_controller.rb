@@ -78,6 +78,7 @@ class ::Api::V1::InvitationsController < ApplicationController
   #Give back 15 Restaurants and for each, supply the name, price, how far from the user,
   #address, type, url, rating image, percent match (serialized restaurant)
   def getRestaurants
+    user = User.find_by_auth_token(params[:auth_token])
     invitash = Invitation.find(params[:id])
     loc = invitash.location
     #restaurants = Yelp.getResults(loc, invitash.categories[0])
@@ -85,7 +86,7 @@ class ::Api::V1::InvitationsController < ApplicationController
     count = 0
     ret = []
     while count < 15
-      ret.append(yelpToRestaurant(restaurants[count], loc, invitash.dayOfWeek, invitash.timeOfDay).serialize)
+      ret.append(yelpToRestaurant(restaurants[count], loc, invitash.dayOfWeek, invitash.timeOfDay).serialize(invitash, user)
       count += 1
     end
     puts "Returning from restaurants..."
