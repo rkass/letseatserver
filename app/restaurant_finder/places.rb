@@ -18,7 +18,7 @@ class GooglePlaces
     for biz in response['results']
      return biz['reference'] if biz['name'] == name
     end
-    return response['results'][0]['reference']
+    return response['results'][0]['reference'] if (response['results']!= nil and response['results'].length > 0)
   end
 
   #time like "2000" for 8pm and "0930" for 9:30 am
