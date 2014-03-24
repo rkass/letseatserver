@@ -21,8 +21,10 @@ class Restaurant
   end
   def url
     @url
+  end
   def rating_img
     @rating_img
+  end
   def percentMatch
     puts "Implement ME!"
     100
