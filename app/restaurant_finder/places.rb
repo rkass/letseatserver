@@ -12,10 +12,6 @@ class GooglePlaces
   #location like "40.72918605727255,-73.9608789"
   #name like "Russo Mozzarella & Pasta"
   def self.getReference(location, name)
-    puts "goog location"
-    puts location
-    puts "goog name"
-    puts name
     query = CGI::escape(name + " near " + location)
     str = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=#{query}&sensor=false&key=#{@@api_key}"
     response = JSON.parse(open(str).read)
@@ -34,11 +30,7 @@ class GooglePlaces
   def self.isOpenAndPriceHelper(ref, dayOfWeek, time)
     return OpenStruct.new if ref == nil
     str = "https://maps.googleapis.com/maps/api/place/details/json?reference=#{ref}&sensor=false&key=#{@@api_key}"
-    puts "google request"
-    puts str
-    puts "deets"
     deets = JSON.parse(open(str).read)
-    puts deets
     ret = OpenStruct.new
     ret.price = deets['result']['price_level']
     open = close = nil

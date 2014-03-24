@@ -95,6 +95,7 @@ class ::Api::V1::InvitationsController < ApplicationController
       ret.append(yelpToRestaurant(restaurants[count], loc, invitash.dayOfWeek, invitash.timeOfDay))
       count += 1
     end
+  puts "Returning from restaurants..."
   puts ret
   render :json => {:success => true, :restaurants => ret}, :status => 201
   return
