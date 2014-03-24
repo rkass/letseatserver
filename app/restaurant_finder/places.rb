@@ -15,9 +15,9 @@ class GooglePlaces
     query = CGI::escape(name + " near " + location)
     str = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=#{query}&sensor=false&key=#{@@api_key}"
     response = JSON.parse(open(str).read)
-    #for biz in response['results']
-     # return biz['reference'] if biz['name'] == name
-    #end
+    for biz in response['results']
+     return biz['reference'] if biz['name'] == name
+    end
     return response['results'][0]['reference']
   end
 
