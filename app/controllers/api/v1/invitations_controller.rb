@@ -80,26 +80,19 @@ class ::Api::V1::InvitationsController < ApplicationController
   def getRestaurants
     invitash = Invitation.find(params[:id])
     loc = invitash.location
-    puts "location: " 
-    puts loc
-    puts "cats"
-    puts invitash.categories[0]
+    #restaurants = Yelp.getResults(loc, invitash.categories[0])
     restaurants = Yelp.getResults("40.727676,-73.984593", "pizza")
-    puts "restaurants length"
-    puts restaurants.length
-    puts "restaurants"
-    puts restaurants
     count = 0
     ret = []
     while count < 15
-      ret.append(yelpToRestaurant(restaurants[count], loc, invitash.dayOfWeek, invitash.timeOfDay))
+      ret.append(yelpToRestaurant(restaurants[count], loc, invitash.dayOfWeek, invitash.timeOfDay).serialize)
       count += 1
     end
-  puts "Returning from restaurants..."
-  puts ret
-  render :json => {:success => true, :restaurants => ret}, :status => 201
-  return
-  end
+    puts "Returning from restaurants..."
+    puts ret
+    render :json => {:success => true, :restaurants => ret, :request => 'restaurants'}, :status => 201
+    return
+    end
 
   def create
     users = []

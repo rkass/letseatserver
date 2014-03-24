@@ -25,7 +25,7 @@ class Restaurant
   def rating_img
     @rating_img
   end
-  def percentMatch
+  def percentMatch(invitation)
     puts "Implement ME!"
     100
   end
@@ -34,5 +34,15 @@ class Restaurant
     0.1
   end
   def serialize(invitation, user)
+    ret = {}
+    ret['percentMatch'] = self.percentMatch(invitation)
+    ret['name'] = self.name
+    ret['price'] = self.price
+    ret['address'] = self.address
+    ret['types_list'] = self.types_list
+    ret['url'] = self.url
+    ret['rating_img'] = self.rating_img
+    ret['distance'] = self.distanceToLocation(invitation.location)
+    ret
   end
 end
