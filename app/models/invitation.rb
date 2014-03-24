@@ -64,7 +64,7 @@ class Invitation < ActiveRecord::Base
     for resp in self.responses
       if resp != nil and ((cnt == self.creator_index) or resp.going)
         inner_cnt = 0
-        for t in types_list
+        for t in resp.types_list
           if cats.has_key?t
             cats[t] += 7 - inner_cnt
           else
