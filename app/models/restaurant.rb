@@ -31,7 +31,7 @@ class Restaurant
   end
   def distanceToLocation(loc)
     puts "Implement ME!"
-    .1
+    0.1
   end
   def serialize(invitation, user)
   end
