@@ -27,8 +27,6 @@ class GooglePlaces
     return OpenStruct.new if ref == nil
     str = "https://maps.googleapis.com/maps/api/place/details/json?reference=#{ref}&sensor=false&key=#{@@api_key}"
     deets = JSON.parse(open(str).read)
-    puts "deets"
-    puts deets
     ret = OpenStruct.new
     ret.price = deets['result']['price_level']
     open = close = nil
