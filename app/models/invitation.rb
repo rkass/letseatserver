@@ -46,7 +46,7 @@ class Invitation < ActiveRecord::Base
     lng = 0
     cnt = 0
     for resp in self.responses  
-      if resp != nil and resp.going
+      if resp != nil and (cnt == self.creator_index or resp.going)
         lat += resp.location.split[0].to_f
         lng += resp.location.split[1].to_f
         cnt += 1
@@ -59,7 +59,7 @@ class Invitation < ActiveRecord::Base
   def categories
     cats = {}
     for resp in self.responses
-      if resp != nil and resp.going
+      if resp != nil and (cnt == self.creator_index or resp.going)
         inner_cnt = 0
         for t in types_list
           if cats.has_key?t
