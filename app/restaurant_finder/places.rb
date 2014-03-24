@@ -12,6 +12,10 @@ class GooglePlaces
   #location like "40.72918605727255,-73.9608789"
   #name like "Russo Mozzarella & Pasta"
   def self.getReference(location, name)
+    puts "goog location"
+    puts location
+    puts "goog name"
+    puts name
     query = CGI::escape(name + " near " + location)
     str = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=#{query}&sensor=false&key=#{@@api_key}"
     response = JSON.parse(open(str).read)
