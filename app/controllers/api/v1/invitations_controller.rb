@@ -67,7 +67,28 @@ class ::Api::V1::InvitationsController < ApplicationController
     return
   end
 
+  def yelpCategoriesToLECategories(lst)
+    lst
+  end
+
+  def yelpToRestaurant(yelpDict, location, dow, time)
+    isOpenAndPrice = GooglePlaces.isOpenAndPrice(location, yelpDict['name'], dow, time)
+    Restaurant.new(yelpDict['name'], isOpenAndPrice.price, yelpDict['location']['display_address'] * ",", yelpCategoriesToLECategories(yelpDict['categories']), yelpDict['mobile_url'], yelpDict['rating_img_url'])
+  end
+  #Give back 15 Restaurants and for each, supply the name, price, how far from the user,
+  #address, type, url, rating image, percent match (serialized restaurant)
   def getRestaurants
+    invitash = Invitation.find(params[:id])
+    loc = Invitation.location
+    restaurants = Yelp.getResults(loc, Invitation.categories[0])
+    count = 0
+    ret = []
+    while count < 15
+      ret.append(yelpToRestaurant(restaurants[count], loc, Invitation.dayOfWeek, Invitation.timeOfDay))
+      count += 1
+    end
+  render :json => {:success => true, :restaurants => ret}, :status => 201
+  return
   end
 
   def create

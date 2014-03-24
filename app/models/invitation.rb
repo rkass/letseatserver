@@ -30,6 +30,32 @@ class Invitation < ActiveRecord::Base
    self.responses[self.users.index(user)] = preferences
    self.save 
   end
+  def dayOfWeek
+    self.time.wday
+  end
+  def timeOfDay
+    h = self.time.hour.to_s
+    h = "0" + h if h.length == 1
+    min = self.time.min.to_s
+    min = "0" + min if min.length == 1
+    h + min
+  end
+  def location
+    return self.responses[self.creator_index].location if (not central) 
+    lat = 0
+    lng = 0
+    cnt = 0
+    for resp in self.responses  
+      if resp != nil
+        lat += resp.location.split[0].to_f
+        lng += resp.location.split[1].to_f
+        cnt += 1
+      end
+    end
+    lat = lat / cnt
+    lng = lng / cnt
+    lat.to_s + "," + lng.to_s
+  end
   def respondNo(arguser, message)
     responses = self.responses
     responses[self.users.index(arguser)] = Response.new(false, message, nil, nil, nil)
