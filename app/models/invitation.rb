@@ -47,12 +47,12 @@ class Invitation < ActiveRecord::Base
     cnt = 0
     grandCnt = 0
     for resp in self.responses  
-      if resp != nil and (grandCnt == self.creator_index or resp.going)
+      if resp != nil and ((grandCnt == self.creator_index) or resp.going)
         lat += resp.location.split[0].to_f
         lng += resp.location.split[1].to_f
         cnt += 1
-      grandCnt += 1
       end
+      grandCnt += 1
     end
     lat = lat / cnt
     lng = lng / cnt
@@ -62,7 +62,7 @@ class Invitation < ActiveRecord::Base
     cats = {}
     cnt = 0
     for resp in self.responses
-      if resp != nil and (cnt == self.creator_index or resp.going)
+      if resp != nil and ((cnt == self.creator_index) or resp.going)
         inner_cnt = 0
         for t in types_list
           if cats.has_key?t
