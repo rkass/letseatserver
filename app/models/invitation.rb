@@ -48,8 +48,8 @@ class Invitation < ActiveRecord::Base
     grandCnt = 0
     for resp in self.responses  
       if resp != nil and ((grandCnt == self.creator_index) or resp.going)
-        lat += resp.location.split[0].to_f
-        lng += resp.location.split[1].to_f
+        lat += resp.location.split(",")[0].to_f
+        lng += resp.location.split(",")[1].to_f
         cnt += 1
       end
       grandCnt += 1
