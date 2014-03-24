@@ -79,12 +79,12 @@ class ::Api::V1::InvitationsController < ApplicationController
   #address, type, url, rating image, percent match (serialized restaurant)
   def getRestaurants
     invitash = Invitation.find(params[:id])
-    loc = Invitation.location
-    restaurants = Yelp.getResults(loc, Invitation.categories[0])
+    loc = invitash.location
+    restaurants = Yelp.getResults(loc, invitash.categories[0])
     count = 0
     ret = []
     while count < 15
-      ret.append(yelpToRestaurant(restaurants[count], loc, Invitation.dayOfWeek, Invitation.timeOfDay))
+      ret.append(yelpToRestaurant(restaurants[count], loc, invitash.dayOfWeek, invitash.timeOfDay))
       count += 1
     end
   puts ret
