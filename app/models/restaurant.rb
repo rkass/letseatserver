@@ -26,11 +26,9 @@ class Restaurant
     @rating_img
   end
   def percentMatch(invitation)
-    puts "Implement ME!"
     100
   end
   def distanceToLocation(loc)
-    puts "Implement ME!"
     0.1
   end
   def serialize(invitation, user)
