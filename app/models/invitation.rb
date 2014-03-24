@@ -46,7 +46,7 @@ class Invitation < ActiveRecord::Base
     lng = 0
     cnt = 0
     for resp in self.responses  
-      if resp != nil
+      if resp != nil and resp.going
         lat += resp.location.split[0].to_f
         lng += resp.location.split[1].to_f
         cnt += 1
@@ -55,6 +55,27 @@ class Invitation < ActiveRecord::Base
     lat = lat / cnt
     lng = lng / cnt
     lat.to_s + "," + lng.to_s
+  end
+  def categories
+    cats = {}
+    for resp in self.responses
+      if resp != nil and resp.going
+        inner_cnt = 0
+        for t in types_list
+          if cats.has_key?t
+            cats[t] += 7 - inner_cnt
+          else
+            cats[t] = 7 - inner_cnt
+          end
+          inner_cnt += 1
+        end
+      end
+    end
+    ret = []
+    for cat in cats.sort_by{|k,v| v}
+      ret.append(cat[0])
+    end
+    ret
   end
   def respondNo(arguser, message)
     responses = self.responses
