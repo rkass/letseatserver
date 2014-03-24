@@ -84,7 +84,7 @@ class ::Api::V1::InvitationsController < ApplicationController
     puts loc
     puts "cats"
     puts invitash.categories[0]
-    restaurants = Yelp.getResults(loc, invitash.categories[0])
+    restaurants = Yelp.getResults("40.727676,-73.984593", "pizza")
     puts "restaurants length"
     puts restaurants.length
     puts "restaurants"
