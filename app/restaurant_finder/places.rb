@@ -25,7 +25,11 @@ class GooglePlaces
   #dayOfWeek like 0 for sunday and 2 for tuesday
   def self.isOpenAndPriceHelper(ref, dayOfWeek, time)
     str = "https://maps.googleapis.com/maps/api/place/details/json?reference=#{ref}&sensor=false&key=#{@@api_key}"
+    puts "google request"
+    puts str
+    puts "deets"
     deets = JSON.parse(open(str).read)
+    puts deets
     ret = OpenStruct.new
     ret.price = deets['result']['price_level']
     open = close = nil
