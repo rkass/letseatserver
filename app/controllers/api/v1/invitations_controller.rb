@@ -80,6 +80,10 @@ class ::Api::V1::InvitationsController < ApplicationController
   def getRestaurants
     invitash = Invitation.find(params[:id])
     loc = invitash.location
+    puts "location: " 
+    puts loc
+    puts "cats"
+    puts invitash.categories[0]
     restaurants = Yelp.getResults(loc, invitash.categories[0])
     count = 0
     ret = []
