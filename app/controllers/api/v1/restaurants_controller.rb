@@ -4,6 +4,7 @@ class ::Api::V1::RestaurantsController < ApplicationController
     user = User.find_by_auth_token(params[:auth_token])
     i = Invitation.find(params[:invitation])
     r = Restaurant.new(params[:name], params[:price], params[:address], params[:types], params[:url], params[:ratingImg], params[:snippetImg])
+    i.votes = {} if i.votes == nil
     for restaurant, vot in i.votes
       if restaurant.url == r.url
         vot.append(user.id)
