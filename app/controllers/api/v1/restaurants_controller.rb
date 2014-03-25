@@ -21,7 +21,7 @@ class ::Api::V1::RestaurantsController < ApplicationController
       i.save
       retVotes = [user.id]
     end
-    render :json => {:success => true, :restaurant => {:user_voted => true, :votes => retVotes.length}, :status => 201 
+    render :json => {:success => true, :restaurant => {:user_voted => true, :votes => retVotes.length}}, :status => 201 
     return
   end
 
