@@ -73,7 +73,7 @@ class ::Api::V1::InvitationsController < ApplicationController
 
   def yelpToRestaurant(yelpDict, location, dow, time)
     isOpenAndPrice = GooglePlaces.isOpenAndPrice(location, yelpDict['name'], dow, time)
-    Restaurant.new(yelpDict['name'], isOpenAndPrice.price, yelpDict['location']['display_address'] * ",", yelpCategoriesToLECategories(yelpDict['categories']), yelpDict['mobile_url'], yelpDict['rating_img_url'], yelpDict['snippet_image_url'])
+    Restaurant.new(yelpDict['name'], isOpenAndPrice.price, yelpDict['location']['display_address'] * ",", yelpCategoriesToLECategories(yelpDict['categories']), yelpDict['mobile_url'], yelpDict['rating_img_url'], yelpDict['image_url'])
   end
   #Give back 15 Restaurants and for each, supply the name, price, how far from the user,
   #address, type, url, rating image, percent match (serialized restaurant)
