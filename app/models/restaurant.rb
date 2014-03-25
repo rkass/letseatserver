@@ -35,7 +35,7 @@ class Restaurant
   def distanceToLocation(loc)
     0.1
   end
-  def serialize(invitation, user)
+  def serialize(invitation, user, votes)
     ret = {}
     ret['percentMatch'] = self.percentMatch(invitation)
     ret['name'] = self.name
@@ -46,6 +46,7 @@ class Restaurant
     ret['rating_img'] = self.rating_img
     ret['snippet_img'] = self.snippet_img
     ret['distance'] = self.distanceToLocation(invitation.location)
+    ret['votes'] = votes
     ret
   end
 end

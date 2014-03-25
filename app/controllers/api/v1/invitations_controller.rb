@@ -86,7 +86,7 @@ class ::Api::V1::InvitationsController < ApplicationController
     count = 0
     ret = []
     while count < 15
-      ret.append(yelpToRestaurant(restaurants[count], loc, invitash.dayOfWeek, invitash.timeOfDay).serialize(invitash, user))
+      ret.append(yelpToRestaurant(restaurants[count], loc, invitash.dayOfWeek, invitash.timeOfDay).serialize(invitash, user, 0))
       count += 1
     end
     puts "Returning from restaurants..."
