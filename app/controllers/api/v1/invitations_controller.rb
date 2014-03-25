@@ -68,7 +68,7 @@ class ::Api::V1::InvitationsController < ApplicationController
   end
 
   def yelpCategoriesToLECategories(lst)
-    lst
+    lst.flatten
   end
 
   def yelpToRestaurant(yelpDict, location, dow, time)
