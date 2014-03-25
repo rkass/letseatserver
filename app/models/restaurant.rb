@@ -46,7 +46,8 @@ class Restaurant
     ret['rating_img'] = self.rating_img
     ret['snippet_img'] = self.snippet_img
     ret['distance'] = self.distanceToLocation(invitation.location)
-    ret['votes'] = votes
+    ret['votes'] = votes.length
+    ret['user_voted'] = votes.include?user.id
     ret
   end
 end

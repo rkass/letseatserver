@@ -17,7 +17,6 @@ class Api::V1::FriendsController < ApplicationController
             if negative
               for u in users
                 if u.encrypted_password != params[:auth_token]
-                  puts "in there"
                   numbers.push(number)
                   break
                 end
