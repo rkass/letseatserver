@@ -26,6 +26,9 @@ class Restaurant
   def rating_img
     @rating_img
   end
+  def snippet_img
+    @snippet_img
+  end
   def percentMatch(invitation)
     100
   end
