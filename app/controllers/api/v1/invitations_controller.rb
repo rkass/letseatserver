@@ -138,6 +138,7 @@ class ::Api::V1::InvitationsController < ApplicationController
         invitation.save
       end
     end
+  end
 
   def getInvitationsOrMeals(meals)
     user = User.find_by_auth_token(params[:auth_token])
