@@ -22,6 +22,9 @@ class Invitation < ActiveRecord::Base
     errors.add(:responses, "Provide a response for all invitees and initialize it to nil") if (self.responses.length != self.users.length)
     errors.add(:time, "Provide a time for the invite") if (self.time == nil)
   end
+  def going(arguser)
+    (self.creator_index == self.users.index(arguser)) or (responded(arguser) and responses[self.users.index(arguser)].going)
+  end
   def responded(arguser)
     self.responses[self.users.index(arguser)] != nil
   end
