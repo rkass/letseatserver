@@ -15,6 +15,7 @@ Letseatserver::Application.routes.draw do
       post "/get_non_friends", :to => 'friends#getNonFriends'
       post "/create_invitation", :to => 'invitations#create'
       post "/get_invitations", :to => 'invitations#get'
+      post "/get_meals", :to => 'invitations#getMeals'
       post "/respond_no", :to => 'invitations#respondNo'
       post "/respond_yes", :to => 'invitations#respondYes'
       post "/get_restaurants", :to => 'invitations#getRestaurants'

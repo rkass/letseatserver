@@ -131,13 +131,29 @@ class ::Api::V1::InvitationsController < ApplicationController
     return
   end
 
-  def get
+  def sort(user)
+    for invitation in user.invitations.find_all_by_scheduled(false)
+      if ((invitation.scheduleTime < DateTime.now) or (invitation.responses.count - invitation.responses.count(nil) >= minimum_attending))
+        invitation.scheduled = true
+        invitation.save
+      end
+    end
+
+  def getInvitationsOrMeals(meals)
     user = User.find_by_auth_token(params[:auth_token])
+    sort(user)
     invitations = []
-    for invitation in user.invitations
+    for invitation in user.invitations.find_all_by_scheduled(meals)
       invitations.append(invitation.serialize(user))
     end
     render :json => {:success => true, :invitations => invitations}
     return
+  end
+
+  def getMeals
+    getInvitationOrMeals(true)
+  end
+  def get
+    getInvitationOrMeals(false)
   end    
 end
