@@ -134,7 +134,7 @@ class Invitation < ActiveRecord::Base
     ret["iResponded"] = self.responded(arguser)
     ret["creatorIndex"] = self.creator_index
     ret["central"] = self.central
-    ret["timeToSchedule"] = DateTime.now - self.scheduleTime
+    ret["timeToSchedule"] = Time.now - self.scheduleTime
     ret
   end
 end
