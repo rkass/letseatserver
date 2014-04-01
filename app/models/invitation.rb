@@ -134,8 +134,8 @@ class Invitation < ActiveRecord::Base
     ret["iResponded"] = self.responded(arguser)
     ret["creatorIndex"] = self.creator_index
     ret["central"] = self.central
-    ret["timeToSchedule"] = self.time - Time.now
-    ret["timeToSchedule"] = self.scheduleTime - Time.nowTime.now if self.scheduleTime != nil
+    #ret["timeToSchedule"] = self.time - Time.now
+    #ret["timeToSchedule"] = self.scheduleTime - Time.nowTime.now if self.scheduleTime != nil
     ret
   end
 end
