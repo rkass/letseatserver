@@ -147,7 +147,7 @@ class ::Api::V1::InvitationsController < ApplicationController
     for invitation in user.invitations.find_all_by_scheduled(meals)
       invitations.append(invitation.serialize(user)) if invitation.going(user) or (not meals)
     end
-    render :json => {:success => true, :invitations => invitations}
+    render :json => {:success => true, :invitations => invitations, :meals => meals}
     return
   end
 
