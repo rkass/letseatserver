@@ -6,7 +6,7 @@ class Invitation < ActiveRecord::Base
   serialize :votes
   validate :validator
   has_and_belongs_to_many :users, :order => :id
-  def self.customNew(users, time, scheduleTime, central, message = nil)
+  def self.customNew(users, time, scheduleTime, central,minimum_attending, message = nil)
     i = Invitation.new
     i.users = users
     i.responses = ([nil] * (users.length))
@@ -15,6 +15,7 @@ class Invitation < ActiveRecord::Base
     i.central = central
     i.scheduled = false
     i.message = message
+    i.minimum_attending = minimum_attending
     i
   end
   def validator
