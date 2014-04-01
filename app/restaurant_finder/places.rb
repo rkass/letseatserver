@@ -38,6 +38,14 @@ class GooglePlaces
     end
     ret.price = deets['result']['price_level']
     open = close = nil
+    if deets['result']['opening_hours'] == nil
+      puts "Opening hours nil"
+      puts "deets:"
+      puts deets
+      puts "str:"
+      puts str
+      return ret
+    end
     for period in deets['result']['opening_hours']['periods']
       if period['close']['day'] == dayOfWeek
         close = period['close']['time'].to_i
