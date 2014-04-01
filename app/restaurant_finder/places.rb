@@ -15,6 +15,8 @@ class GooglePlaces
     query = CGI::escape(name + " near " + location)
     str = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=#{query}&sensor=false&key=#{@@api_key}"
     response = JSON.parse(open(str).read)
+    print "Response"
+    print response
     for biz in response['results']
      return biz['reference'] if biz['name'] == name
     end
@@ -38,6 +40,7 @@ class GooglePlaces
     end
     ret.price = deets['result']['price_level']
     open = close = nil
+=begin
     if deets['result']['opening_hours'] == nil
       puts "Opening hours nil"
       puts "deets:"
@@ -46,6 +49,7 @@ class GooglePlaces
       puts str
       return ret
     end
+=end
     for period in deets['result']['opening_hours']['periods']
       if period['close']['day'] == dayOfWeek
         close = period['close']['time'].to_i
