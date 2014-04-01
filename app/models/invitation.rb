@@ -134,6 +134,14 @@ class Invitation < ActiveRecord::Base
     ret["iResponded"] = self.responded(arguser)
     ret["creatorIndex"] = self.creator_index
     ret["central"] = self.central
+    if self.scheduleTime != nil
+      ret["scheduleTime"] = self.scheduleTime.to_formatted_s(:rfc822)
+      index = ret["scheduleTime"].index("+")
+      index = ret["scheduleTime"].index("-") if index == nil 
+      ret["scheduleTime"] = ret["scheduleTime"][0..index - 2]
+    else
+      ret["scheduleTime"] = ret["time"]
+    end
     #ret["timeToSchedule"] = self.time - Time.now
     #ret["timeToSchedule"] = self.scheduleTime - Time.nowTime.now if self.scheduleTime != nil
     ret
