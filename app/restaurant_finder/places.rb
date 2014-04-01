@@ -22,7 +22,7 @@ class GooglePlaces
     scnt = 0
     for biz in response['results'][1..-1]
       thisSim = getSim(formattedAddress, biz)
-      if (thisSim < sim)
+      if (thisSim > sim)
         sim = thisSim
         ref = biz['reference']
         scnt = cnt
