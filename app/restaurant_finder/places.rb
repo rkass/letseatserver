@@ -1,29 +1,45 @@
 require 'open-uri'
 require 'ostruct'
+require 'similar_text'
 
 class GooglePlaces
 
   @@api_key = 'AIzaSyBITjgfUC0tbWp9-0SRIRR-PYAultPKDbA'
 
-  def self.isOpenAndPrice(location, name, dayOfWeek, time)
-    return self.isOpenAndPriceHelper(self.getReference(location, name), dayOfWeek, time)
+  def self.isOpenAndPrice(formattedAddress, dayOfWeek, time)
+    return self.isOpenAndPriceHelper(self.getReference(formattedAddress), dayOfWeek, time)
   end
 
   #location like "40.72918605727255,-73.9608789"
   #name like "Russo Mozzarella & Pasta"
-  def self.getReference(location, name)
-    query = CGI::escape(name + " near " + location)
+  def self.getReference(formattedAddress)
+    query = CGI::escape(formattedAddress)
     str = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=#{query}&sensor=false&key=#{@@api_key}"
     response = JSON.parse(open(str).read)
-    print "Response"
-    print response
-    for biz in response['results']
-     return biz['reference'] if biz['name'] == name
+    sim = getSim(formattedAddress, response['results'][0])
+    ref = response['results'][0]['reference']
+    cnt = 0
+    scnt = 0
+    for biz in response['results'][1..-1]
+      thisSim = getSim(formattedAddress, biz)
+      if (thisSim < sim)
+        sim = thisSim
+        ref = biz['reference']
+        scnt = cnt
+      end
+      cnt += 1
     end
-    return response['results'][0]['reference'] if (response['results']!= nil and response['results'].length > 0)
+    puts "formatted address"
+    puts formattedAddress
+    puts "selected business"
+    puts response['results'][scnt]
+    return ref if ref != nil
     puts "reference is nil for"
-    puts name
-    puts str
+    puts formattedAddress
+  end
+
+  def getSim(formattedAddress, results)
+    formattedAddress.similar(results['name'] + ", " + results['formatted_address'])
   end
 
   #time like "2000" for 8pm and "0930" for 9:30 am
@@ -40,7 +56,6 @@ class GooglePlaces
     end
     ret.price = deets['result']['price_level']
     open = close = nil
-=begin
     if deets['result']['opening_hours'] == nil
       puts "Opening hours nil"
       puts "deets:"
@@ -49,7 +64,6 @@ class GooglePlaces
       puts str
       return ret
     end
-=end
     for period in deets['result']['opening_hours']['periods']
       if period['close']['day'] == dayOfWeek
         close = period['close']['time'].to_i

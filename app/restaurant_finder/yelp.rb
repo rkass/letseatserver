@@ -9,12 +9,12 @@ class Yelp
 
   #location like "40.727676,-73.984593"
   #category like "pizza" 
-  def self.getResults(location, category)
+  def self.getResults(location, category, limit)
     category = category.downcase
     #results stored in json result in businesses index
     consumer = OAuth::Consumer.new(@@consumer_key, @@consumer_secret, {:site => "http://api.yelp.com", :signature_method => "HMAC-SHA1", :scheme => :query_string})
     access_token = OAuth::AccessToken.new(consumer, @@token, @@token_secret)
-    return JSON.parse(access_token.get(URI::encode("/v2/search?ll=#{location}&category_filter=#{category}")).body)['businesses']
+    return JSON.parse(access_token.get(URI::encode("/v2/search?ll=#{location}&category_filter=#{category}&limit=#{limit}")).body)['businesses']
   end
 
 end

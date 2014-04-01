@@ -71,8 +71,13 @@ class ::Api::V1::InvitationsController < ApplicationController
     lst.flatten
   end
 
+  def getYelpFormattedAddress(yelpDict)
+    yelpDict['name'] + ", " + yelpDict['location']['address'][0] + ", " + yelpDict['location']['city'] + ", " + yelpDict['location']['state_code'] + " " + yelpDict['location']['postal_code'] + ", " + yelpDict['location']['country_code']
+   end
+    
+
   def yelpToRestaurant(yelpDict, location, dow, time)
-    isOpenAndPrice = GooglePlaces.isOpenAndPrice(location, yelpDict['name'], dow, time)
+    isOpenAndPrice = GooglePlaces.isOpenAndPrice(getYelpFormattedAddress(yelpDict), dow, time)
     Restaurant.new(yelpDict['name'], isOpenAndPrice.price, yelpDict['location']['display_address'] * ",", yelpCategoriesToLECategories(yelpDict['categories']), yelpDict['mobile_url'], yelpDict['rating_img_url'], yelpDict['image_url'])
   end
   #Give back 15 Restaurants and for each, supply the name, price, how far from the user,
@@ -83,7 +88,6 @@ class ::Api::V1::InvitationsController < ApplicationController
     loc = invitash.location
     #restaurants = Yelp.getResults(loc, invitash.categories[0])
     restaurants = Yelp.getResults("40.727676,-73.984593", "pizza")
-    puts restaurants
     count = 0
     ret = []
     while count < 15

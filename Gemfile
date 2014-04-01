@@ -8,6 +8,8 @@ gem 'nokogiri'
 
 gem 'oauth'
 
+gem 'similar_text'
+
 gem 'places'
 
 # Use postgresql as the database for Active Record
