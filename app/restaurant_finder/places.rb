@@ -16,7 +16,7 @@ class GooglePlaces
     query = CGI::escape(formattedAddress)
     str = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=#{query}&sensor=false&key=#{@@api_key}"
     response = JSON.parse(open(str).read)
-    sim = getSim(formattedAddress, response['results'][0])
+    sim = self.getSim(formattedAddress, response['results'][0])
     ref = response['results'][0]['reference']
     cnt = 0
     scnt = 0
@@ -38,7 +38,7 @@ class GooglePlaces
     puts formattedAddress
   end
 
-  def getSim(formattedAddress, results)
+  def self.getSim(formattedAddress, results)
     formattedAddress.similar(results['name'] + ", " + results['formatted_address'])
   end
 
