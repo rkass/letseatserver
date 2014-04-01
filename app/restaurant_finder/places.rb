@@ -19,6 +19,9 @@ class GooglePlaces
      return biz['reference'] if biz['name'] == name
     end
     return response['results'][0]['reference'] if (response['results']!= nil and response['results'].length > 0)
+    puts "reference is nil for"
+    puts name
+    puts str
   end
 
   #time like "2000" for 8pm and "0930" for 9:30 am
@@ -28,6 +31,11 @@ class GooglePlaces
     str = "https://maps.googleapis.com/maps/api/place/details/json?reference=#{ref}&sensor=false&key=#{@@api_key}"
     deets = JSON.parse(open(str).read)
     ret = OpenStruct.new
+    if deets == nil
+      puts "Deets was nil"
+      puts str
+      return ret
+    end
     ret.price = deets['result']['price_level']
     open = close = nil
     for period in deets['result']['opening_hours']['periods']
