@@ -83,6 +83,7 @@ class ::Api::V1::InvitationsController < ApplicationController
     loc = invitash.location
     #restaurants = Yelp.getResults(loc, invitash.categories[0])
     restaurants = Yelp.getResults("40.727676,-73.984593", "pizza")
+    puts restaurants
     count = 0
     ret = []
     while count < 15
