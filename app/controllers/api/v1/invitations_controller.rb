@@ -138,7 +138,9 @@ class ::Api::V1::InvitationsController < ApplicationController
 
   def sort(user)
     for invitation in user.invitations.find_all_by_scheduled(false)
-      if (((invitation.scheduleTime != nil) and (invitation.scheduleTime < DateTime.now)) or (invitation.responses.count - invitation.responses.count(nil) == 0))
+      date = invitation.scheduleTime
+      date = invitation.time if (date == nil or invitation.time < date)
+      if (date < DateTime.now) or (invitation.responses.count - invitation.responses.count(nil) == 0))
         invitation.scheduled = true
         invitation.save
       end

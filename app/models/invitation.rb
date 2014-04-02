@@ -89,12 +89,14 @@ class Invitation < ActiveRecord::Base
     responses = self.responses
     responses[self.users.index(arguser)] = Response.new(false, message, nil, nil, nil)
     self.responses = responses
+    self.scheduleTime = DateTime.now + 5.minutes if ((self.responses.count - self.responses.count(nil) == 0 and (self.responses.count > 1))
     self.save
   end
   def respondYes(arguser, response)
     responses = self.responses
     responses[self.users.index(arguser)] = response
     self.responses = responses
+    self.scheduleTime = DateTime.now + 5.minutes if ((self.responses.count - self.responses.count(nil) == 0) and (self.responses.count > 1))
     self.save
   end
   def serialize(arguser)
@@ -142,6 +144,7 @@ class Invitation < ActiveRecord::Base
     else
       ret["scheduleTime"] = ret["time"]
     end
+    ret["scheduled"] = self.scheduled
     #ret["timeToSchedule"] = self.time - Time.now
     #ret["timeToSchedule"] = self.scheduleTime - Time.nowTime.now if self.scheduleTime != nil
     ret
