@@ -89,7 +89,7 @@ class Invitation < ActiveRecord::Base
     responses = self.responses
     responses[self.users.index(arguser)] = Response.new(false, message, nil, nil, nil)
     self.responses = responses
-    self.scheduleTime = DateTime.now + 5.minutes if ((self.responses.count - self.responses.count(nil) == 0 and (self.responses.count > 1))
+    self.scheduleTime = DateTime.now + 5.minutes if ((self.responses.count - self.responses.count(nil) == 0) and (self.responses.count > 1))
     self.save
   end
   def respondYes(arguser, response)
