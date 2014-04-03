@@ -134,6 +134,9 @@ class Invitation < ActiveRecord::Base
     ret["message"] = self.message
     ret["id"] = self.id
     ret["iResponded"] = self.responded(arguser)
+    if (self.id == 126)
+      puts ret["iResponded"]
+    end
     ret["creatorIndex"] = self.creator_index
     ret["central"] = self.central
     if (self.scheduleTime != nil and self.scheduleTime < self.time)
