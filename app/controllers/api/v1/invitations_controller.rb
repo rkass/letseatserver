@@ -140,7 +140,7 @@ class ::Api::V1::InvitationsController < ApplicationController
     for invitation in user.invitations.find_all_by_scheduled(false)
       date = invitation.scheduleTime
       date = invitation.time if (date == nil or invitation.time < date)
-      if ((date < DateTime.now) or (invitation.responses.count - invitation.responses.count(nil) == 0))
+      if ((date < DateTime.now) or (invitation.responses.count - invitation.responses.count(nil) == invitation.responses.count))
         invitation.scheduled = true
         invitation.save
       end
