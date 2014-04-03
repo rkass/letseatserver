@@ -1,7 +1,9 @@
 require 'date'
 class ::Api::V1::InvitationsController < ApplicationController
   
-  def makeDateTime(dateString)
+  def makeDateTime(dateString, secondsFromGMT)
+    puts "seconds from gmt:"
+    puts secondsFromGMT
     split = dateString.split(',')
     monthString = ""
     monthNum = 0 
@@ -125,7 +127,7 @@ class ::Api::V1::InvitationsController < ApplicationController
     end
     central = false
     central = true if (params[:central])
-    invitation = Invitation.customNew(users, makeDateTime(params[:date]), scheduleTime,central, params[:minPeople], params[:message])
+    invitation = Invitation.customNew(users, makeDateTime(params[:date], params[:secondsFromGMT]), scheduleTime,central, params[:minPeople], params[:message])
     if invitation.save
       invitation = Invitation.find(invitation.id)
       invitation.insertPreferences(User.find_by_auth_token(params[:auth_token]), p, creator = true)
