@@ -29,13 +29,7 @@ class GooglePlaces
       end
       cnt += 1
     end
-    puts "formatted address"
-    puts formattedAddress
-    puts "selected business"
-    puts response['results'][scnt]
     return ref if ref != nil
-    puts "reference is nil for"
-    puts formattedAddress
   end
 
   def self.getSim(formattedAddress, results)
@@ -50,18 +44,11 @@ class GooglePlaces
     deets = JSON.parse(open(str).read)
     ret = OpenStruct.new
     if deets == nil
-      puts "Deets was nil"
-      puts str
       return ret
     end
     ret.price = deets['result']['price_level']
     open = close = nil
     if deets['result']['opening_hours'] == nil
-      puts "Opening hours nil"
-      puts "deets:"
-      puts deets
-      puts "str:"
-      puts str
       return ret
     end
     for period in deets['result']['opening_hours']['periods']

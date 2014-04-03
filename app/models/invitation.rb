@@ -139,9 +139,6 @@ class Invitation < ActiveRecord::Base
     ret["message"] = self.message
     ret["id"] = self.id
     ret["iResponded"] = self.responded(arguser)
-    if (self.id == 126)
-      puts ret["iResponded"]
-    end
     ret["creatorIndex"] = self.creator_index
     ret["central"] = self.central
     if (self.scheduleTime != nil and self.scheduleTime < self.time)
@@ -149,11 +146,7 @@ class Invitation < ActiveRecord::Base
       index = ret["scheduleTime"].index("+")
       index = ret["scheduleTime"].index("-") if index == nil 
       ret["scheduleTime"] = ret["scheduleTime"][0..index - 2]
-      puts "sched time"
-      puts id
     else  
-      puts "time"
-      puts id
       ret["scheduleTime"] = ret["time"]
     end
     ret["scheduled"] = self.scheduled
