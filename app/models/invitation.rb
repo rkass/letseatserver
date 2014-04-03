@@ -106,16 +106,21 @@ class Invitation < ActiveRecord::Base
       ret["people"].append(user.phone_number)
     end
     ret["responses"] = []
+    ret["messages"] = []
     count = 0
     for response in self.responses
       if count == self.creator_index
         ret["responses"].append("yes")
+        ret["messages"].append("")
       elsif self.responses[count] == nil
         ret["responses"].append("undecided")
+        ret["messages"].append("")
       elsif self.responses[count].going
         ret["responses"].append("yes")
+        ret["messages"].append("")
       else
         ret["responses"].append("no")
+        ret["messages"].append(self.responses[count].message)
       end
       count += 1
     end
