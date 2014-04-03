@@ -144,12 +144,6 @@ class ::Api::V1::InvitationsController < ApplicationController
         invitation.scheduled = true
         invitation.save
       end
-      if (invitation.id == 132)
-        puts "scheduled"
-        puts invitation.scheduled
-        puts "count"
-        invitation.responses.count - invitation.responses.count(nil)
-      end
     end
   end
 
