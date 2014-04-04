@@ -188,8 +188,9 @@ class Invitation < ActiveRecord::Base
         count += 1
       end
       self.restaurants = ret
-    end
+    end 
     self.with_lock do
+      puts "Decrementing id: #{self.id}"
       self.update_attributes(:restaurants => ret, :updatingRecommendations => self.updatingRecommendations - 1)
     end
   end 
