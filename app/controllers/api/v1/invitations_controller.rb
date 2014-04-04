@@ -133,7 +133,8 @@ class ::Api::V1::InvitationsController < ApplicationController
     else
       render :json => {:success => false}, :status =>422
     end
-    sleep(10)
+    sleep(20)
+    puts "here"
     return
   end
 
