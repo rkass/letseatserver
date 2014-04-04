@@ -119,7 +119,7 @@ class ::Api::V1::InvitationsController < ApplicationController
     if invitation.save
       invitation = Invitation.find(invitation.id)
       invitation.insertPreferences(User.find_by_auth_token(params[:auth_token]), p, creator = true)
-      invitation.saveAndUpdateRecommendations(User.find_by_auth_token(params[:auth_token]))
+      invitation.saveAndUpdateRecommendations
       respondWithInvitation("create_invitation", User.find_by_auth_token(params[:auth_token]), invitation) 
     else
       render :json => {:success => false}, :status =>422
