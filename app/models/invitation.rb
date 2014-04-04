@@ -160,7 +160,7 @@ class Invitation < ActiveRecord::Base
             ret["restaurants"].append(key.serialize(self.restaurants[key], user))
           end
         end
-        ret.updatingRecommendations = self.updatingRecommendations
+        ret["updatingRecommendations"] = self.updatingRecommendations
       end
     ret["time"] = self.transformTime(ret["time"]) 
     ret["scheduleTime"] = self.transformTime(ret["scheduleTime"])
