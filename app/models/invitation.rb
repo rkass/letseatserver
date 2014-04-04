@@ -218,6 +218,7 @@ class Invitation < ActiveRecord::Base
   def saveAndUpdateRecommendations
     self.with_lock do
       ret = self.update_attributes(:updatingRecommendations => self.updatingRecommendations + 1)
+    end
     self.delay.updateRestaurants
     ret
   end
