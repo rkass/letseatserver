@@ -157,7 +157,7 @@ class Invitation < ActiveRecord::Base
       if withRestaurants
         if self.restaurants != nil
           self.restaurants.each_key do |key|
-            ret["restaurants"].append(key.serialize(self.restaurants[key], user))
+            ret["restaurants"].append(key.serialize(self.restaurants[key], arguser))
           end
         end
         ret["updatingRecommendations"] = self.updatingRecommendations
