@@ -154,4 +154,10 @@ class Invitation < ActiveRecord::Base
     #ret["timeToSchedule"] = self.scheduleTime - Time.nowTime.now if self.scheduleTime != nil
     ret
   end
+  
+  def djtest
+    sleep(30)
+    puts "done"
+  end
+
 end
