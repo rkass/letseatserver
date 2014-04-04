@@ -184,7 +184,7 @@ class Invitation < ActiveRecord::Base
       count = 0 
       ret = {}
       while count < 15
-        ret[yelpToRestaurant(restaurants[count], invitash.dayOfWeek, invitash.timeOfDay)] = []
+        ret[yelpToRestaurant(restaurants[count], self.dayOfWeek, self.timeOfDay)] = []
         count += 1
       end
       self.restaurants = ret
