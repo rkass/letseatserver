@@ -3,7 +3,7 @@ require Rails.root.join('app', 'models', 'response.rb').to_s
 
 class Invitation < ActiveRecord::Base
   serialize :responses
-  serialize :votes
+  serialize :restaurants
   validate :validator
   has_and_belongs_to_many :users, :order => :id
   def self.customNew(users, time, scheduleTime, central,minimum_attending, message = nil)
@@ -155,9 +155,22 @@ class Invitation < ActiveRecord::Base
     ret
   end
   
-  def djtest
-    sleep(30)
-    puts "done"
+  def updateRestaurants
+    #in future replace first arg with self.location
+    restaurants = Yelp.getResults("40.727676,-73.984593", "pizza", 15) 
+    count = 0 
+    ret = []
+    while count < 15
+      ret.append(yelpToRestaurant(restaurants[count], loc, invitash.dayOfWeek, invitash.timeOfDay).serialize(invitash, user))
+      count += 1
+    end
+  end 
+
+  
+  def saveAndUpdateRecommendations
+    self.updatingRecommendations = true
+    self.save
+    self.delay.updateRestaurants
   end
 
 end
