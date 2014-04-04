@@ -172,19 +172,19 @@ class Invitation < ActiveRecord::Base
   def getYelpFormattedAddress(yelpDict)
     yelpDict['name'] + ", " + yelpDict['location']['address'][0] + ", " + yelpDict['location']['city'] + ", " + yelpDict['location']['state_code'] + " " + yelpDict['location']['postal_code'] + ", " + yelpDict['location']['country_code']
    end 
-  def yelpToRestaurant(yelpDict, location, dow, time)
+  def yelpToRestaurant(yelpDict, dow, time)
     isOpenAndPrice = GooglePlaces.isOpenAndPrice(getYelpFormattedAddress(yelpDict), dow, time)
     Restaurant.new(yelpDict['name'], isOpenAndPrice.price, yelpDict['location']['display_address'] * ",", yelpCategoriesToLECategories(yelpDict['categories']), yelpDict['mobile_url'], yelpDict['rating_img_url'], yelpDict['image_url'])
   end 
   def updateRestaurants
-    #in future replace first arg with self.location
     ret = self.restaurants
     if ret == nil
+      #in future replace first arg with self.location
       restaurants = Yelp.getResults("40.727676,-73.984593", "pizza", 15) 
       count = 0 
       ret = {}
       while count < 15
-        ret[yelpToRestaurant(restaurants[count], loc, invitash.dayOfWeek, invitash.timeOfDay)] = []
+        ret[yelpToRestaurant(restaurants[count], invitash.dayOfWeek, invitash.timeOfDay)] = []
         count += 1
       end
       self.restaurants = ret
