@@ -216,6 +216,7 @@ class Invitation < ActiveRecord::Base
     end
   end   
   def saveAndUpdateRecommendations
+    ret = nil
     self.with_lock do
       ret = self.update_attributes(:updatingRecommendations => self.updatingRecommendations + 1)
     end
