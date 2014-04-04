@@ -38,7 +38,7 @@ class Restaurant
   def equals(otherRest)
     self.url == otherRest.url
   end
-  def serialize(votes, user)
+  def serialize(votes, user, invitation)
     ret = {}
     ret['percentMatch'] = self.percentMatch(invitation)
     ret['name'] = self.name
