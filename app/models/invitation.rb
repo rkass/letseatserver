@@ -99,78 +99,126 @@ class Invitation < ActiveRecord::Base
     self.scheduleTime = DateTime.now + 5.minutes if ((self.responses.count - self.responses.count(nil) == self.responses.count) and (self.responses.count > 1))
     self.save
   end
-  def serialize(arguser)
+  def serializeTime(time)
+    ret = time.to_formatted_s(:rfc822)
+    index = ret.index("+")
+    index = ret.index("-") if index == nil
+    ret[0..index - 2]
+  end
+
+  def serialize(arguser, withRestaurants = false)
     ret = {}
     ret["people"] = []
-    for user in self.users
-      ret["people"].append(user.phone_number)
-    end
     ret["responses"] = []
     ret["messages"] = []
-    count = 0
-    for response in self.responses
-      if count == self.creator_index
-        ret["responses"].append("yes")
-        ret["messages"].append("")
-      elsif self.responses[count] == nil
-        ret["responses"].append("undecided")
-        ret["messages"].append("")
-      elsif self.responses[count].going
-        ret["responses"].append("yes")
-        ret["messages"].append("")
-      else
-        ret["responses"].append("no")
-        ret["messages"].append(self.responses[count].message)
-      end
-      count += 1
-    end
     ret["preferences"] = []
-    for response in self.responses
-      if response == nil
-        ret["preferences"].append([]) 
-      else
-        ret["preferences"].append(response.types_list)
+    if withRestaurants
+      ret["restaurants"] = []
+    end
+    self.with_lock do
+      for user in self.users
+        ret["people"].append(user.phone_number)
       end
-    end
-    ret["time"] = self.time.to_formatted_s(:rfc822)
-    index = ret["time"].index("+")
-    index = ret["time"].index("-") if index == nil
-    ret["time"] = ret["time"][0..index - 2]
-    ret["message"] = self.message
-    ret["id"] = self.id
-    ret["iResponded"] = self.responded(arguser)
-    ret["creatorIndex"] = self.creator_index
-    ret["central"] = self.central
-    if (self.scheduleTime != nil and self.scheduleTime < self.time)
-      ret["scheduleTime"] = self.scheduleTime.to_formatted_s(:rfc822)
-      index = ret["scheduleTime"].index("+")
-      index = ret["scheduleTime"].index("-") if index == nil 
-      ret["scheduleTime"] = ret["scheduleTime"][0..index - 2]
-    else  
-      ret["scheduleTime"] = ret["time"]
-    end
-    ret["scheduled"] = self.scheduled
-    #ret["timeToSchedule"] = self.time - Time.now
-    #ret["timeToSchedule"] = self.scheduleTime - Time.nowTime.now if self.scheduleTime != nil
+      count = 0
+      for response in self.responses
+        if count == self.creator_index
+          ret["responses"].append("yes")
+          ret["messages"].append("")
+        elsif self.responses[count] == nil
+          ret["responses"].append("undecided")
+          ret["messages"].append("")
+        elsif self.responses[count].going
+          ret["responses"].append("yes")
+          ret["messages"].append("")
+        else
+          ret["responses"].append("no")
+          ret["messages"].append(self.responses[count].message)
+        end
+        if response == nil
+          ret["preferences"].append([])
+        else
+          ret["preferences"].append(response.types_list)
+        end
+        count += 1
+      end
+      ret["time"] = self.time
+      ret["message"] = self.message
+      ret["id"] = self.id
+      ret["iResponded"] = self.responded(arguser)
+      ret["creatorIndex"] = self.creator_index
+      ret["central"] = self.central
+      if (self.scheduleTime != nil and self.scheduleTime < self.time)
+        ret["scheduleTime"] = self.scheduleTime
+      else  
+        ret["scheduleTime"] = ret["time"]
+      end
+      ret["scheduled"] = self.scheduled
+      end
+      if withRestaurants
+        if self.restaurants != nil
+          self.restaurants.each_key do |key|
+            ret["restaurants"].append(key.serialize(self.restaurants[key], user))
+          end
+        end
+        ret.updatingRecommendations = self.updatingRecommendations
+      end
+    ret["time"] = self.transformTime(ret["time"]) 
+    ret["scheduleTime"] = self.transformTime(ret["scheduleTime"])
     ret
   end
-  
+  def yelpCategoriesToLECategories(lst)
+    lst.flatten
+  end 
+  def getYelpFormattedAddress(yelpDict)
+    yelpDict['name'] + ", " + yelpDict['location']['address'][0] + ", " + yelpDict['location']['city'] + ", " + yelpDict['location']['state_code'] + " " + yelpDict['location']['postal_code'] + ", " + yelpDict['location']['country_code']
+   end 
+  def yelpToRestaurant(yelpDict, location, dow, time)
+    isOpenAndPrice = GooglePlaces.isOpenAndPrice(getYelpFormattedAddress(yelpDict), dow, time)
+    Restaurant.new(yelpDict['name'], isOpenAndPrice.price, yelpDict['location']['display_address'] * ",", yelpCategoriesToLECategories(yelpDict['categories']), yelpDict['mobile_url'], yelpDict['rating_img_url'], yelpDict['image_url'])
+  end 
   def updateRestaurants
     #in future replace first arg with self.location
-    restaurants = Yelp.getResults("40.727676,-73.984593", "pizza", 15) 
-    count = 0 
-    ret = []
-    while count < 15
-      ret.append(yelpToRestaurant(restaurants[count], loc, invitash.dayOfWeek, invitash.timeOfDay).serialize(invitash, user))
-      count += 1
+    ret = self.restaurants
+    if ret == nil
+      restaurants = Yelp.getResults("40.727676,-73.984593", "pizza", 15) 
+      count = 0 
+      ret = {}
+      while count < 15
+        ret[yelpToRestaurant(restaurants[count], loc, invitash.dayOfWeek, invitash.timeOfDay)] = []
+        count += 1
+      end
+      self.restaurants = ret
+    end
+    self.with_lock do
+      self.update_attributes(:restaurants => ret, :updatingRecommendations => self.updatingRecommendations - 1)
     end
   end 
-
-  
+  def vote(user, restaurant)
+    self.with_lock do
+      self.restaurants.each_key do |key|
+        if key.equals(restaurant)
+          self.restaurants[key].append(user.id)
+          break
+        end
+      end
+      self.save
+    end
+  end   
+  def unvote(user, restaurant)
+    self.with_lock do
+      self.restaurants.each_key do |key|
+        if key.equals(restaurant)
+          self.restaurants[key].delete(user.id)
+          break
+        end
+      end
+      self.save 
+    end
+  end   
   def saveAndUpdateRecommendations
-    self.updatingRecommendations = true
-    self.save
+    self.with_lock do
+      ret = self.update_attributes(:updatingRecommendations => self.updatingRecommendations + 1)
     self.delay.updateRestaurants
+    ret
   end
-
 end

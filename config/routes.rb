@@ -18,7 +18,7 @@ Letseatserver::Application.routes.draw do
       post "/get_meals", :to => 'invitations#getMeals'
       post "/respond_no", :to => 'invitations#respondNo'
       post "/respond_yes", :to => 'invitations#respondYes'
-      post "/get_restaurants", :to => 'invitations#getRestaurants'
+      post "/get_invitation", :to => 'invitations#getInvitation'
       post "/cast_vote", :to => 'restaurants#vote'
       post "/cast_unvote", :to => 'restaurants#unvote'
     end

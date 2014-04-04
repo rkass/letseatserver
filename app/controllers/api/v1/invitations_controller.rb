@@ -53,53 +53,43 @@ class ::Api::V1::InvitationsController < ApplicationController
     year += 1 if (DateTime.now + secondsFromGMT.seconds).to_date.month > monthNum
     DateTime.new(year, monthNum, dayOfMonth, hour, minutes)
   end
-
+  def respondWithInvitation(call, user, invitation)
+    render :json => {:success => true, :call => call, :invitation => invitation.serialize(user, true)}
+  end  
   def respondNo
     Invitation.find(params[:id]).respondNo(User.find_by_auth_token(params[:auth_token]), params[:message])
-    render :json => {:success => true}, :status=>201
+    render :json => {:success => true, :call => "respond_no"}, :status=>201
     return
   end
-
   def respondYes
     r = Response.new(true, nil, params[:foodList], params[:location], params[:minPrice], params[:maxPrice])
-    Invitation.find(params[:id]).respondYes(User.find_by_auth_token(params[:auth_token]), r)
-    render :json => {:success => true}, :status=>201
-    return
+    invitation = Invitation.find(params[:id])
+    user = User.find_by_authentication_token(params[:auth_token)
+    invitation.respondYes(user, r)
+    invitation.saveAndUpdateRecommendations
+    respondWithInvitation("respond_yes", user, invitation)
   end
-
-  def yelpCategoriesToLECategories(lst)
-    lst.flatten
-  end
-
-  def getYelpFormattedAddress(yelpDict)
-    yelpDict['name'] + ", " + yelpDict['location']['address'][0] + ", " + yelpDict['location']['city'] + ", " + yelpDict['location']['state_code'] + " " + yelpDict['location']['postal_code'] + ", " + yelpDict['location']['country_code']
-   end
-    
-
-  def yelpToRestaurant(yelpDict, location, dow, time)
-    isOpenAndPrice = GooglePlaces.isOpenAndPrice(getYelpFormattedAddress(yelpDict), dow, time)
-    Restaurant.new(yelpDict['name'], isOpenAndPrice.price, yelpDict['location']['display_address'] * ",", yelpCategoriesToLECategories(yelpDict['categories']), yelpDict['mobile_url'], yelpDict['rating_img_url'], yelpDict['image_url'])
-  end
-  #Give back 15 Restaurants and for each, supply the name, price, how far from the user,
-  #address, type, url, rating image, percent match (serialized restaurant)
-  def getRestaurants
+  def getInvitation
     user = User.find_by_auth_token(params[:auth_token])
     invitash = Invitation.find(params[:id])
-    loc = invitash.location
-    #restaurants = Yelp.getResults(loc, invitash.categories[0])
-    restaurants = Yelp.getResults("40.727676,-73.984593", "pizza", 15)
-    count = 0
-    ret = []
-    while count < 15
-      ret.append(yelpToRestaurant(restaurants[count], loc, invitash.dayOfWeek, invitash.timeOfDay).serialize(invitash, user))
-      count += 1
-    end
-#    puts "Returning from restaurants..."
- #   puts ret
-    render :json => {:success => true, :restaurants => ret, :request => 'restaurants'}, :status => 201
-    return
+    respondWithInvitation("get_invitation", user, invitash)
   end
-
+ def vote
+    user = User.find_by_auth_token(params[:auth_token])
+    i = Invitation.find(params[:invitation])
+    restaurant = Restaurant.new(params[:name], params[:price], params[:address], params[:types], params[:url], params[:ratingImg], params[:snippetImg])
+    i.vote(user, restaurant)
+    i.saveAndUpdateRecommendations
+    respondWithInvitation("cast_vote", user, i)
+  end
+  def unvote
+    user = User.find_by_auth_token(params[:auth_token])
+    i = Invitation.find(params[:invitation])
+    restaurant = Restaurant.new(params[:name], params[:price], params[:address], params[:types], params[:url], params[:ratingImg], params[:snippetImg])
+    i.unvote(user, restaurant)
+    i.saveAndUpdateRecommendations
+    respondWithInvitation("cast_unvote", user, i)
+  end
   def create
     users = []
     users.append(User.find_by_auth_token(params[:auth_token]))
@@ -129,40 +119,36 @@ class ::Api::V1::InvitationsController < ApplicationController
     if invitation.save
       invitation = Invitation.find(invitation.id)
       invitation.insertPreferences(User.find_by_auth_token(params[:auth_token]), p, creator = true)
-      render :json => {:success => true, :number => invitation.id}, :status=>201
+      invitation.saveAndUpdateRecommendations(User.find_by_auth_token(params[:auth_token]))
+      respondWithInvitation("create_invitation", User.find_by_auth_token(params[:auth_token]), invitation) 
     else
       render :json => {:success => false}, :status =>422
     end
-    invitation.delay.djtest
-    return
   end
-
   def sort(user)
     for invitation in user.invitations.find_all_by_scheduled(false)
       date = invitation.scheduleTime
       date = invitation.time if (date == nil or invitation.time < date)
       if ((date < DateTime.now) or (invitation.responses.count - invitation.responses.count(nil) == invitation.responses.count))
-        invitation.scheduled = true
-        invitation.save
+        invitation.update_attributes(:scheduled => true)
       end
     end
   end
-
-  def getInvitationsOrMeals(meals)
+  def getInvitationsOrMeals(call)
     user = User.find_by_auth_token(params[:auth_token])
     sort(user)
     invitations = []
+    meals = call == "get_meals"
     for invitation in user.invitations.find_all_by_scheduled(meals)
       invitations.append(invitation.serialize(user)) if invitation.going(user) or (not meals)
     end
-    render :json => {:success => true, :invitations => invitations, :meals => meals}
+    render :json => {:success => true, :invitations => invitations, :call => call}
     return
   end
-
   def getMeals
-    getInvitationsOrMeals(true)
+    getInvitationsOrMeals("get_meals")
   end
   def get
-    getInvitationsOrMeals(false)
+    getInvitationsOrMeals("get_invitations")
   end    
 end

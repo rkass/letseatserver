@@ -35,7 +35,10 @@ class Restaurant
   def distanceToLocation(loc)
     0.1
   end
-  def serialize(invitation, user)
+  def equals(otherRest)
+    self.url == otherRest.url
+  end
+  def serialize(votes, user)
     ret = {}
     ret['percentMatch'] = self.percentMatch(invitation)
     ret['name'] = self.name
@@ -45,16 +48,6 @@ class Restaurant
     ret['url'] = self.url
     ret['rating_img'] = self.rating_img
     ret['snippet_img'] = self.snippet_img
-    ret['distance'] = self.distanceToLocation(invitation.location)
-    ivotes = invitation.votes
-    votes = []
-    ivotes = {} if ivotes == nil
-    for k, v in ivotes
-      if k.url == self.url
-        votes = v
-        break
-      end
-    end
     ret['votes'] = votes.length
     ret['user_voted'] = votes.include?user.id
     ret
