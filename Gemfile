@@ -8,6 +8,10 @@ gem 'nokogiri'
 
 gem 'oauth'
 
+gem 'hirefire-resource'
+
+gem 'delayed_job_active_record'
+
 gem 'similar_text'
 
 gem 'places'

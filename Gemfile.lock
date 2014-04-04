@@ -36,6 +36,11 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.7.0)
+    delayed_job (4.0.0)
+      activesupport (>= 3.0, < 4.1)
+    delayed_job_active_record (4.0.0)
+      activerecord (>= 3.0, < 4.1)
+      delayed_job (>= 3.0, < 4.1)
     devise (3.2.2)
       bcrypt-ruby (~> 3.0)
       orm_adapter (~> 0.1)
@@ -46,6 +51,7 @@ GEM
     execjs (2.0.2)
     hashie (2.0.5)
     hike (1.2.3)
+    hirefire-resource (0.3.0)
     httparty (0.13.0)
       json (~> 1.8)
       multi_xml (>= 0.5.2)
@@ -142,7 +148,9 @@ PLATFORMS
 
 DEPENDENCIES
   coffee-rails (~> 4.0.0)
+  delayed_job_active_record
   devise
+  hirefire-resource
   jbuilder (~> 1.2)
   jquery-rails
   nokogiri
