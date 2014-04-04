@@ -162,8 +162,8 @@ class Invitation < ActiveRecord::Base
         end
         ret["updatingRecommendations"] = self.updatingRecommendations
       end
-    ret["time"] = self.transformTime(ret["time"]) 
-    ret["scheduleTime"] = self.transformTime(ret["scheduleTime"])
+    ret["time"] = self.serializeTime(ret["time"]) 
+    ret["scheduleTime"] = self.serializeTime(ret["scheduleTime"])
     ret
   end
   def yelpCategoriesToLECategories(lst)
