@@ -133,6 +133,7 @@ class ::Api::V1::InvitationsController < ApplicationController
     else
       render :json => {:success => false}, :status =>422
     end
+    invitation.delay.djtest
     return
   end
 
