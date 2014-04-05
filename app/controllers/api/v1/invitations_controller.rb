@@ -138,7 +138,7 @@ class ::Api::V1::InvitationsController < ApplicationController
     user = User.find_by_auth_token(params[:auth_token])
     sort(user)
     invitations = []
-    meals = call == "get_meals"
+    meals = (call == "get_meals")
     for invitation in user.invitations.find_all_by_scheduled(meals)
       invitations.append(invitation.serialize(user)) if invitation.going(user) or (not meals)
     end
