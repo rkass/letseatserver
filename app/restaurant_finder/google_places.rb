@@ -48,14 +48,14 @@ class GooglePlaces
     end
     ret.price = deets['result']['price_level']
     open = close = nil
-    if deets['result']['opening_hours'] == nil
+    if deets['result']['opening_hours']  == nil
       return ret
     end
     for period in deets['result']['opening_hours']['periods']
-      if period['close']['day'] == dayOfWeek
+      if period['close'] != nil and period['close']['day'] == dayOfWeek
         close = period['close']['time'].to_i
       end
-      if period['open']['day'] == dayOfWeek
+      if period['close'] != nil and period['open']['day'] == dayOfWeek
         open = period['open']['time'].to_i
       end
     end
