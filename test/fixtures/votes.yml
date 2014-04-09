@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  preferences: MyText
+  voted_restaurant: MyText
+  other_restaurants: MyText
+
+two:
+  preferences: MyText
+  voted_restaurant: MyText
+  other_restaurants: MyText

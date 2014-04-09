@@ -1,5 +1,5 @@
 class Restaurant
-  def initialize(name, price, address, types_list, url, rating_img, snippet_img)
+  def initialize(name, price, address, types_list, url, rating_img, snippet_img, rating, categories, review_count)
     @name = name
     @price = price
     @address = address
@@ -7,7 +7,19 @@ class Restaurant
     @url = url
     @rating_img = rating_img
     @snippet_img = snippet_img
+    @rating = rating
+    @categories = categories
+    @review_count = review_count
   end 
+  def rating
+    @rating
+  end
+  def categories
+    @categories
+  end
+  def review_count
+    @review_count
+  end
   def name
     @name
   end 
