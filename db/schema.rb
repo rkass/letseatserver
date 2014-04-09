@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140404134845) do
+ActiveRecord::Schema.define(version: 20140409213850) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -42,8 +42,9 @@ ActiveRecord::Schema.define(version: 20140404134845) do
     t.datetime "scheduleTime"
     t.boolean  "central"
     t.boolean  "scheduled"
-    t.text     "votes"
     t.integer  "minimum_attending"
+    t.text     "restaurants"
+    t.integer  "updatingRecommendations", default: 0
   end
 
   create_table "invitations_users", force: true do |t|
@@ -71,5 +72,13 @@ ActiveRecord::Schema.define(version: 20140404134845) do
   end
 
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+
+  create_table "votes", force: true do |t|
+    t.text     "preferences"
+    t.text     "voted_restaurant"
+    t.text     "other_restaurants"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
 end
