@@ -17,4 +17,6 @@ class Yelp
     return JSON.parse(access_token.get(URI::encode("/v2/search?ll=#{location}&category_filter=#{category}&limit=#{limit}")).body)['businesses']
   end
 
+  def self.getAssociatedCategories
+
 end
