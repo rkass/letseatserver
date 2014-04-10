@@ -29,6 +29,8 @@ class Invitation < ActiveRecord::Base
   def responded(arguser)
     self.responses[self.users.index(arguser)] != nil
   end
+  def preferencesForUser(user)
+    self.responses[self.users.index(user)]
   def insertPreferences(user, preferences, creator = false)
    self.creator_index = self.users.index(user) if creator
    self.responses[self.users.index(user)] = preferences
@@ -174,7 +176,7 @@ class Invitation < ActiveRecord::Base
    end 
   def yelpToRestaurant(yelpDict, dow, time)
     isOpenAndPrice = GooglePlaces.isOpenAndPrice(getYelpFormattedAddress(yelpDict), dow, time)
-    Restaurant.new(yelpDict['name'], isOpenAndPrice.price, yelpDict['location']['display_address'] * ",", yelpCategoriesToLECategories(yelpDict['categories']), yelpDict['mobile_url'], yelpDict['rating_img_url'], yelpDict['image_url'])
+    Restaurant.new(yelpDict['name'], isOpenAndPrice.price, yelpDict['location']['display_address'] * ",", yelpCategoriesToLECategories(yelpDict['categories']), yelpDict['mobile_url'], yelpDict['rating_img_url'], yelpDict['image_url'], yelpDict['rating'], yelpDict['categories'], yelpDict['review_count'])
   end 
   def updateRestaurants
     ret = self.restaurants
@@ -197,15 +199,21 @@ class Invitation < ActiveRecord::Base
     end
   end 
   def vote(user, restaurant)
+    preferences = preferencesForUser(user)
+    voted_restaurant = nil
+    other_restaurants = []
     self.with_lock do
       self.restaurants.each_key do |key|
         if key.equals(restaurant)
+          voted_restaurant = key
           self.restaurants[key].append(user.id)
-          break
+        else
+          other_restaurants.append(key)
         end
       end
       self.save
     end
+    Vote.create(:preferences => preferences, :voted_restaurant => voted_restaurant, :other_restaurants => other_restaurants)
   end   
   def unvote(user, restaurant)
     self.with_lock do
