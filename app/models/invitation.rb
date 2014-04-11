@@ -160,6 +160,8 @@ class Invitation < ActiveRecord::Base
       if withRestaurants
         if self.restaurants != nil
           self.restaurants.each_key do |key|
+            print "votes: " 
+            print self.restaurants[key]
             ret["restaurants"].append(key.serialize(self.restaurants[key], arguser, self))
           end
         end
