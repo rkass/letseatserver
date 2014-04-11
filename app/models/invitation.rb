@@ -208,6 +208,7 @@ class Invitation < ActiveRecord::Base
         if key.equals(restaurant)
           voted_restaurant = key
           self.restaurants[key].append(user.id)
+          print "voting"
         else
           other_restaurants.append(key)
         end

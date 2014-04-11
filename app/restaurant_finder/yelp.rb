@@ -18,5 +18,6 @@ class Yelp
   end
 
   def self.getAssociatedCategories
+  end
 
 end
