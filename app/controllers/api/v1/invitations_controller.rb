@@ -72,6 +72,7 @@ class ::Api::V1::InvitationsController < ApplicationController
   def getInvitation
     user = User.find_by_auth_token(params[:auth_token])
     invitash = Invitation.find(params[:id])
+    invitash.sortScheduled
     respondWithInvitation("get_invitation", user, invitash)
   end
  def vote
@@ -119,6 +120,7 @@ class ::Api::V1::InvitationsController < ApplicationController
     if invitation.save
       invitation = Invitation.find(invitation.id)
       invitation.insertPreferences(User.find_by_auth_token(params[:auth_token]), p, creator = true)
+      print "saving and updating"
       invitation.saveAndUpdateRecommendations
       respondWithInvitation("create_invitation", User.find_by_auth_token(params[:auth_token]), invitation) 
     else

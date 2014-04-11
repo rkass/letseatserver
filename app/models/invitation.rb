@@ -171,6 +171,15 @@ class Invitation < ActiveRecord::Base
     ret["scheduleTime"] = self.serializeTime(ret["scheduleTime"])
     ret
   end
+  def sortScheduled
+    date = self.scheduleTime
+    date = self.time if (date == nil or self.time < date)
+    if ((date < DateTime.now) or (self.responses.count - self.responses.count(nil) == self.responses.count))
+      self.update_attributes(:scheduled => true)
+    else
+      self.update_attributes(:scheduled => false)
+    end 
+  end
   def yelpCategoriesToLECategories(lst)
     lst.flatten
   end 
