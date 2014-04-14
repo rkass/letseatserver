@@ -60,8 +60,8 @@ class ::Api::V1::InvitationsController < ApplicationController
     print hour
     DateTime.new(year, monthNum, dayOfMonth, hour, minutes)
     print "date"
-    print (DateTime.new(year, monthNum, dayOfMonth, hour, minutes) + secondsFromGMT.seconds)
-    DateTime.new(year, monthNum, dayOfMonth, hour, minutes) + secondsFromGMT.seconds
+    print (DateTime.new(year, monthNum, dayOfMonth, hour, minutes) - secondsFromGMT.seconds)
+    DateTime.new(year, monthNum, dayOfMonth, hour, minutes) - secondsFromGMT.seconds
   end
   def respondWithInvitation(call, user, invitation)
     print "Respond with invitation scheduled? "
@@ -125,7 +125,7 @@ class ::Api::V1::InvitationsController < ApplicationController
       scheduleTime = DateTime.now + 5.hours
     elsif (params[:scheduleAfter] == "24 Hours")
       scheduleTime = DateTime.now + 1.days
-    end
+    en
     central = false
     central = true if (params[:central])
     invitation = Invitation.customNew(users, makeDateTime(params[:date], params[:secondsFromGMT]), scheduleTime,central, params[:minPeople], params[:message])
