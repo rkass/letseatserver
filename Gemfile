@@ -10,7 +10,7 @@ gem 'oauth'
 
 gem 'hirefire-resource'
 
-gem 'apns'
+gem 'houston'
 
 gem 'delayed_job_active_record'
 

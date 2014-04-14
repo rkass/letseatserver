@@ -64,7 +64,7 @@ class ::Api::V1::InvitationsController < ApplicationController
   def respondYes
     r = Response.new(true, nil, params[:foodList], params[:location], params[:minPrice], params[:maxPrice])
     invitation = Invitation.find(params[:id])
-    user = User.find_by_authentication_token(params[:auth_token])
+    user = User.find_by_auth_token(params[:auth_token])
     invitation.respondYes(user, r)
     invitation.saveAndUpdateRecommendations
     respondWithInvitation("respond_yes", user, invitation)
