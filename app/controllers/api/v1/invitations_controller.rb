@@ -54,7 +54,8 @@ class ::Api::V1::InvitationsController < ApplicationController
     DateTime.new(year, monthNum, dayOfMonth, hour, minutes)
   end
   def respondWithInvitation(call, user, invitation)
-    print "Respond with invitation scheduled? " + invitation.scheduled
+    print "Respond with invitation scheduled? "
+    print invitation.scheduled
     render :json => {:success => true, :call => call, :invitation => invitation.serialize(user, true)}
   end  
   def respondNo
@@ -120,8 +121,11 @@ class ::Api::V1::InvitationsController < ApplicationController
     invitation = Invitation.customNew(users, makeDateTime(params[:date], params[:secondsFromGMT]), scheduleTime,central, params[:minPeople], params[:message])
     if invitation.save
       invitation = Invitation.find(invitation.id)
+      print "Invitation save--scheduled?" 
+      print invitation.scheduled
       invitation.insertPreferences(User.find_by_auth_token(params[:auth_token]), p, creator = true)
-      print "saving and updating"
+      print "Preferences inserted--scheduled?" 
+      print invitation.scheduled
       invitation.saveAndUpdateRecommendations
       respondWithInvitation("create_invitation", User.find_by_auth_token(params[:auth_token]), invitation) 
     else
