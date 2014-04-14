@@ -157,6 +157,8 @@ class Invitation < ActiveRecord::Base
       else  
         ret["scheduleTime"] = ret["time"]
       end
+      print "sending scheduled?"
+      self.scheduled
       ret["scheduled"] = self.scheduled
       end
       if withRestaurants
