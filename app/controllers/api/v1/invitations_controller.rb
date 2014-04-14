@@ -49,6 +49,8 @@ class ::Api::V1::InvitationsController < ApplicationController
     print "split time:"
     print splitTime
     ampm = "AM" unless splitTime[1].include?"PM"
+    print "ampm"
+    print ampm
     hour += 12 if ampm == "PM" and hour != 12
     minutes = (splitTime[1].gsub! ampm, '').to_i
     year = (DateTime.now + secondsFromGMT.seconds).to_date.year
