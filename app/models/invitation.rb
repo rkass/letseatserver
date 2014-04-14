@@ -27,6 +27,9 @@ class Invitation < ActiveRecord::Base
   def going(arguser)
     (self.creator_index == self.users.index(arguser)) or (responded(arguser) and responses[self.users.index(arguser)].going)
   end
+  def declined(arguser)
+    responded(arguser) and (not responses[self.user.index(arguser)].going)
+  end
   def responded(arguser)
     self.responses[self.users.index(arguser)] != nil
   end
