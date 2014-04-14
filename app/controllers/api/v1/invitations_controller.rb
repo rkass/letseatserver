@@ -60,6 +60,7 @@ class ::Api::V1::InvitationsController < ApplicationController
     DateTime.new(year, monthNum, dayOfMonth, hour, minutes)
     print "date"
     print DateTime.new(year, monthNum, dayOfMonth, hour, minutes)
+    DateTime.new(year, monthNum, dayOfMonth, hour, minutes)
   end
   def respondWithInvitation(call, user, invitation)
     print "Respond with invitation scheduled? "
