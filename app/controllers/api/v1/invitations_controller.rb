@@ -55,7 +55,11 @@ class ::Api::V1::InvitationsController < ApplicationController
     minutes = (splitTime[1].gsub! ampm, '').to_i
     year = (DateTime.now + secondsFromGMT.seconds).to_date.year
     year += 1 if (DateTime.now + secondsFromGMT.seconds).to_date.month > monthNum
+    print "hour"
+    print hour
     DateTime.new(year, monthNum, dayOfMonth, hour, minutes)
+    print "date"
+    print DateTime.new(year, monthNum, dayOfMonth, hour, minutes)
   end
   def respondWithInvitation(call, user, invitation)
     print "Respond with invitation scheduled? "
