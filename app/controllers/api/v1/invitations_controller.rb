@@ -46,6 +46,8 @@ class ::Api::V1::InvitationsController < ApplicationController
     splitTime = split[2].split(':')
     hour = splitTime[0].to_i
     ampm = "PM"
+    print "split time:"
+    print splitTime
     ampm = "AM" unless splitTime[1].include?"PM"
     hour += 12 if ampm == "PM" and hour != 12
     minutes = (splitTime[1].gsub! ampm, '').to_i
