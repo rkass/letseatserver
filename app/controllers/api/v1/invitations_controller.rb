@@ -157,7 +157,11 @@ class ::Api::V1::InvitationsController < ApplicationController
     invitations = []
     meals = (call == "get_meals")
     for invitation in user.invitations.find_all_by_scheduled(meals)
-      invitations.append(invitation.serialize(user)) if (not invitation.declined(user))
+      if not meals
+        print "declined?"
+        print invitation.declined(user)
+      end
+      invitations.append(invitation.serialize(user)) if ((not invitation.declined(user)) or (not meals))
     end
     render :json => {:success => true, :invitations => invitations, :call => call}
     return
