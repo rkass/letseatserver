@@ -54,6 +54,7 @@ class ::Api::V1::InvitationsController < ApplicationController
     DateTime.new(year, monthNum, dayOfMonth, hour, minutes)
   end
   def respondWithInvitation(call, user, invitation)
+    print "Respond with invitation scheduled? " + invitation.scheduled
     render :json => {:success => true, :call => call, :invitation => invitation.serialize(user, true)}
   end  
   def respondNo

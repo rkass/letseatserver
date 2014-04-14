@@ -110,6 +110,7 @@ class Invitation < ActiveRecord::Base
   end
 
   def serialize(arguser, withRestaurants = false)
+    print "Serializing is scheduled?" self.scheduled
     ret = {}
     ret["people"] = []
     ret["responses"] = []
