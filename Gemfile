@@ -10,6 +10,7 @@ gem 'oauth'
 
 gem 'hirefire-resource'
 
+gem 'apns'
 
 gem 'delayed_job_active_record'
 
