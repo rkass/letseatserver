@@ -6,7 +6,7 @@ class Invitation < ActiveRecord::Base
   serialize :restaurants
   validate :validator
   has_and_belongs_to_many :users, :order => :id
-  def self.customNew(users, time, scheduleTime, central,minimum_attending, message = nil)
+  def self.customNew(users, time, scheduleTime, central,minimum_attending, seconds_from_gmt, message = nil)
     i = Invitation.new
     i.users = users
     i.responses = ([nil] * (users.length))
@@ -15,6 +15,7 @@ class Invitation < ActiveRecord::Base
     i.central = central
     i.scheduled = false
     i.message = message
+    i.seconds_from_gmt = seconds_from_gmt
     i.minimum_attending = minimum_attending
     i
   end
@@ -171,7 +172,7 @@ class Invitation < ActiveRecord::Base
         end
         ret["updatingRecommendations"] = self.updatingRecommendations
       end
-    ret["time"] = self.serializeTime(ret["time"]) + self.seconds_from_gmt 
+    ret["time"] = self.serializeTime(ret["time"] + self.seconds_from_gmt.seconds)
     ret["scheduleTime"] = self.serializeTime(ret["scheduleTime"])
     ret
   end

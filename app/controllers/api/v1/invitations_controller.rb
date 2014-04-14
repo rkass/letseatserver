@@ -128,7 +128,7 @@ class ::Api::V1::InvitationsController < ApplicationController
     end
     central = false
     central = true if (params[:central])
-    invitation = Invitation.customNew(users, makeDateTime(params[:date], params[:secondsFromGMT]), scheduleTime,central, params[:minPeople], params[:message])
+    invitation = Invitation.customNew(users, makeDateTime(params[:date], params[:secondsFromGMT]), scheduleTime,central, params[:minPeople], params[:secondsFromGMT], params[:message])
     if invitation.save
       invitation = Invitation.find(invitation.id)
       print "Invitation save--scheduled?" 
