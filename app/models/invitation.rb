@@ -171,7 +171,7 @@ class Invitation < ActiveRecord::Base
         end
         ret["updatingRecommendations"] = self.updatingRecommendations
       end
-    ret["time"] = self.serializeTime(ret["time"]) 
+    ret["time"] = self.serializeTime(ret["time"]) + self.seconds_from_gmt 
     ret["scheduleTime"] = self.serializeTime(ret["scheduleTime"])
     ret
   end

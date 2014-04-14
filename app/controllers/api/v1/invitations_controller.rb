@@ -54,7 +54,7 @@ class ::Api::V1::InvitationsController < ApplicationController
     hour += 12 if ampm == "PM" and hour != 12
     hour -= 12 if ampm == "AM" and hour == 12
     minutes = (splitTime[1].gsub! ampm, '').to_i
-    year = (DateTime.now + secondsFromGMT.seconds).to_date.year
+    year = (DateTime.now + secondsFromGMT.seconds)
     year += 1 if (DateTime.now + secondsFromGMT.seconds).to_date.month > monthNum
     print "hour"
     print hour
