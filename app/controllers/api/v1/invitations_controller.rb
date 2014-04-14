@@ -67,7 +67,7 @@ class ::Api::V1::InvitationsController < ApplicationController
     print "Respond with invitation scheduled? "
     print invitation.scheduled
     render :json => {:success => true, :call => call, :invitation => invitation.serialize(user, true)}
-  end  
+  end    
   def respondNo
     Invitation.find(params[:id]).respondNo(User.find_by_auth_token(params[:auth_token]), params[:message])
     render :json => {:success => true, :call => "respond_no"}, :status=>201
