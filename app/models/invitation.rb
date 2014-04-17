@@ -215,7 +215,7 @@ class Invitation < ActiveRecord::Base
       ret = {}
       while count < 15
         puts "count start :#{count}"
-        ret[count] = {yelpToRestaurant(restaurants[count], self.dayOfWeek, self.timeOfDay)] => []}
+        ret[count] = {yelpToRestaurant(restaurants[count], self.dayOfWeek, self.timeOfDay) => []}
         puts "count end: #{count}"
         count += 1
       end
