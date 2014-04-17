@@ -44,7 +44,4 @@ class User < ActiveRecord::Base
     connection.write(notification.message)
     connection.close
   end
-  end
-
-    
 end
