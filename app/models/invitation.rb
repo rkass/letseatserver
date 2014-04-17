@@ -182,7 +182,7 @@ class Invitation < ActiveRecord::Base
       self.update_attributes(:scheduled => true)
       cnt = 0
       for u in self.users
-          u.sendPush(self, true) if (cnt != self.creator_index and u.device_token != nil and u.device_token != "(null)" and (not self.declined(u)) and (u != excludeUser))    
+          u.sendPush(self, true) if (u.device_token != nil and u.device_token != "(null)" and (not self.declined(u)) and (u != excludeUser))    
           cnt += 1
       end 
     else
