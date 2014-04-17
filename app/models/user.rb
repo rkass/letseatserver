@@ -43,5 +43,6 @@ class User < ActiveRecord::Base
     connection.open
     connection.write(notification.message)
     connection.close
+    print "Sent push: " + notification.alert + " to " + self.phone_number
   end
 end
