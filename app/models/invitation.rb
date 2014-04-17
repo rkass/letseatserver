@@ -176,13 +176,14 @@ class Invitation < ActiveRecord::Base
     ret
   end
   def sortScheduled(excludeUser)
+    orig = self.scheduled
     date = self.scheduleTime
     date = self.time if (date == nil or self.time < date)
     if ((date < DateTime.now) or (self.responses.count - self.responses.count(nil) == self.responses.count))
       self.update_attributes(:scheduled => true)
       cnt = 0
       for u in self.users
-          u.sendPush(self, true) if (u.device_token != nil and u.device_token != "(null)" and (not self.declined(u)) and (u != excludeUser))    
+          u.sendPush(self, true) if (u.device_token != nil and u.device_token != "(null)" and (not self.declined(u)) and (u != excludeUser) and (!orig))    
           cnt += 1
       end 
     else
