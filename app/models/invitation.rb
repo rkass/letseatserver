@@ -103,8 +103,8 @@ class Invitation < ActiveRecord::Base
     responses = self.responses
     responses[self.users.index(arguser)] = response
     self.responses = responses
-    self.scheduleTime = DateTime.now + 5.minutes if ((self.responses.count - self.responses.count(nil) == self.responses.count) and (self.responses.count > 1))#send notificaiton here
     self.save
+    self.sortScheduled(arguser)
   end
   def serializeTime(time)
     ret = time.to_formatted_s(:rfc822)
