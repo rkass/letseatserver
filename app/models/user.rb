@@ -28,7 +28,7 @@ class User < ActiveRecord::Base
       fo.print obj.read
     end
     file = File.new(fname)
-    certificate = File.read("/Users/ryan/Desktop/PushNotificationCrypto/ck.pem")
+    certificate = file.read
     passphrase = "ryan30"
     connection = Houston::Connection.new(Houston::APPLE_DEVELOPMENT_GATEWAY_URI, certificate, passphrase)
     notification = Houston::Notification.new(device: self.device_token)
