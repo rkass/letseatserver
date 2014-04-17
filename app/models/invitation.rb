@@ -181,19 +181,16 @@ class Invitation < ActiveRecord::Base
     ret["scheduleTime"] = self.serializeTime(ret["scheduleTime"])
     ret
   end
-  def sortScheduled
+  def sortScheduled(excludeUser)
     date = self.scheduleTime
     date = self.time if (date == nil or self.time < date)
     if ((date < DateTime.now) or (self.responses.count - self.responses.count(nil) == self.responses.count))
-      print "date:"
-      print date
-      print "schedule time"
-      print self.scheduleTime
-      print "time"
-      print self.time
-      print "now" 
-      print DateTime.now
       self.update_attributes(:scheduled => true)
+      cnt = 0
+      for u in self.users
+          u.sendPush(self, true) if (cnt != self.creator_index and u.device_token != nil and u.device_token != "(null)" and (not self.declined(u)) and (u != excludeUser))    
+          cnt += 1
+      end 
     else
       self.update_attributes(:scheduled => false)
     end 

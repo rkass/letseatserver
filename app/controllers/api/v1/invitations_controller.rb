@@ -84,7 +84,7 @@ class ::Api::V1::InvitationsController < ApplicationController
   def getInvitation
     user = User.find_by_auth_token(params[:auth_token])
     invitash = Invitation.find(params[:id])
-    invitash.sortScheduled
+    invitash.sortScheduled(user)
     respondWithInvitation("get_invitation", user, invitash)
   end
  def vote
@@ -149,19 +149,12 @@ class ::Api::V1::InvitationsController < ApplicationController
   end
   def sort(user)
     for invitation in user.invitations.find_all_by_scheduled(false)
-      invitation.sortScheduled
+      invitation.sortScheduled(user)
       #date = invitation.scheduleTime
       #date = invitation.time if (date == nil or invitation.time < date)
       #if ((date < DateTime.now) or (invitation.responses.count - invitation.responses.count(nil) == invitation.responses.count))
       #  invitation.update_attributes(:scheduled => true)
       #end
-      if (invitation.scheduled)
-        cnt = 0
-        for u in invitation.users
-          u.sendPush(invitation, true) if (cnt != invitation.creator_index and u.device_token != nil and u.device_token != "(null)")    
-          cnt += 1
-        end
-      end
     end
   end
   def getInvitationsOrMeals(call)
