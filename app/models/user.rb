@@ -20,4 +20,10 @@ class User < ActiveRecord::Base
     end
     arr
   end
+  def sendPush(invitation)
+    message = "You have a new invitation waiting for you!"
+    message = "Your meal has been scheduled for " + invitation.restaurants[0].keys[0].name if invitation
+  end
+
+    
 end
