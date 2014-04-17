@@ -22,6 +22,7 @@ class Api::V1::SessionsController < ApplicationController
   def updateToken
     user = User.find_by_auth_token(params[:auth_token])
     user.update_attributes(:device_token => params[:token])
+    render :json => {}
   end
   
   def destroy
