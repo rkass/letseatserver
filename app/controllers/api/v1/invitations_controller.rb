@@ -136,6 +136,11 @@ class ::Api::V1::InvitationsController < ApplicationController
       invitation.insertPreferences(User.find_by_auth_token(params[:auth_token]), p, creator = true)
       print "Preferences inserted--scheduled?" 
       print invitation.scheduled
+      cnt = 0
+      for u in invitation.users
+        u.sendPush(invitation, false) if (cnt != invitation.creator_index and u.device_token != nil and u.device_token != "(null)")
+        cnt += 1
+      end
       invitation.saveAndUpdateRecommendations
       respondWithInvitation("create_invitation", User.find_by_auth_token(params[:auth_token]), invitation) 
     else
@@ -144,10 +149,18 @@ class ::Api::V1::InvitationsController < ApplicationController
   end
   def sort(user)
     for invitation in user.invitations.find_all_by_scheduled(false)
-      date = invitation.scheduleTime
-      date = invitation.time if (date == nil or invitation.time < date)
-      if ((date < DateTime.now) or (invitation.responses.count - invitation.responses.count(nil) == invitation.responses.count))
-        invitation.update_attributes(:scheduled => true)
+      invitation.sortScheduled
+      #date = invitation.scheduleTime
+      #date = invitation.time if (date == nil or invitation.time < date)
+      #if ((date < DateTime.now) or (invitation.responses.count - invitation.responses.count(nil) == invitation.responses.count))
+      #  invitation.update_attributes(:scheduled => true)
+      #end
+      if (invitation.scheduled)
+        cnt = 0
+        for u in invitation.users
+          u.sendPush(invitation, true) if (cnt != invitation.creator_index and u.device_token != nil and u.device_token != "(null)")    
+          cnt += 1
+        end
       end
     end
   end

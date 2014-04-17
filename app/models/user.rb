@@ -20,9 +20,30 @@ class User < ActiveRecord::Base
     end
     arr
   end
-  def sendPush(invitation)
-    message = "You have a new invitation waiting for you!"
-    message = "Your meal has been scheduled for " + invitation.restaurants[0].keys[0].name if invitation
+  def sendPush(invitation, inviteLink)
+    s3 = AWS::S3.new
+    obj = s3.buckets['devpem'].objects['ck.pem']
+    fname = "tempfile.pem"
+    File.open(fname, 'wb') do |fo|
+      fo.print obj.read
+    end
+    file = File.new(fname)
+    certificate = File.read("/Users/ryan/Desktop/PushNotificationCrypto/ck.pem")
+    passphrase = "ryan30"
+    connection = Houston::Connection.new(Houston::APPLE_DEVELOPMENT_GATEWAY_URI, certificate, passphrase)
+    notification = Houston::Notification.new(device: self.device_token)
+    if inviteLink
+      notification.alert = "Your meal has been scheduled for " + invitation.restaurants[0].keys[0].name
+      notification.custom_data = {link:"invite", num:invitation.id}
+    else
+      notification.alert = "You have a new invitation waiting for you!"
+      notification.custom_data = {link:"invitations", scheduled:invitation.scheduled}
+    end
+    notification.sound = "sosumi.aiff"
+    connection.open
+    connection.write(notification.message)
+    connection.close
+  end
   end
 
     
