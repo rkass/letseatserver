@@ -6,6 +6,8 @@ gem 'rails', '4.0.2'
 
 gem 'nokogiri'
 
+gem 'aws-sdk', '~> 1.38.0'
+
 gem 'oauth'
 
 gem 'hirefire-resource'
