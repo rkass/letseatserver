@@ -167,10 +167,11 @@ class Invitation < ActiveRecord::Base
       end
       if withRestaurants
         if self.restaurants != nil
-          self.restaurants.each_key do |key|
+          count = 0
+          while (count < 15)
             print "votes: " 
-            print self.restaurants[key]
-            ret["restaurants"].append(key.serialize(self.restaurants[key], arguser, self))
+            print self.restaurants[count]
+            ret["restaurants"].append(self.restaurants[count].keys[0].serialize(self.restaurants[count][self.restaurants[count].keys[0]], arguser, self))
           end
         end
         ret["updatingRecommendations"] = self.updatingRecommendations
