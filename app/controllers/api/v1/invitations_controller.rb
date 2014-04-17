@@ -46,26 +46,16 @@ class ::Api::V1::InvitationsController < ApplicationController
     splitTime = split[2].split(':')
     hour = splitTime[0].to_i
     ampm = "PM"
-    print "split time:"
-    print splitTime
     ampm = "AM" unless splitTime[1].include?"PM"
-    print "ampm"
-    print ampm
     hour += 12 if ampm == "PM" and hour != 12
     hour -= 12 if ampm == "AM" and hour == 12
     minutes = (splitTime[1].gsub! ampm, '').to_i
     year = (DateTime.now).to_date.year
     year += 1 if (DateTime.now + secondsFromGMT.seconds).to_date.month > monthNum
-    print "hour"
-    print hour
-    #DateTime.new(year, monthNum, dayOfMonth, hour, minutes)
-    print "date"
-    print (DateTime.new(year, monthNum, dayOfMonth, hour, minutes) - secondsFromGMT.seconds)
     DateTime.new(year, monthNum, dayOfMonth, hour, minutes) - secondsFromGMT.seconds
   end
   def respondWithInvitation(call, user, invitation)
-    print "Respond with invitation scheduled? "
-    print invitation.scheduled
+    print "rendering"
     render :json => {:success => true, :call => call, :invitation => invitation.serialize(user, true)}
   end    
   def respondNo
@@ -74,11 +64,14 @@ class ::Api::V1::InvitationsController < ApplicationController
     return
   end
   def respondYes
+    print "responding yest"
     r = Response.new(true, nil, params[:foodList], params[:location], params[:minPrice], params[:maxPrice])
     invitation = Invitation.find(params[:id])
     user = User.find_by_auth_token(params[:auth_token])
     invitation.respondYes(user, r)
+    print "back from model call"
     invitation.saveAndUpdateRecommendations
+    print "back from save and update call"
     respondWithInvitation("respond_yes", user, invitation)
   end
   def getInvitation
@@ -131,11 +124,7 @@ class ::Api::V1::InvitationsController < ApplicationController
     invitation = Invitation.customNew(users, makeDateTime(params[:date], params[:secondsFromGMT]), scheduleTime,central, params[:minPeople], params[:secondsFromGMT], params[:message])
     if invitation.save
       invitation = Invitation.find(invitation.id)
-      print "Invitation save--scheduled?" 
-      print invitation.scheduled
       invitation.insertPreferences(User.find_by_auth_token(params[:auth_token]), p, creator = true)
-      print "Preferences inserted--scheduled?" 
-      print invitation.scheduled
       cnt = 0
       for u in invitation.users
         u.sendPush(invitation, false) if (cnt != invitation.creator_index and u.device_token != nil and u.device_token != "(null)")
@@ -163,10 +152,6 @@ class ::Api::V1::InvitationsController < ApplicationController
     invitations = []
     meals = (call == "get_meals")
     for invitation in user.invitations.find_all_by_scheduled(meals)
-      if not meals
-        print "declined?"
-        print invitation.declined(user)
-      end
       invitations.append(invitation.serialize(user)) if ((not invitation.declined(user)) or (not meals))
     end
     render :json => {:success => true, :invitations => invitations, :call => call}

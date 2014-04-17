@@ -103,7 +103,7 @@ class Invitation < ActiveRecord::Base
     responses = self.responses
     responses[self.users.index(arguser)] = response
     self.responses = responses
-    self.scheduleTime = DateTime.now + 5.minutes if ((self.responses.count - self.responses.count(nil) == self.responses.count) and (self.responses.count > 1))
+    self.scheduleTime = DateTime.now + 5.minutes if ((self.responses.count - self.responses.count(nil) == self.responses.count) and (self.responses.count > 1))#send notificaiton here
     self.save
   end
   def serializeTime(time)
@@ -114,8 +114,6 @@ class Invitation < ActiveRecord::Base
   end
 
   def serialize(arguser, withRestaurants = false)
-    print "Serializing is scheduled?" 
-    print self.scheduled
     ret = {}
     ret["people"] = []
     ret["responses"] = []
@@ -161,16 +159,12 @@ class Invitation < ActiveRecord::Base
       else  
         ret["scheduleTime"] = ret["time"]
       end
-      print "sending scheduled?"
-      self.scheduled
       ret["scheduled"] = self.scheduled
       end
       if withRestaurants
         if self.restaurants != nil
           count = 0
           while (count < 15)
-            print "votes: " 
-            print self.restaurants[count]
             ret["restaurants"].append(self.restaurants[count].keys[0].serialize(self.restaurants[count][self.restaurants[count].keys[0]], arguser, self))
             count += 1
           end
@@ -213,9 +207,7 @@ class Invitation < ActiveRecord::Base
       count = 0 
       ret = {}
       while count < 15
-        puts "count start :#{count}"
         ret[count] = {yelpToRestaurant(restaurants[count], self.dayOfWeek, self.timeOfDay) => []}
-        puts "count end: #{count}"
         count += 1
       end
       self.restaurants = ret
@@ -234,7 +226,6 @@ class Invitation < ActiveRecord::Base
         if key.equals(restaurant)
           voted_restaurant = key
           self.restaurants[key].append(user.id)
-          print "voting"
         else
           other_restaurants.append(key)
         end
