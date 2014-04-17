@@ -18,6 +18,11 @@ class Api::V1::SessionsController < ApplicationController
     end
     invalid_login_attempt
   end
+
+  def updateToken
+    user = User.find_by_auth_token(params[:auth_token])
+    user.update_attributes(:device_token => params[:token])
+  end
   
   def destroy
     sign_out(resource_name)
