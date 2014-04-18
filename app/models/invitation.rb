@@ -223,13 +223,17 @@ class Invitation < ActiveRecord::Base
     voted_restaurant = nil
     other_restaurants = []
     self.with_lock do
-      for dict in self.restaurants
+      count = 0
+      while (count < 15)
+        dict = self.restaurants[count]
         if dict.keys[0].equals(restaurant)
           voted_restaurant = dict.keys[0] 
           dict[dict.keys[0]].append(user.id)
+          self.restaurants[count] = dict
         else
           other_restaurants.append(dict.keys[0])
         end
+        count += 1
       end
       self.save
     end
@@ -237,11 +241,15 @@ class Invitation < ActiveRecord::Base
   end   
   def unvote(user, restaurant)
     self.with_lock do
-      for dict in self.restaurants
+      count = 0
+      while (count < 15)
+        dict = self.restaurants[count]
         if dict.keys[0].equals(restaurant)
           dict[dict.keys[0]].delete(user.id)
+          self.restaurants[count] = dict
           break
         end
+        count += 1
       end 
       self.save 
     end
