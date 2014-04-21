@@ -130,6 +130,9 @@ class ::Api::V1::InvitationsController < ApplicationController
         u.sendPush(invitation, false) if (cnt != invitation.creator_index and u.device_token != nil and u.device_token != "(null)")
         cnt += 1
       end
+      for num in invitation.invitees
+        sendInviteText(params[:foodList], invitation.time, num)
+      end
       invitation.saveAndUpdateRecommendations
       respondWithInvitation("create_invitation", User.find_by_auth_token(params[:auth_token]), invitation) 
     else
