@@ -24,6 +24,8 @@ class ApplicationController < ActionController::Base
   end
 
   def sendInviteText(typesList, date, phoneNumber)
+    print "typesList" 
+    print typesList
     date = date.strftime('%b %e, %l:%M %p')
     typesString = typesList[0] + " food" if typesList.length == 1
     if typesList.length > 1
