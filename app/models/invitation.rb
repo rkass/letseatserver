@@ -4,9 +4,11 @@ require Rails.root.join('app', 'models', 'response.rb').to_s
 class Invitation < ActiveRecord::Base
   serialize :responses
   serialize :restaurants
+  serialize :invitees
   validate :validator
+  
   has_and_belongs_to_many :users, :order => :id
-  def self.customNew(users, time, scheduleTime, central,minimum_attending, seconds_from_gmt, message = nil)
+  def self.customNew(users, time, scheduleTime, central,minimum_attending, seconds_from_gmt, invitees, message = nil)
     i = Invitation.new
     i.users = users
     i.responses = ([nil] * (users.length))
@@ -17,7 +19,7 @@ class Invitation < ActiveRecord::Base
     i.message = message
     i.seconds_from_gmt = seconds_from_gmt
     i.minimum_attending = minimum_attending
-    i
+    i.invitees = invitees
   end
   def validator
     errors.add(:users, "Supply a creator") if self.users.length < 1
