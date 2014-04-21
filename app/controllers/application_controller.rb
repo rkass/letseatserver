@@ -45,6 +45,7 @@ class ApplicationController < ActionController::Base
  
     @client.account.messages.create({
       :from => '+15162520417',    
+      :to => phoneNumber,
       :body => msg, 
       :media_url => 'http://google.com',
     })
