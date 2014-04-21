@@ -4,6 +4,8 @@ source 'https://rubygems.org'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.0.2'
 
+gem 'twilio-ruby', '~> 3.11'
+
 gem 'nokogiri'
 
 gem 'aws-sdk', '~> 1.38.0'
