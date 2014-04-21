@@ -7,12 +7,16 @@ class ApplicationController < ActionController::Base
     User.find_by_auth_token(auth_token)  
   end
 
-  def phoneStrip(phoneString)
-    str = phoneString.gsub(/[^0-9]/, "")
+  def self.phoneStrip(phoneString)
+    str = phoneString.gsub(/[^0-9]/, "") 
     if str.length == 11
       str = str[1..str.length]
-    end
-    str
+    end 
+    str 
+  end
+
+  def phoneStrip(phoneString)
+    self.phoneStrip(phoneString)
   end
 
   def configure_permitted_parameters
