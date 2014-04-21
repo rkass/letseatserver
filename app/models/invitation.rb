@@ -19,7 +19,11 @@ class Invitation < ActiveRecord::Base
     i.message = message
     i.seconds_from_gmt = seconds_from_gmt
     i.minimum_attending = minimum_attending
-    i.invitees = invitees
+    i.invitees = []
+    for inv in invitees
+      i.invitees.append(phoneStrip(inv))
+    end
+    i
   end
   def validator
     errors.add(:users, "Supply a creator") if self.users.length < 1
