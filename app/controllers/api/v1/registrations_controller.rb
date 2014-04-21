@@ -6,24 +6,24 @@ class Api::V1::RegistrationsController < ApplicationController
       :phone_number => phoneStrip(params[:phoneNumber]), :auth_token => Digest::SHA1.hexdigest(params[:username] + params[:password]))
     invs = Invitation.where("invitees like ?", "%" + user.phone_number + "%")
     if user.save
-      print "Successfully saved"
       for inv in invs
         inv.users.append(user)
         inv.save
         inv = Invitation.find(inv.id)
         newresponses = []
-        resp = inv.responses
+        resp = inv.responses.reverse
         cnt = 0
         while (cnt < inv.users.length)
           if (inv.users[cnt].id == user.id)
             newresponses.append(nil)
           else
-            newresponses.append(resp[cnt])
-            cnt += 1
+            newresponses.append(resp.pop())
           end
+          cnt += 1
         end
+        inv.responses = newresponses
+        inv.save
       end
-      print "Resaving"
       user.save    
       render :json=> {:auth_token=> user.auth_token, :phone_number => user.phone_number, :request=>"sign_up"}, :status=>201
       return
