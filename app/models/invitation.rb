@@ -21,7 +21,7 @@ class Invitation < ActiveRecord::Base
     i.minimum_attending = minimum_attending
     i.invitees = []
     for inv in invitees
-      i.invitees.append(phoneStrip(inv))
+      i.invitees.append(ApplicationController::phoneStrip(inv))
     end
     i
   end
