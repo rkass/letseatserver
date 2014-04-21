@@ -16,7 +16,7 @@ class ApplicationController < ActionController::Base
   end
 
   def phoneStrip(phoneString)
-    self.phoneStrip(phoneString)
+    self.class.phoneStrip(phoneString)
   end
 
   def configure_permitted_parameters
