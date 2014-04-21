@@ -39,7 +39,7 @@ class ApplicationController < ActionController::Base
     msg = phoneNumber + " has invited you out to eat " + " on " + date + ". " + "Click here to respond by downloading Let's Eat." if typesList.length == 0
     account_sid = 'AC2f765a199ace2dc474a668b9daa59b5c' 
     auth_token = '3f3d821890f60e0a8240cab0232be4a1' 
- 
+    msg += "  google.com" 
     # set up a client to talk to the Twilio REST API 
     @client = Twilio::REST::Client.new account_sid, auth_token 
  
@@ -47,7 +47,6 @@ class ApplicationController < ActionController::Base
       :from => '+15162520417',    
       :to => phoneNumber,
       :body => msg, 
-      :media_url => 'http://google.com',
     })
   end  
 
