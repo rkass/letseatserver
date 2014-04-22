@@ -86,6 +86,7 @@ GEM
     nokogiri (1.5.6)
     oauth (0.4.7)
     orm_adapter (0.5.0)
+    parallel (1.0.0)
     pg (0.17.1)
     places (0.0.1)
       hashie
@@ -174,6 +175,7 @@ DEPENDENCIES
   jquery-rails
   nokogiri
   oauth
+  parallel
   pg
   places
   rails (= 4.0.2)

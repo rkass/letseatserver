@@ -10,6 +10,8 @@ gem 'nokogiri'
 
 gem 'aws-sdk', '~> 1.38.0'
 
+gem 'parallel'
+
 gem 'oauth'
 
 gem 'hirefire-resource'
