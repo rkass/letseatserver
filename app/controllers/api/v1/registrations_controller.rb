@@ -21,6 +21,7 @@ class Api::V1::RegistrationsController < ApplicationController
           end
           cnt += 1
         end
+        inv.sortScheduled(nil)
         inv.responses = newresponses
         inv.save
       end
