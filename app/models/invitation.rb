@@ -269,14 +269,14 @@ class Invitation < ActiveRecord::Base
     ret
   end
   def hundredSerial
-    r = ""
-    m = Mutex.new
+    r = []
+    #m = Mutex.new
     cnt = 0
     while (cnt < 100)
       res = Yelp.getResults("40.727676,-73.984593", "pizza", 2000)
-      m.synchronize{
-        r += res
-      }
+     # m.synchronize{
+        r.append(res)
+     # }
       cnt += 1
     end
   end
