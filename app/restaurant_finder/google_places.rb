@@ -16,7 +16,7 @@ class GooglePlaces
     query = CGI::escape(formattedAddress)
     str = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=#{query}&sensor=false&key=#{@@api_key}"
     result = open(str).read
-    Request.create(:api => 'google', :result => result, :url => str)
+    Request.create({:api => 'google', :result => result, :url => str})
     response = JSON.parse(result)
     sim = self.getSim(formattedAddress, response['results'][0])
     ref = response['results'][0]['reference']
@@ -44,7 +44,7 @@ class GooglePlaces
     return OpenStruct.new if ref == nil
     str = "https://maps.googleapis.com/maps/api/place/details/json?reference=#{ref}&sensor=false&key=#{@@api_key}"
     result = open(str).read
-    Request.create(:api => 'google', :result => result, :url => str)
+    Request.create({:api => 'google', :result => result, :url => str})
     deets = JSON.parse(result)
     ret = OpenStruct.new
     if deets == nil
