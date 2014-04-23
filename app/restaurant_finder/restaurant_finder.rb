@@ -3,6 +3,7 @@ class RestaurantFinder
   def self.find(categories, invitation, parallel = true)
     if parallel
       Parallel.each(categories) do |category|
+        ActiveRecord::Base.connection.reconnect!
         searchCategory(0, category, invitation, 2000)
       end
     else
