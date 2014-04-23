@@ -15,7 +15,9 @@ class GooglePlaces
   def self.getReference(formattedAddress)
     query = CGI::escape(formattedAddress)
     str = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=#{query}&sensor=false&key=#{@@api_key}"
-    response = JSON.parse(open(str).read)
+    result = open(str).read
+    Request.create(:api => 'google', :result => result, :url => str)
+    response = JSON.parse(result)
     sim = self.getSim(formattedAddress, response['results'][0])
     ref = response['results'][0]['reference']
     cnt = 0
@@ -41,7 +43,9 @@ class GooglePlaces
   def self.isOpenAndPriceHelper(ref, dayOfWeek, time)
     return OpenStruct.new if ref == nil
     str = "https://maps.googleapis.com/maps/api/place/details/json?reference=#{ref}&sensor=false&key=#{@@api_key}"
-    deets = JSON.parse(open(str).read)
+    result = open(str).read
+    Request.create(:api => 'google', :result => result, :url => str)
+    deets = JSON.parse(result)
     ret = OpenStruct.new
     if deets == nil
       return ret
@@ -53,17 +57,19 @@ class GooglePlaces
     end
     for period in deets['result']['opening_hours']['periods']
       if period['close'] != nil and period['close']['day'] == dayOfWeek
-        close = period['close']['time'].to_i
+        open_end = period['close']['time'].to_i
       end
       if period['close'] != nil and period['open']['day'] == dayOfWeek
-        open = period['open']['time'].to_i
+        open_start = period['open']['time'].to_i
       end
     end
-    if open == nil or close == nil
+    if open_start == nil or open_end == nil
       ret.open = nil
     else
-      ret.open = (time.to_i >= open and time.to_i <= close)
+      ret.open = (time.to_i >= open_start and time.to_i <= open_end)
     end
+    ret.open_start = open_start
+    ret.open_end = open_end
     return ret
   end
 

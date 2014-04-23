@@ -1,4 +1,4 @@
-class Restaurant
+class OldRestaurant
   def initialize(name, price, address, types_list, url, rating_img, snippet_img, rating = nil, categories = nil, review_count = nil)
     @name = name
     @price = price
