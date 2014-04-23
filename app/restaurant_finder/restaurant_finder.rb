@@ -40,8 +40,8 @@ class RestaurantFinder
   def self.nilEscape(str)
     if str == nil
       return "" 
-    return str
     end
+    return str
   end
 
   def self.getFormattedAddressFromYelpResult(yelpDict)
