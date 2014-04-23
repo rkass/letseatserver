@@ -290,13 +290,38 @@ class Invitation < ActiveRecord::Base
       }
     end
   end
+  def hundredNoProcesses
+    r = []
+    m = Mutex.new
+    Parallel.map([0]*100, :in_processes=>0) do |chunk|
+      res = Yelp.getResults("40.727676,-73.984593", "pizza", 2000)
+      m.synchronize{
+        r.append(res)
+      }   
+    end 
+  end 
+  def hundredNoThreading
+    r = []
+    m = Mutex.new
+    Parallel.map([0]*100, :in_threads=>0) do |chunk|
+      res = Yelp.getResults("40.727676,-73.984593", "pizza", 2000)
+      m.synchronize{
+        r.append(res)
+      }   
+    end 
+  end 
   def benchmarkYelp
     print "Running one hundred requests serially..."
     x = Benchmark.measure{hundredSerial}
-    print "Finished running...results:"
     print x
     print "Running one hundred requests using map..."
     x = Benchmark.measure{hundredMapped}
+    print x
+    print "Running one hundred requests processes => 0"
+    x = Benchmark.measure{hundredNoProcesses}
+    print x
+    print "Running one hundred requests threads => 0"
+    x = Benchmark.measure{hundredNoThreading}
     print x
   end
 end
