@@ -338,11 +338,12 @@ class Invitation < ActiveRecord::Base
     end 
   end 
   def benchmarkRestFinder
-    categories = self.responses[0].types_list
+    rf = RestaurantFinder.new(Invitation.find(308), [])
     puts "Running restaurant finder..."
-    x = Benchmark.measure{RestaurantFinder.find(categories, self)}
+    x = Benchmark.measure{rf.find(categories)}
     puts "Results..."
     puts x
+    puts rf.restaurants
 =begin
     x = Benchmark.measure{hundredSerial}
     print x
