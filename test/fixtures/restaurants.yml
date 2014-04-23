@@ -1,0 +1,45 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  price: 1
+  address: MyString
+  types_list: MyText
+  url: MyString
+  rating_img: MyString
+  snippet_img: MyString
+  rating: 
+  categories: MyString
+  review_count: 1
+  open_start: MyString
+  open_end: MyString
+  open: false
+  sum_price_scores: 
+  sum_food_scores: 
+  distance: 
+  distance_score: 
+  votes: MyText
+  rating_score: 
+  percent_match: 
+
+two:
+  name: MyString
+  price: 1
+  address: MyString
+  types_list: MyText
+  url: MyString
+  rating_img: MyString
+  snippet_img: MyString
+  rating: 
+  categories: MyString
+  review_count: 1
+  open_start: MyString
+  open_end: MyString
+  open: false
+  sum_price_scores: 
+  sum_food_scores: 
+  distance: 
+  distance_score: 
+  votes: MyText
+  rating_score: 
+  percent_match: 
