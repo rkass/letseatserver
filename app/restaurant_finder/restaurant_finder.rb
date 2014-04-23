@@ -2,7 +2,7 @@ class RestaurantFinder
 
   def self.find(categories, invitation)
     Parallel.each(categories) do |category|
-      searchCategory(0, category, invitation, radius
+      searchCategory(0, category, invitation, radius)
     end
   end
 
@@ -23,7 +23,7 @@ class RestaurantFinder
 
   def self.getYelpFormattedAddress(yelpDict)
     yelpDict['name'] + ", " + yelpDict['location']['address'][0] + ", " + yelpDict['location']['city'] + ", " + yelpDict['location']['state_code'] + " " + yelpDict['location']['postal_code'] + ", " + yelpDict['location']['country_code']
-   end
+  end
 
 =begin
   def yelpToRestaurant(yelpDict, dow, time)
