@@ -9,6 +9,8 @@ class Invitation < ActiveRecord::Base
   
   has_and_belongs_to_many :users, :order => :id
   has_many :restaurants
+
+  attr_accessor :new_preferences
   def self.customNew(users, time, scheduleTime, central,minimum_attending, seconds_from_gmt, invitees, message = nil)
     i = Invitation.new
     i.users = users
@@ -44,6 +46,7 @@ class Invitation < ActiveRecord::Base
     self.responses[self.users.index(user)]
   end
   def insertPreferences(user, preferences, creator = false)
+   self.new_preferences = preferences
    self.creator_index = self.users.index(user) if creator
    self.responses[self.users.index(user)] = preferences
    self.save 
@@ -109,6 +112,7 @@ class Invitation < ActiveRecord::Base
   def respondYes(arguser, response)
     responses = self.responses
     responses[self.users.index(arguser)] = response
+    self.new_preferences = response
     self.responses = responses
     self.save
     self.sortScheduled(arguser)
@@ -170,10 +174,8 @@ class Invitation < ActiveRecord::Base
       end
       if withRestaurants
         if self.restaurants != nil
-          count = 0
-          while (count < 15)
-            ret["restaurants"].append(self.restaurants[count].keys[0].serialize(self.restaurants[count][self.restaurants[count].keys[0]], arguser, self))
-            count += 1
+          ret["restaurants"] = self.restaurants.first(15).map do |rest|
+            rest.serialize(arguser)
           end
         end
         ret["updatingRecommendations"] = self.updatingRecommendations
@@ -182,6 +184,7 @@ class Invitation < ActiveRecord::Base
     ret["scheduleTime"] = self.serializeTime(ret["scheduleTime"])
     ret
   end
+
   def sortScheduled(excludeUser)
     orig = self.scheduled
     date = self.scheduleTime
@@ -197,34 +200,58 @@ class Invitation < ActiveRecord::Base
       self.update_attributes(:scheduled => false)
     end 
   end
-  def yelpCategoriesToLECategories(lst)
-    lst.flatten
-  end 
-  def getYelpFormattedAddress(yelpDict)
-    yelpDict['name'] + ", " + yelpDict['location']['address'][0] + ", " + yelpDict['location']['city'] + ", " + yelpDict['location']['state_code'] + " " + yelpDict['location']['postal_code'] + ", " + yelpDict['location']['country_code']
-   end 
-  def yelpToRestaurant(yelpDict, dow, time)
-    isOpenAndPrice = GooglePlaces.isOpenAndPrice(getYelpFormattedAddress(yelpDict), dow, time)
-    Restaurant.new(yelpDict['name'], isOpenAndPrice.price, yelpDict['location']['display_address'] * ",", yelpCategoriesToLECategories(yelpDict['categories']), yelpDict['mobile_url'], yelpDict['rating_img_url'], yelpDict['image_url'], yelpDict['rating'], yelpDict['categories'], yelpDict['review_count'])
-  end 
-  def updateRestaurants
-    ret = self.restaurants
-    if ret == nil
-      #in future replace first arg with self.location
-      restaurants = Yelp.getResults("40.727676,-73.984593", "pizza", 15) 
-      count = 0 
-      ret = {}
-      while count < 15
-        ret[count] = {yelpToRestaurant(restaurants[count], self.dayOfWeek, self.timeOfDay) => []}
-        count += 1
+  def fillGapsAndScore
+    for r in self.restaurants
+      r.fill_gaps
+      r.recompute
+    end
+  end
+
+  def newCategories
+    ret = self.new_preferences.types_list.dup
+    return ret if ret == []
+    for pref in self.responses
+      if pref != self.new_preferences
+        for t in pref.types_list
+          ret.delete(t)
+          return ret if ret == []
+        end 
       end
-      self.restaurants = ret
-    end 
+    end
+    ret
+  end
+
+  def allCategories
+    ret = []
+    for pref in self.responses
+      for t in pref.types_list
+        ret.append(t) if (not ret.include?t)
+      end
+    end
+    ret
+  end 
+    
+  def updateRestaurants
+    if self.central
+      RestaurantFinder.find(newCategories, invitation)
+      fillGapsAndScore
+    else
+      for r in self.restaurants
+        if (r.votes == nil or r.votes == [])
+          r.destory
+        else
+          r.computeDistance
+        end
+      end
+      RestaurantFinder.find(allCategories, invitation)
+      fillGapsAndScore
+    end
     self.with_lock do
-      puts "Decrementing id: #{self.id} from current value of #{self.updatingRecommendations}"
+      puts "Decrementing id: #{self.id} from current value of #{self.updatingRecommendations}"     
       self.update_attributes(:restaurants => ret, :updatingRecommendations => self.updatingRecommendations - 1)
     end
-  end 
+  end
+     
   def vote(user, restaurant)
     preferences = preferencesForUser(user)
     voted_restaurant = nil
