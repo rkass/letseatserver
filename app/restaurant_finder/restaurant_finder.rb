@@ -2,7 +2,7 @@ class RestaurantFinder
 
   def self.find(categories, invitation)
     Parallel.each(categories) do |category|
-      searchCategory(0, category, invitation, radius)
+      searchCategory(0, category, invitation, 2000)
     end
   end
 
