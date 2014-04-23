@@ -283,7 +283,7 @@ class Invitation < ActiveRecord::Base
   def hundredMapped
     r = []
     m = Mutex.new
-    Parallel.map([0]*100) do |chunk|
+    Parallel.each([0]*100) do |chunk|
       res = Yelp.getResults("40.727676,-73.984593", "pizza", 2000)
       m.synchronize{
         r.append(res)
