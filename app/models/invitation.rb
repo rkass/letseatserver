@@ -317,11 +317,5 @@ class Invitation < ActiveRecord::Base
     print "Running one hundred requests using map..."
     x = Benchmark.measure{hundredMapped}
     print x
-    print "Running one hundred requests processes => 0"
-    x = Benchmark.measure{hundredNoProcesses}
-    print x
-    print "Running one hundred requests threads => 0"
-    x = Benchmark.measure{hundredNoThreading}
-    print x
   end
 end
