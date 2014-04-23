@@ -18,6 +18,7 @@ class GooglePlaces
     result = open(str).read
     Request.create({:api => 'google', :result => result, :url => str})
     response = JSON.parse(result)
+    return nil if response == nil
     sim = self.getSim(formattedAddress, response['results'][0])
     ref = response['results'][0]['reference']
     cnt = 0
