@@ -41,6 +41,8 @@ class RestaurantFinder
     if str == nil
       return "" 
     return str
+    end
+  end
 
   def self.getFormattedAddressFromYelpResult(yelpDict)
     nilEscape(yelpDict['name']) + ", " + nilEscape(yelpDict['location']['address'][0]) + ", " + nilEscape(yelpDict['location']['city']) + ", " + nilEscape(yelpDict['location']['state_code']) + " " + nilEscape(yelpDict['location']['postal_code']) + ", " + nilEscape(yelpDict['location']['country_code'])
