@@ -292,11 +292,11 @@ class Invitation < ActiveRecord::Base
   end
   def benchmarkYelp
     print "Running one hundred requests serially..."
-    x = Benchmark.measure(hundredSerial)
+    x = Benchmark.measure{hundredSerial}
     print "Finished running...results:"
     print x
     print "Running one hundred requests using map..."
-    x = Benchmark.measure(hundredMapped)
+    x = Benchmark.measure{hundredMapped}
     print x
   end
 end
