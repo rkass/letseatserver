@@ -9,7 +9,7 @@ class RestaurantFinder
   def self.searchCategory(viableOptions, category, invitation, radius)
     viableOptions = viableOptions
     categoryMutex = Mutex.new
-    yelpResults = Yelp.getResults(invitation.location, category, current_radius)
+    yelpResults = Yelp.getResults(invitation.location, category, radius)
     Parallel.each(yelpResults) do |yelpResult|
       if (not invitation.restaurants.where(url:yelpResult['mobile_url']).exists?)
         isOpenAndPrice = GooglePlaces.isOpenAndPrice(getFormattedAddressFromYelpResult(yelpResult), invitation.dayOfWeek, invitation.timeOfDay)       
