@@ -8,6 +8,7 @@ class Invitation < ActiveRecord::Base
   validate :validator
   
   has_and_belongs_to_many :users, :order => :id
+  has_many :restaurants
   def self.customNew(users, time, scheduleTime, central,minimum_attending, seconds_from_gmt, invitees, message = nil)
     i = Invitation.new
     i.users = users
