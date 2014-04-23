@@ -268,4 +268,35 @@ class Invitation < ActiveRecord::Base
     self.delay.updateRestaurants
     ret
   end
+  def hundredSerial
+    r = ""
+    m = Mutex.new
+    cnt = 0
+    while (cnt < 100)
+      res = Yelp.getResults("40.727676,-73.984593", "pizza", 2000)
+      m.synchronize{
+        r += res
+      }
+      cnt += 1
+    end
+  end
+  def hundredMapped
+    r = ""
+    m = Mutex.new
+    Parallel.map([0]*100) do |chunk|
+      res = Yelp.getResults("40.727676,-73.984593", "pizza", 2000)
+      m.synchronize{
+        r += res
+      }
+    end
+  end
+  def benchmarkYelp(location, category, radius)
+    print "Running one hundred requests serially..."
+    x = Benchmark.measure(hundredSerial)
+    print "Finished running...results:"
+    print x
+    print "Running one hundred requests using map..."
+    x = Benchmark.measure(hundredMapped)
+    print x
+  end
 end
