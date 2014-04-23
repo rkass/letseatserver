@@ -3,7 +3,6 @@ require Rails.root.join('app', 'models', 'response.rb').to_s
 
 class Invitation < ActiveRecord::Base
   serialize :responses
-  serialize :restaurants
   serialize :invitees
   validate :validator
   
