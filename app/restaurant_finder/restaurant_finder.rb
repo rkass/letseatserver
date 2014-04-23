@@ -11,6 +11,7 @@ class RestaurantFinder
     categoryMutex = Mutex.new
     yelpResults = Yelp.getResults(invitation.location, category, radius)
     Parallel.each(yelpResults) do |yelpResult|
+      ActiveRecord::Base.connection.reconnect!
       if (not invitation.restaurants.where(url:yelpResult['mobile_url']).exists?)
         isOpenAndPrice = GooglePlaces.isOpenAndPrice(getFormattedAddressFromYelpResult(yelpResult), invitation.dayOfWeek, invitation.timeOfDay)       
         restaurant = invitation.restaurants.create(:name => yelpResult['name'], :price => isOpenAndPrice.price, :address => yelpResult['location']['display_address'], :url => yelpResult['mobile_url'], :rating_img => yelpResult['rating_img_url'], :snippet_img => yelpResult['image_url'], :rating => yelpResult['rating'], :categories => yelpResult['categories'], :review_count => yelpResult['review_count'], :open_start => isOpenAndPrice.openStart, :open_end => isOpenAndPrice.openEnd, :open => isOpenAndPrice.open, :distance => yelpResult['distance'])
@@ -21,7 +22,7 @@ class RestaurantFinder
   end
 
 
-  def self.getYelpFormattedAddress(yelpDict)
+  def self.getFormattedAddressFromYelpResult(yelpDict)
     yelpDict['name'] + ", " + yelpDict['location']['address'][0] + ", " + yelpDict['location']['city'] + ", " + yelpDict['location']['state_code'] + " " + yelpDict['location']['postal_code'] + ", " + yelpDict['location']['country_code']
   end
 

@@ -7,7 +7,7 @@ class Invitation < ActiveRecord::Base
   validate :validator
   
   has_and_belongs_to_many :users, :order => :id
-  has_many :restaurants
+  has_many :restaurants, :order => 'percent_match_DESC'
 
   attr_accessor :new_preferences
   def self.customNew(users, time, scheduleTime, central,minimum_attending, seconds_from_gmt, invitees, message = nil)
@@ -337,12 +337,18 @@ class Invitation < ActiveRecord::Base
       }   
     end 
   end 
-  def benchmarkYelp
-    print "Running one hundred requests serially..."
+  def benchmarkRestFinder
+    categories = self.responses[0].types_list
+    puts "Running restaurant finder..."
+    x = Benchmark.measure{RestaurantFinder.find(categories, self)}
+    puts "Results..."
+    puts x
+=begin
     x = Benchmark.measure{hundredSerial}
     print x
     print "Running one hundred requests using map..."
     x = Benchmark.measure{hundredMapped}
     print x
+=end
   end
 end
