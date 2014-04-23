@@ -3,7 +3,7 @@ class RestaurantFinder
   def self.find(categories, invitation, parallel = true)
     if parallel
       Parallel.each(categories) do |category|
-        ActiveRecord::Base.connection.reconnect!
+        #ActiveRecord::Base.connection.reconnect!
         searchCategory(0, category, invitation, 2000)
       end
     else
@@ -19,7 +19,7 @@ class RestaurantFinder
     yelpResults = Yelp.getResults(invitation.location, category, radius)
     if parallel
       Parallel.each(yelpResults) do |yelpResult|
-        ActiveRecord::Base.connection.reconnect!
+   #     ActiveRecord::Base.connection.reconnect!
         if (not invitation.restaurants.where(url:yelpResult['mobile_url']).exists?)
           isOpenAndPrice = GooglePlaces.isOpenAndPrice(getFormattedAddressFromYelpResult(yelpResult), invitation.dayOfWeek, invitation.timeOfDay)       
           restaurant = invitation.restaurants.create({:name => yelpResult['name'], :price => isOpenAndPrice.price, :address => yelpResult['location']['display_address'] * ",", :url => yelpResult['mobile_url'], :rating_img => yelpResult['rating_img_url'], :snippet_img => yelpResult['image_url'], :rating => yelpResult['rating'], :categories => yelpResult['categories'], :review_count => yelpResult['review_count'], :open_start => isOpenAndPrice.openStart, :open_end => isOpenAndPrice.openEnd, :open => isOpenAndPrice.open, :distance => yelpResult['distance']})
