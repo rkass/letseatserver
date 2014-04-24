@@ -18,7 +18,7 @@ development:
   adapter: postgresql
   encoding: unicode
   database: letseatserver_development
-  pool: 5
+  pool: 10
   username:
   password:
 
@@ -47,7 +47,7 @@ test:
   adapter: postgresql
   encoding: unicode
   database: letseatserver_test
-  pool: 5
+  pool: 10
   username: letseatserver
   password:
 
@@ -55,6 +55,6 @@ production:
   adapter: postgresql
   encoding: unicode
   database: letseatserver_production
-  pool: 5
+  pool: 10
   username: letseatserver
   password:
