@@ -47,10 +47,13 @@ class RestaurantFinder
   end
 
   def find(categories, parallel = true)
+    loc = @invitation.location
+    dow = @invitation.dayOfWeek
+    tod = @invitation.timeOfDay
     if parallel
       categories.each do |category|
         #ActiveRecord::Base.connection.reconnect!
-        searchCategory(0, category, 2000, @invitation.location, @invitation.dayOfWeek, @invitation.timeOfDay)
+        searchCategory(0, category, 2000, loc, dow, tod)
       end
       @restaurants.each{ |r| @invitation.restaurants.create(r) }
     else
