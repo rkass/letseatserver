@@ -8,6 +8,18 @@ serialize :categories
     self.votes.include?user.id
   end
 
+  def compute(foodWeight, priceWeight, distanceWeight, restWeight)
+    computeTotalFoodScore
+    computeTotalPriceScore
+    computeDistanceScore  
+    computeRestScore
+    computePercentMatch(foodWeight, priceWeight, distanceWeight, restWeight)
+  end
+
+  def computePercentMatch(foodWeight, priceWeight, distanceWeight, restWeight)
+    self.percent_match = (foodWeight * self.sum_food_scores + priceWeight * self.sum_price_scores + distanceWeight * self.distance_score + restWeight * self.rating_score) / (foodWeight + priceWeight + distanceWeight + restWeight)
+  end
+
   def computePrice(user)
     return 1 if userVoted(user)
     prefs = self.invitation.preferencesForUser(user)
@@ -28,10 +40,91 @@ serialize :categories
     return 0
   end
 
-  def computeFoodScore
+  def getLECategories
+    self.categories.map{ |c| RestaurantFinder.getLECategory(c[1]) }
   end
 
-  def compute
+  def computeFoodScore(user)
+    self.rating_score = ((5 * self.invitation.responses.length - 4) + 5) if userVoted(user)
+    prefs = self.invitation.preferencesForUser(user)
+    cnt = 0
+    while (cnt < prefs.types_list)
+      return ((5 * self.invitation.responses.length - 4) + (5 - cnt)) if self.getLECategories.include?prefs.types_list[cnt].downcase
+      cnt += 1
+    end
+    return 0
+  end
+  
+  def computeTotalFoodScore
+    tot = 0.
+    for u in self.invitation.users
+      tot += computeFoodScore(u)
+    end
+    self.sum_food_scores = tot / (((5 * self.invitation.responses.length - 4) + 5) * self.invitation.responses.length)
+  end
+
+  def computeTotalPriceScore
+    tot = 0.
+    for u in self.invitation.users
+      tot += computePriceScore(u)
+    end
+    self.sum_price_scores = tot / self.invitation.responses.length
+  end
+
+  def computeDistanceScore
+    self.distance_score = [1 - (self.distance / 40000),0].max
+  end
+
+  def computeRestScore
+    if self.review_count > 100
+      self.rating_score = 1 if self.rating == 5
+      self.rating_score =.97 if self.rating == 4.5
+      self.rating_score =.95 if self.rating == 4
+      self.rating_score = .9 if self.rating == 3.5
+      self.rating_score = .85 if self.rating == 3
+      self.rating_score = .5 if self.rating == 2.5
+      self.rating_score = .25 if self.rating == 2
+      self.rating_score = .1 if self.rating == 1.5
+      self.rating_score = .05 if self.rating == 1
+      self.rating_score = .02 if self.rating == .5
+      self.rating_score = 0 if self.rating == 0
+    elsif self.review_count > 50
+      self.rating_score = .97 if self.rating == 5
+      self.rating_score = .95 if self.rating == 4.5 
+      self.rating_score = .9 if self.rating == 4
+      self.rating_score = .85 if self.rating == 3.5 
+      self.rating_score = .8 if self.rating == 3
+      self.rating_score = .5 if self.rating == 2.5 
+      self.rating_score = .3 if self.rating == 2
+      self.rating_score = .2 if self.rating == 1.5 
+      self.rating_score = .1 if self.rating == 1
+      self.rating_score = .05 if self.rating == .5
+      self.rating_score = .02 if self.rating == 0
+    elsif self.review_count > 10
+      self.rating_score = .95 if self.rating == 5
+      self.rating_score = .92 if self.rating == 4.5 
+      self.rating_score = .87 if self.rating == 4
+      self.rating_score = .82 if self.rating == 3.5 
+      self.rating_score = .77 if self.rating == 3
+      self.rating_score = .5 if self.rating == 2.5 
+      self.rating_score = .31 if self.rating == 2
+      self.rating_score = .25 if self.rating == 1.5 
+      self.rating_score = .1 if self.rating == 1
+      self.rating_score = .05 if self.rating == .5
+      self.rating_score = .03 if self.rating == 0
+    else
+      self.rating_score = .7 if self.rating == 5
+      self.rating_score = .65 if self.rating == 4.5 
+      self.rating_score = .6 if self.rating == 4
+      self.rating_score = .55 if self.rating == 3.5 
+      self.rating_score = .52 if self.rating == 3
+      self.rating_score = .5 if self.rating == 2.5 
+      self.rating_score = .48 if self.rating == 2
+      self.rating_score = .45 if self.rating == 1.5 
+      self.rating_score = .38 if self.rating == 1
+      self.rating_score = .32 if self.rating == .5
+      self.rating_score = .25 if self.rating == 0
+    end
   end
     
 
