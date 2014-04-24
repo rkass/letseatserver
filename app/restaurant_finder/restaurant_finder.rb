@@ -1,11 +1,8 @@
-hey = 0
-
 class RestaurantFinder
 
   #restaurants is a dictionary representing restaurants
   attr_accessor :invitation, :restaurants, :restaurants_mutex, :x
   def initialize(invitation, restaurants)
-    hey = 0
     @invitation = invitation
     @x = 0
     @restaurants = restaurants.map{ |r| r.attributes }
@@ -59,7 +56,7 @@ class RestaurantFinder
         #ActiveRecord::Base.connection.reconnect!
         self.searchCategory(0, category, 2000, loc, dow, tod)
       end
-      puts "Final hey is now #{hey}"
+      puts "Final hey is now #{@x}"
       puts "Creating restaurant records"
       puts "Length of restaurants"
       puts @restaurants.length
@@ -113,8 +110,8 @@ class RestaurantFinder
     rf = self
     if parallel
       Parallel.each(yelpResults) do |yelpResult|
-        hey += 1   
-        puts "hey is now #{hey}"
+        @restaurants_mutex.synchronize{@x += 1  } 
+        puts "X is now #{@x}"
 =begin
    #     ActiveRecord::Base.connection.reconnect!
         if (not exists(yelpResult))
