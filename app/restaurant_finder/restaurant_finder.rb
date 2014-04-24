@@ -102,13 +102,13 @@ class RestaurantFinder
     viableOptions = viableOptions
     yelpResults = Yelp.getResults(location, assoc_categories, radius)
     if parallel
+      ActiveRecord::Base.connection.disconnect!
       results = Parallel.map(yelpResults) do |yelpResult|
         if (not exists(yelpResult))
           isOpenAndPrice = GooglePlaces.isOpenAndPrice(RestaurantFinder.getFormattedAddressFromYelpResult(yelpResult), dow, tod)
           {:name => yelpResult['name'], :price => isOpenAndPrice.price, :address => yelpResult['location']['display_address'] * ",", :url => yelpResult['mobile_url'], :rating_img => yelpResult['rating_img_url'], :snippet_img => yelpResult['image_url'], :rating => yelpResult['rating'], :categories => yelpResult['categories'], :review_count => yelpResult['review_count'], :open_start => isOpenAndPrice.openStart, :open_end => isOpenAndPrice.openEnd, :open => isOpenAndPrice.open, :distance => yelpResult['distance']}
         end
       end
-      ActiveRecord::Base.connection.disconnect!
       ActiveRecord::Base.establish_connection
       results.each do |r|
         @invitation.restaurants.create(r) if r != nil
