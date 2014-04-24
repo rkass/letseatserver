@@ -42,6 +42,7 @@ class RestaurantFinder
       return "vegetarian,vegan"
     elsif category.downcase == "vietnamese"
       return "vietnamese"
+    end
   end
 
   def find(categories, parallel = true)
