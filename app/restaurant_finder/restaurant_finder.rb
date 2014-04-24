@@ -54,7 +54,7 @@ class RestaurantFinder
     if parallel
       categories.each do |category|
         #ActiveRecord::Base.connection.reconnect!
-        searchCategory(0, category, 2000, loc, dow, tod)
+        self.searchCategory(0, category, 2000, loc, dow, tod)
       end
       puts "X is now #{@x}"
       puts "Creating restaurant records"
