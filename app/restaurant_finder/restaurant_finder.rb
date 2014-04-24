@@ -56,6 +56,8 @@ class RestaurantFinder
         searchCategory(0, category, 2000, loc, dow, tod)
       end
       puts "Creating restaurant records"
+      puts "Length of restaurants"
+      puts @restaurants.length
       @restaurants.each{ |r| @invitation.restaurants.create(r) }
     else
       categories.each do |category|
@@ -111,6 +113,7 @@ class RestaurantFinder
           isOpenAndPrice = GooglePlaces.isOpenAndPrice(RestaurantFinder.getFormattedAddressFromYelpResult(yelpResult), dow, tod)
           restDict = {:name => yelpResult['name'], :price => isOpenAndPrice.price, :address => yelpResult['location']['display_address'] * ",", :url => yelpResult['mobile_url'], :rating_img => yelpResult['rating_img_url'], :snippet_img => yelpResult['image_url'], :rating => yelpResult['rating'], :categories => yelpResult['categories'], :review_count => yelpResult['review_count'], :open_start => isOpenAndPrice.openStart, :open_end => isOpenAndPrice.openEnd, :open => isOpenAndPrice.open, :distance => yelpResult['distance']}
           @restaurants_mutex.synchronize{
+            puts "appending"
              @restaurants.append(restDict)
           }
           categoryMutex.synchronize{viableOptions += 1} if restDict[:open]
