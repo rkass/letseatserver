@@ -49,7 +49,7 @@ class RestaurantFinder
     if parallel
       categories.each do |category|
         #ActiveRecord::Base.connection.reconnect!
-        searchCategory(0, category, 2000, @invitation.location, @invitation.dow, @invitation.timeOfDay)
+        searchCategory(0, category, 2000, @invitation.location, @invitation.dayOfWeek, @invitation.timeOfDay)
       end
     else
       categories.each do |category|
