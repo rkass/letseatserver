@@ -13,12 +13,9 @@ class ParallelTester
   end
   
   def incrementHundred
-    100.times{
-      Thread.new{
-        foo
-      }
-    }
-    puts "Zip is #{@zip}"
+    Parallel.each([3, 4, 5]) do
+      puts "Zip is #{@zip}"
+    end
   end
 
 end
