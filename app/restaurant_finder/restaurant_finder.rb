@@ -112,8 +112,11 @@ class RestaurantFinder
           isOpenAndPrice = GooglePlaces.isOpenAndPrice(RestaurantFinder.getFormattedAddressFromYelpResult(yelpResult), dow, tod)
           restDict = {:name => yelpResult['name'], :price => isOpenAndPrice.price, :address => yelpResult['location']['display_address'] * ",", :url => yelpResult['mobile_url'], :rating_img => yelpResult['rating_img_url'], :snippet_img => yelpResult['image_url'], :rating => yelpResult['rating'], :categories => yelpResult['categories'], :review_count => yelpResult['review_count'], :open_start => isOpenAndPrice.openStart, :open_end => isOpenAndPrice.openEnd, :open => isOpenAndPrice.open, :distance => yelpResult['distance']}
           @restaurants_mutex.synchronize{
-            puts "appending"
+            puts "appending to length: "
+            puts @restaurants.length
              @restaurants.append(restDict)
+            puts "new length"
+            puts @restaurants.length
           }
           categoryMutex.synchronize{viableOptions += 1} if restDict[:open]
         end 
