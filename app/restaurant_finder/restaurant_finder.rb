@@ -68,6 +68,28 @@ class RestaurantFinder
   end
 
   def fillInGaps
+    avg_open_start = 0
+    avg_open_end = 0
+    start_count = 0
+    end_count = 0
+    for r in @invitation.restaurants
+      if r.open_start != nil
+        avg_open_start += r.open_start.to_i
+        start_count += 1  
+      end
+      if r.open_end != nil
+        avg_open_end += r.open_end.to_i
+        end_count += 1
+      end
+    end
+    avg_open_start = avg_open_start / start_count
+    avg_open_end = avg_open_end / end_count
+    for r in @invitation.restaurants
+      r.open_start = avg_open_start if r.open_start == nil
+      r.open_end = avg_open_end if r.open_end == nil
+      r.open = (@invitation.time.to_i >= r.open_start and @invitation.time.to_i <= r.open_end) if r.open == nil
+      r.save
+    end
   end
 
   def searchCategory(viableOptions, category, radius, parallel = true)
