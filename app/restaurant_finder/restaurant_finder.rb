@@ -93,10 +93,10 @@ class RestaurantFinder
   end
 
   def searchCategory(viableOptions, category, radius, parallel = true)
-    category = RestaurantFinder.getAssociatedCategories(category)
+    assoc_categories = RestaurantFinder.getAssociatedCategories(category)
     viableOptions = viableOptions
     categoryMutex = Mutex.new
-    yelpResults = Yelp.getResults(invitation.location, category, radius)
+    yelpResults = Yelp.getResults(invitation.location, assoc_categories, radius)
     if parallel
       Parallel.each(yelpResults) do |yelpResult|
    #     ActiveRecord::Base.connection.reconnect!
