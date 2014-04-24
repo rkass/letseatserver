@@ -63,7 +63,7 @@ class RestaurantFinder
   def exists(yelpResult)
     @restaurants_mutex.synchronize{
       for r in @restaurants
-        return true if r.url == yelpResult['mobile_url']
+        return true if r[:url] == yelpResult['mobile_url']
       end
     }
     return false
