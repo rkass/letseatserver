@@ -117,7 +117,7 @@ class RestaurantFinder
         if os != nil
           @invitation.restaurants.create(os.restaurant)
           os.requests.each{ |req| Request.create(req) }
-          viableOptions += 1 if r[:open]
+          viableOptions += 1 if os.restaurant[:open]
         end
       end 
     else
