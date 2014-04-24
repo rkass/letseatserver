@@ -44,4 +44,5 @@ def searchCategory(viableOptions, category, radius, location, dow, tod,parallel 
 
   #  searchCategory(viableOptions, category,  [40000, (radius * 2)].min, location, dow, tod, parallel) if ((viableOptions < 5) and (radius < 40000))
   end
+end
          
