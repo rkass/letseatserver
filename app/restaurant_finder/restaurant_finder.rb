@@ -1,9 +1,10 @@
 class RestaurantFinder
 
+  #restaurants is a dictionary representing restaurants
   attr_accessor :invitation, :restaurants, :restaurants_mutex
   def initialize(invitation, restaurants)
     @invitation = invitation
-    @restaurants = restaurants
+    @restaurants = restaurants.map{ |r| r.attributes }
     @restaurants_mutex = Mutex.new
   end 
 
@@ -51,6 +52,7 @@ class RestaurantFinder
         #ActiveRecord::Base.connection.reconnect!
         searchCategory(0, category, 2000, @invitation.location, @invitation.dayOfWeek, @invitation.timeOfDay)
       end
+      @restaurants.each{ |r| @invitation.restaurants.create(r) }
     else
       categories.each do |category|
         searchCategory(0, category, 2000, false)
@@ -101,12 +103,12 @@ class RestaurantFinder
       Parallel.each(yelpResults) do |yelpResult|
    #     ActiveRecord::Base.connection.reconnect!
         if (not exists(yelpResult))
-          isOpenAndPrice = GooglePlaces.isOpenAndPrice(RestaurantFinder.getFormattedAddressFromYelpResult(yelpResult), dow, tod)       
-          #restaurant = []#Restaurant.new({:name => yelpResult['name'], :price => isOpenAndPrice.price, :address => yelpResult['location']['display_address'] * ",", :url => yelpResult['mobile_url'], :rating_img => yelpResult['rating_img_url'], :snippet_img => yelpResult['image_url'], :rating => yelpResult['rating'], :categories => yelpResult['categories'], :review_count => yelpResult['review_count'], :open_start => isOpenAndPrice.openStart, :open_end => isOpenAndPrice.openEnd, :open => isOpenAndPrice.open, :distance => yelpResult['distance']})
-          #@restaurants_mutex.synchronize{
-           # @restaurants.append(restaurant)
-          #}
-          #categoryMutex.synchronize{viableOptions += 1} if restaurant.open
+          isOpenAndPrice = GooglePlaces.isOpenAndPrice(RestaurantFinder.getFormattedAddressFromYelpResult(yelpResult), dow, tod)
+          restDict = {:name => yelpResult['name'], :price => isOpenAndPrice.price, :address => yelpResult['location']['display_address'] * ",", :url => yelpResult['mobile_url'], :rating_img => yelpResult['rating_img_url'], :snippet_img => yelpResult['image_url'], :rating => yelpResult['rating'], :categories => yelpResult['categories'], :review_count => yelpResult['review_count'], :open_start => isOpenAndPrice.openStart, :open_end => isOpenAndPrice.openEnd, :open => isOpenAndPrice.open, :distance => yelpResult['distance']}
+          @restaurants_mutex.synchronize{
+             @restaurants.append(restDict)
+          }
+          categoryMutex.synchronize{viableOptions += 1} if restDict[:open]
         end 
       end
     else
@@ -118,7 +120,7 @@ class RestaurantFinder
         end
       end
     end
-    searchCategory(viableOptions, category,  [40000, (radius * 2)].min, parallel) if ((viableOptions < 5) and (radius < 40000))
+    searchCategory(viableOptions, category,  [40000, (radius * 2)].min, location, dow, tod, parallel) if ((viableOptions < 5) and (radius < 40000))
   end
 
   def self.nilEscape(str)
