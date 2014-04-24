@@ -56,11 +56,6 @@ class RestaurantFinder
         #ActiveRecord::Base.connection.reconnect!
         self.searchCategory(0, category, 2000, loc, dow, tod)
       end
-      puts "Final hey is now #{@x}"
-      puts "Creating restaurant records"
-      puts "Length of restaurants"
-      puts @restaurants.length
-      @restaurants.each{ |r| @invitation.restaurants.create(r) }
     else
       categories.each do |category|
         searchCategory(0, category, 2000, false)
