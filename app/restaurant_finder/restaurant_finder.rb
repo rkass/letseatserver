@@ -1,9 +1,10 @@
 class RestaurantFinder
 
   #restaurants is a dictionary representing restaurants
-  attr_accessor :invitation, :restaurants, :restaurants_mutex
+  attr_accessor :invitation, :restaurants, :restaurants_mutex, :x
   def initialize(invitation, restaurants)
     @invitation = invitation
+    @x = 0
     @restaurants = restaurants.map{ |r| r.attributes }
     @restaurants_mutex = Mutex.new
   end 
@@ -55,6 +56,7 @@ class RestaurantFinder
         #ActiveRecord::Base.connection.reconnect!
         searchCategory(0, category, 2000, loc, dow, tod)
       end
+      puts "X is now #{@x}"
       puts "Creating restaurant records"
       puts "Length of restaurants"
       puts @restaurants.length
@@ -108,6 +110,9 @@ class RestaurantFinder
     rf = self
     if parallel
       Parallel.each(yelpResults) do |yelpResult|
+        @x += 1   
+        puts "X is now #{@x}"
+=begin
    #     ActiveRecord::Base.connection.reconnect!
         if (not exists(yelpResult))
           isOpenAndPrice = GooglePlaces.isOpenAndPrice(RestaurantFinder.getFormattedAddressFromYelpResult(yelpResult), dow, tod)
@@ -121,6 +126,7 @@ class RestaurantFinder
           }
           categoryMutex.synchronize{viableOptions += 1} if restDict[:open]
         end 
+=end
       end
     else
       yelpResults.each do |yelpResult|
