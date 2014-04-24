@@ -344,7 +344,6 @@ class Invitation < ActiveRecord::Base
     puts "Time Results..."
     puts x
     puts "Generating #{self.restaurants.length} restaurants"
-    self.restaurants.each{|r| r.destroy}
     puts "Running restaurant finder without parallelism...starting from #{self.restaurants.length} restaurants..."
     x = Benchmark.measure{rf.find(self.responses[0].types_list, false)}
     puts "Time Results..."

@@ -106,13 +106,18 @@ class RestaurantFinder
       results = Parallel.map(yelpResults) do |yelpResult|
         if (not exists(yelpResult))
           isOpenAndPrice = GooglePlaces.isOpenAndPrice(RestaurantFinder.getFormattedAddressFromYelpResult(yelpResult), dow, tod)
-          {:name => yelpResult['name'], :price => isOpenAndPrice.price, :address => yelpResult['location']['display_address'] * ",", :url => yelpResult['mobile_url'], :rating_img => yelpResult['rating_img_url'], :snippet_img => yelpResult['image_url'], :rating => yelpResult['rating'], :categories => yelpResult['categories'], :review_count => yelpResult['review_count'], :open_start => isOpenAndPrice.openStart, :open_end => isOpenAndPrice.openEnd, :open => isOpenAndPrice.open, :distance => yelpResult['distance']}
+          os = OpenStruct.new
+          os.restaurant = {:name => yelpResult['name'], :price => isOpenAndPrice.price, :address => yelpResult['location']['display_address'] * ",", :url => yelpResult['mobile_url'], :rating_img => yelpResult['rating_img_url'], :snippet_img => yelpResult['image_url'], :rating => yelpResult['rating'], :categories => yelpResult['categories'], :review_count => yelpResult['review_count'], :open_start => isOpenAndPrice.openStart, :open_end => isOpenAndPrice.openEnd, :open => isOpenAndPrice.open, :distance => yelpResult['distance']}
+          os.requests = isOpenAndPrice.requests
         end
       end
       ActiveRecord::Base.establish_connection
-      results.each do |r|
-        @invitation.restaurants.create(r) if r != nil
-        viableOptions += 1 if r[:open]
+      results.each do |os|
+        if os != nil
+          @invitation.restaurants.create(os.restaurant)
+          os.request.each{ |req| Request.create(req) }
+          viableOptions += 1 if r[:open]
+        end
       end 
     else
       yelpResults.each do |yelpResult|

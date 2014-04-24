@@ -7,18 +7,22 @@ class GooglePlaces
   @@api_key = 'AIzaSyBITjgfUC0tbWp9-0SRIRR-PYAultPKDbA'
 
   def self.isOpenAndPrice(formattedAddress, dayOfWeek, time)
-    return self.isOpenAndPriceHelper(self.getReference(formattedAddress), dayOfWeek, time)
+    refStruct = self.getReference(formattedAddress)
+    returnStruct = self.isOpenAndPriceHelper(refStruct.ref, dayOfWeek, time)
+    returnStruct.requests = [returnStruct.request, refStruct.request]
+    return returnStruct
   end
 
   #location like "40.72918605727255,-73.9608789"
   #name like "Russo Mozzarella & Pasta"
   def self.getReference(formattedAddress)
+    retStruct = OpenStruct.new
     query = CGI::escape(formattedAddress)
     str = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=#{query}&sensor=false&key=#{@@api_key}"
     result = open(str).read
-    #Request.create({:api => 'google', :result => result, :url => str})
+    retStruct.request = {:api => 'google', :result => result, :url => str}
     response = JSON.parse(result)
-    return nil if (response == nil or response['results'] == nil or response['results'][0] == nil)
+    return retStruct if (response == nil or response['results'] == nil or response['results'][0] == nil)
     sim = self.getSim(formattedAddress, response['results'][0])
     ref = response['results'][0]['reference']
     cnt = 0
@@ -32,7 +36,8 @@ class GooglePlaces
       end
       cnt += 1
     end
-    return ref if ref != nil
+    retStruct.ref = ref
+    return retStruct
   end
 
   def self.getSim(formattedAddress, results)
@@ -44,10 +49,10 @@ class GooglePlaces
   def self.isOpenAndPriceHelper(ref, dayOfWeek, time)
     return OpenStruct.new if ref == nil
     str = "https://maps.googleapis.com/maps/api/place/details/json?reference=#{ref}&sensor=false&key=#{@@api_key}"
-    result = open(str).read
-    #Request.create({:api => 'google', :result => result, :url => str})
-    deets = JSON.parse(result)
     ret = OpenStruct.new
+    result = open(str).read
+    ret.request = {:api => 'google', :result => result, :url => str}
+    deets = JSON.parse(result)
     if deets == nil
       return ret
     end
