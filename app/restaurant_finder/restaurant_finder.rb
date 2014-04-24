@@ -56,7 +56,7 @@ class RestaurantFinder
         #ActiveRecord::Base.connection.reconnect!
         self.searchCategory(0, category, 2000, loc, dow, tod)
       end
-      puts "X is now #{@x}"
+      puts "Final X is now #{@x}"
       puts "Creating restaurant records"
       puts "Length of restaurants"
       puts @restaurants.length
