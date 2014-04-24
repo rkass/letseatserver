@@ -47,7 +47,7 @@ class RestaurantFinder
 
   def find(categories, parallel = true)
     if parallel
-      Parallel.each(categories) do |category|
+      categories.each do |category|
         #ActiveRecord::Base.connection.reconnect!
         searchCategory(0, category, 2000)
       end
