@@ -108,7 +108,7 @@ class RestaurantFinder
           {:name => yelpResult['name'], :price => isOpenAndPrice.price, :address => yelpResult['location']['display_address'] * ",", :url => yelpResult['mobile_url'], :rating_img => yelpResult['rating_img_url'], :snippet_img => yelpResult['image_url'], :rating => yelpResult['rating'], :categories => yelpResult['categories'], :review_count => yelpResult['review_count'], :open_start => isOpenAndPrice.openStart, :open_end => isOpenAndPrice.openEnd, :open => isOpenAndPrice.open, :distance => yelpResult['distance']}
         end
       end
-      ActiveRecord::Base.connection.reconnect!
+      Invitation.connection.reconnect!
       results.each do |r|
         @invitation.restaurants.create(r) if r != nil
         viableOptions += 1 if r[:open]
