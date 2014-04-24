@@ -119,7 +119,7 @@ class RestaurantFinder
         if (not @invitation.restaurants.where(url:yelpResult['mobile_url']).exists?)
           isOpenAndPrice = GooglePlaces.isOpenAndPrice(RestaurantFinder.getFormattedAddressFromYelpResult(yelpResult), @invitation.dayOfWeek, @invitation.timeOfDay)
           restaurant = @invitation.restaurants.create({:name => yelpResult['name'], :price => isOpenAndPrice.price, :address => yelpResult['location']['display_address'] * ",", :url => yelpResult['mobile_url'], :rating_img => yelpResult['rating_img_url'], :snippet_img => yelpResult['image_url'], :rating => yelpResult['rating'], :categories => yelpResult['categories'], :review_count => yelpResult['review_count'], :open_start => isOpenAndPrice.open_start, :open_end => isOpenAndPrice.open_end, :open => isOpenAndPrice.open, :distance => yelpResult['distance']})
-          categoryMutex.synchronize{viableOptions += 1} if restaurant.open 
+          viableOptions += 1 if restaurant.open 
         end
       end
     end

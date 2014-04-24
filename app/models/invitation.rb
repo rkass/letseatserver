@@ -339,11 +339,17 @@ class Invitation < ActiveRecord::Base
   end 
   def benchmarkRestFinder
     rf = RestaurantFinder.new(self, [])
-    puts "Running restaurant finder..."
+    puts "Running restaurant finder with parallelism..."
     x = Benchmark.measure{rf.find(self.responses[0].types_list)}
-    puts "Results..."
+    puts "Time Results..."
     puts x
-    puts rf.restaurants
+    puts "Generating #{self.restaurants.length} restaurants"
+    self.restaurants.map{|r| r.destroy}
+    puts "Running restaurant finder without parallelism..."
+    x = Benchmark.measure{rf.find(self.responses[0].types_list, false)}
+    puts "Time Results..."
+    puts x
+    puts "Generating #{self.restaurants.length} restaurants"
 =begin
     x = Benchmark.measure{hundredSerial}
     print x
