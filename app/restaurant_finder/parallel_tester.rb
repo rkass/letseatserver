@@ -1,5 +1,6 @@
 class ParallelTester
 
+  attr_accessor :zip
   def initialize
     @mutex = Mutex.new
     @zip = 42
