@@ -66,6 +66,9 @@ class RestaurantFinder
     return false
   end
 
+  def fillInGaps
+  end
+
   def searchCategory(viableOptions, category, radius, parallel = true)
     category = RestaurantFinder.getAssociatedCategories
     viableOptions = viableOptions
