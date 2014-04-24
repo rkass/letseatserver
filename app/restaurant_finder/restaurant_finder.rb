@@ -71,7 +71,7 @@ class RestaurantFinder
   end
 
   def searchCategory(viableOptions, category, radius, parallel = true)
-    category = RestaurantFinder.getAssociatedCategories
+    category = RestaurantFinder.getAssociatedCategories(category)
     viableOptions = viableOptions
     categoryMutex = Mutex.new
     yelpResults = Yelp.getResults(invitation.location, category, radius)
