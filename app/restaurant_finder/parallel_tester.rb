@@ -12,11 +12,11 @@ class ParallelTester
   end
   
   def incrementHundred
-    ([0] * 100).each do
+    100.times{
       Thread.new{
         foo
       }
-    end
+    }
     puts "Zip is #{@zip}"
   end
 
