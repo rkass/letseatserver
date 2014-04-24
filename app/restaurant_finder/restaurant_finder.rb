@@ -118,7 +118,7 @@ class RestaurantFinder
         end
       end
     end
-    searchCategory(viableOptions, category, location, [40000, (radius * 2)].min) if ((viableOptions < 5) and (radius < 40000))
+    searchCategory(viableOptions, category,  [40000, (radius * 2)].min, parallel) if ((viableOptions < 5) and (radius < 40000))
   end
 
   def self.nilEscape(str)
