@@ -49,7 +49,7 @@ serialize :categories
     prefs = self.invitation.preferencesForUser(user)
     cnt = 0
     while (cnt < prefs.types_list.length)
-      return ((5 * self.invitation.responses.length - 4) + (5 - cnt)) if self.getLECategories.include?prefs.types_list[cnt].downcase
+      return ((5 * self.invitation.responses.length - 4) + (5 - cnt)) if prefs.types_list[cnt] != nil and self.getLECategories.include?prefs.types_list[cnt].downcase
       cnt += 1
     end
     return 0
