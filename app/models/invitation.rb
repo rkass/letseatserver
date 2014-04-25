@@ -51,12 +51,13 @@ class Invitation < ActiveRecord::Base
    self.save 
   end
   def dayOfWeek
-    self.time.wday
+    (self.time + self.seconds_from_gmt.seconds).wday
   end
   def timeOfDay
-    h = self.time.hour.to_s
+    newt = self.time + self.seconds_from_gmt.seconds
+    h = newt.hour.to_s
     h = "0" + h if h.length == 1
-    min = self.time.min.to_s
+    min = newt.min.to_s
     min = "0" + min if min.length == 1
     h + min
   end
