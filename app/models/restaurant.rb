@@ -14,6 +14,7 @@ serialize :categories
     computeDistanceScore  
     computeRestScore
     computePercentMatch(foodWeight, priceWeight, distanceWeight, restWeight)
+    self.save
   end
 
   def computePercentMatch(foodWeight, priceWeight, distanceWeight, restWeight)
