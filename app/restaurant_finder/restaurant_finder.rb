@@ -17,6 +17,7 @@ class RestaurantFinder
                         "thai" => "thai",
                         "vegetarian" => "vegetarian,vegan",
                         "vietnamese" => "vietnamese"
+                        "restaurants" => "restaurants"
   }
   
   #restaurants is a dictionary representing restaurants
@@ -53,6 +54,7 @@ class RestaurantFinder
         searchCategory(0, category, 2000, loc, dow, tod,false)
       end
     end
+    self.searchCategory(0, "restaurants", 2000, loc, dow, tod) if (@invitation.restaurants.select{|r| r.open} < 15)
   end
 
   def exists(yelpResult)
@@ -137,7 +139,9 @@ class RestaurantFinder
         end
       end
     end
-    searchCategory(viableOptions, category,  [40000, (radius * 2)].min, location, dow, tod, parallel) if ((viableOptions < 5) and (radius < 40000))
+    threshold = 15 if category == "restaurants"
+    threshold = 5 if category != "restaurants"
+    searchCategory(viableOptions, category,  [40000, (radius * 2)].min, location, dow, tod, parallel) if ((viableOptions < threshold) and (radius < 40000))
   end
 
   def self.nilEscape(str)
