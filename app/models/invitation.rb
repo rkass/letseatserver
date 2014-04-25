@@ -203,7 +203,7 @@ class Invitation < ActiveRecord::Base
   def newCategories
     ret = self.new_preferences.types_list.dup
     return ret if ret == []
-    for pref in self.responses.select{|r| r!= nil}
+    for pref in (self.responses.select{|r| r!= nil})
       if pref != self.new_preferences
         for t in pref.types_list
           ret.delete(t)
@@ -216,7 +216,7 @@ class Invitation < ActiveRecord::Base
 
   def allCategories
     ret = []
-    for pref in self.responses.select{|r| r!= nil}
+    for pref in (self.responses.select{|r| r!= nil})
       for t in pref.types_list
         ret.append(t) if (not ret.include?t)
       end
@@ -226,7 +226,7 @@ class Invitation < ActiveRecord::Base
     
   def updateRestaurants
     rf = RestaurantFinder.new(self)
-    if self.central
+    if not self.central
       rf.find(newCategories)
       rf.fillGaps
       self.restaurants.each{ |r| r.compute(1, 1,1,1) }
