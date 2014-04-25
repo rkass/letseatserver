@@ -78,52 +78,52 @@ serialize :categories
   def computeRestScore
     if self.review_count > 100
       self.rating_score = 1 if self.rating == 5
-      self.rating_score =.97 if self.rating == 4.5
-      self.rating_score =.95 if self.rating == 4
-      self.rating_score = .9 if self.rating == 3.5
-      self.rating_score = .85 if self.rating == 3
-      self.rating_score = .5 if self.rating == 2.5
-      self.rating_score = .25 if self.rating == 2
-      self.rating_score = .1 if self.rating == 1.5
-      self.rating_score = .05 if self.rating == 1
-      self.rating_score = .02 if self.rating == .5
+      self.rating_score = 0.97 if self.rating == 4.5
+      self.rating_score = 0.95 if self.rating == 4
+      self.rating_score = 0.9 if self.rating == 3.5
+      self.rating_score = 0.85 if self.rating == 3
+      self.rating_score = 0.5 if self.rating == 2.5
+      self.rating_score = 0.25 if self.rating == 2
+      self.rating_score = 0.1 if self.rating == 1.5
+      self.rating_score = 0.05 if self.rating == 1
+      self.rating_score = 0.02 if self.rating == 0.5
       self.rating_score = 0 if self.rating == 0
     elsif self.review_count > 50
-      self.rating_score = .97 if self.rating == 5
-      self.rating_score = .95 if self.rating == 4.5 
-      self.rating_score = .9 if self.rating == 4
-      self.rating_score = .85 if self.rating == 3.5 
-      self.rating_score = .8 if self.rating == 3
-      self.rating_score = .5 if self.rating == 2.5 
-      self.rating_score = .3 if self.rating == 2
-      self.rating_score = .2 if self.rating == 1.5 
-      self.rating_score = .1 if self.rating == 1
-      self.rating_score = .05 if self.rating == .5
-      self.rating_score = .02 if self.rating == 0
+      self.rating_score = 0.97 if self.rating == 5
+      self.rating_score = 0.95 if self.rating == 4.5 
+      self.rating_score = 0.9 if self.rating == 4
+      self.rating_score = 0.85 if self.rating == 3.5 
+      self.rating_score = 0.8 if self.rating == 3
+      self.rating_score = 0.5 if self.rating == 2.5 
+      self.rating_score = 0.3 if self.rating == 2
+      self.rating_score = 0.2 if self.rating == 1.5 
+      self.rating_score = 0.1 if self.rating == 1
+      self.rating_score = 0.05 if self.rating == 0.5
+      self.rating_score = 0.02 if self.rating == 0
     elsif self.review_count > 10
-      self.rating_score = .95 if self.rating == 5
-      self.rating_score = .92 if self.rating == 4.5 
-      self.rating_score = .87 if self.rating == 4
-      self.rating_score = .82 if self.rating == 3.5 
-      self.rating_score = .77 if self.rating == 3
-      self.rating_score = .5 if self.rating == 2.5 
-      self.rating_score = .31 if self.rating == 2
-      self.rating_score = .25 if self.rating == 1.5 
-      self.rating_score = .1 if self.rating == 1
-      self.rating_score = .05 if self.rating == .5
-      self.rating_score = .03 if self.rating == 0
+      self.rating_score = 0.95 if self.rating == 5
+      self.rating_score = 0.92 if self.rating == 4.5 
+      self.rating_score = 0.87 if self.rating == 4
+      self.rating_score = 0.82 if self.rating == 3.5 
+      self.rating_score = 0.77 if self.rating == 3
+      self.rating_score = 0.5 if self.rating == 2.5 
+      self.rating_score = 0.31 if self.rating == 2
+      self.rating_score = 0.25 if self.rating == 1.5 
+      self.rating_score = 0.1 if self.rating == 1
+      self.rating_score = 0.05 if self.rating == .5
+      self.rating_score = 0.03 if self.rating == 0
     else
-      self.rating_score = .7 if self.rating == 5
-      self.rating_score = .65 if self.rating == 4.5 
-      self.rating_score = .6 if self.rating == 4
-      self.rating_score = .55 if self.rating == 3.5 
-      self.rating_score = .52 if self.rating == 3
-      self.rating_score = .5 if self.rating == 2.5 
-      self.rating_score = .48 if self.rating == 2
-      self.rating_score = .45 if self.rating == 1.5 
-      self.rating_score = .38 if self.rating == 1
-      self.rating_score = .32 if self.rating == .5
-      self.rating_score = .25 if self.rating == 0
+      self.rating_score = 0.7 if self.rating == 5
+      self.rating_score = 0.65 if self.rating == 4.5 
+      self.rating_score = 0.6 if self.rating == 4
+      self.rating_score = 0.55 if self.rating == 3.5 
+      self.rating_score = 0.52 if self.rating == 3
+      self.rating_score = 0.5 if self.rating == 2.5 
+      self.rating_score = 0.48 if self.rating == 2
+      self.rating_score = 0.45 if self.rating == 1.5 
+      self.rating_score = 0.38 if self.rating == 1
+      self.rating_score = 0.32 if self.rating == 0.5
+      self.rating_score = 0.25 if self.rating == 0
     end
   end
     
