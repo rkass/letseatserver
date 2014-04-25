@@ -61,6 +61,7 @@ serialize :categories
     tot = 0.0
     for u in self.invitation.users
       tot += computeFoodScore(u)
+      puts tot
     end
     self.sum_food_scores = tot / (((5 * self.invitation.responses.length - 4) + 5) * (self.invitation.responses.length - self.invitation.responses.count(nil)))
   end
