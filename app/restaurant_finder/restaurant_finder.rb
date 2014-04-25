@@ -79,6 +79,7 @@ class RestaurantFinder
       if r.price != nil
         avg_price += 1
         price_count += 1
+      end
     end
     if starts == []
       avg_open_start = "1400"
