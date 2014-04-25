@@ -245,7 +245,7 @@ class Invitation < ActiveRecord::Base
     end
     self.with_lock do
       puts "Decrementing id: #{self.id} from current value of #{self.updatingRecommendations}"     
-      self.update_attributes(:restaurants => ret, :updatingRecommendations => self.updatingRecommendations - 1)
+      self.update_attributes(:updatingRecommendations => self.updatingRecommendations - 1)
     end
   end
      
