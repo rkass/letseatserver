@@ -16,7 +16,7 @@ class RestaurantFinder
                         "steakhouse" => "steak",
                         "thai" => "thai",
                         "vegetarian" => "vegetarian,vegan",
-                        "vietnamese" => "vietnamese"
+                        "vietnamese" => "vietnamese",
                         "restaurants" => "restaurants"
   }
   
