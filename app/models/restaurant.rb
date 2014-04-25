@@ -20,7 +20,7 @@ serialize :categories
     self.percent_match = (foodWeight * self.sum_food_scores + priceWeight * self.sum_price_scores + distanceWeight * self.distance_score + restWeight * self.rating_score) / (foodWeight + priceWeight + distanceWeight + restWeight)
   end
 
-  def computePrice(user)
+  def computePriceScore(user)
     return 1 if userVoted(user)
     prefs = self.invitation.preferencesForUser(user)
     return 0 if prefs == nil
