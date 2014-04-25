@@ -233,7 +233,8 @@ class Invitation < ActiveRecord::Base
     else
       for r in self.restaurants
         if (r.votes == nil or r.votes == [])
-          r.destory
+          puts "Destroying"
+          r.destroy
         else
           r.computeDistance
         end
