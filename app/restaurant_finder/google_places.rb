@@ -53,7 +53,7 @@ class GooglePlaces
     result = open(str).read
     ret.request = {:api => 'google', :result => result, :url => str}
     deets = JSON.parse(result)
-    if deets == nil
+    if deets == nil or deets['result'] == nil
       return ret
     end
     ret.price = deets['result']['price_level']
