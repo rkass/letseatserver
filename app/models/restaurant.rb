@@ -110,7 +110,7 @@ serialize :categories
       self.rating_score = 0.31 if self.rating == 2
       self.rating_score = 0.25 if self.rating == 1.5 
       self.rating_score = 0.1 if self.rating == 1
-      self.rating_score = 0.05 if self.rating == .5
+      self.rating_score = 0.05 if self.rating == 0.5
       self.rating_score = 0.03 if self.rating == 0
     else
       self.rating_score = 0.7 if self.rating == 5
