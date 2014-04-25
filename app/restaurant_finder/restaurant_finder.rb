@@ -88,7 +88,7 @@ class RestaurantFinder
     for r in @invitation.restaurants
       r.open_start = avg_open_start if r.open_start == nil
       r.open_end = avg_open_end if r.open_end == nil
-      r.open = (@invitation.time.to_i >= r.open_start and @invitation.time.to_i <= r.open_end) if r.open == nil
+      r.open = (@invitation.time.to_i >= r.open_start.to_i and @invitation.time.to_i <= r.open_end.to_i) if r.open == nil
       r.save
     end
   end
