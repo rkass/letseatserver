@@ -121,7 +121,9 @@ class ::Api::V1::InvitationsController < ApplicationController
     end
     central = false
     central = true if (params[:central])
-    invitation = Invitation.customNew(users, makeDateTime(params[:date], params[:secondsFromGMT]), scheduleTime,central, params[:minPeople], params[:secondsFromGMT], params[:invitees], params[:message])
+    invitees  = params[:invitees]
+    invitees = [] if invitees == nil
+    invitation = Invitation.customNew(users, makeDateTime(params[:date], params[:secondsFromGMT]), scheduleTime,central, params[:minPeople], params[:secondsFromGMT], invitees, params[:message])
     if invitation.save
       invitation = Invitation.find(invitation.id)
       invitation.insertPreferences(User.find_by_auth_token(params[:auth_token]), p, creator = true)
