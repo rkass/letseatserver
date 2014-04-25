@@ -199,12 +199,6 @@ class Invitation < ActiveRecord::Base
       self.update_attributes(:scheduled => false)
     end 
   end
-  def fillGapsAndScore
-    for r in self.restaurants
-      r.fill_gaps
-      r.recompute
-    end
-  end
 
   def newCategories
     ret = self.new_preferences.types_list.dup
@@ -235,7 +229,7 @@ class Invitation < ActiveRecord::Base
     if self.central
       rf.find(newCategories)
       rf.fillGaps
-      self.restaurants.each{ |r| r.compute }
+      self.restaurants.each{ |r| r.compute(1, 1,1,1) }
     else
       for r in self.restaurants
         if (r.votes == nil or r.votes == [])
@@ -246,7 +240,7 @@ class Invitation < ActiveRecord::Base
       end
       rf.find(allCategories)
       rf.fillGaps
-      self.restaurants.each{ |r| r.compute }
+      self.restaurants.each{ |r| r.compute(1, 1, 1, 1) }
     end
     self.with_lock do
       puts "Decrementing id: #{self.id} from current value of #{self.updatingRecommendations}"     

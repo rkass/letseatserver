@@ -48,7 +48,7 @@ serialize :categories
     self.rating_score = ((5 * self.invitation.responses.length - 4) + 5) if userVoted(user)
     prefs = self.invitation.preferencesForUser(user)
     cnt = 0
-    while (cnt < prefs.types_list)
+    while (cnt < prefs.types_list.length)
       return ((5 * self.invitation.responses.length - 4) + (5 - cnt)) if self.getLECategories.include?prefs.types_list[cnt].downcase
       cnt += 1
     end
@@ -73,6 +73,12 @@ serialize :categories
 
   def computeDistanceScore
     self.distance_score = [1 - (self.distance / 40000),0].max
+  end
+
+  def serialize(user)
+    ret = self.attributes
+    ret['user_voted'] = self.votes.include?user.id
+    ret
   end
 
   def computeRestScore
