@@ -67,6 +67,8 @@ class RestaurantFinder
   def fillGaps
     starts = []
     ends = []
+    avg_price = 0.0
+    price_count = 0.0
     for r in @invitation.restaurants
       if r.open_start != nil
         starts.append(r.open_start)
@@ -74,6 +76,9 @@ class RestaurantFinder
       if r.open_end != nil
         ends.append(r.open_end)
       end
+      if r.price != nil
+        avg_price += 1
+        price_count += 1
     end
     if starts == []
       avg_open_start = "1400"
@@ -85,10 +90,16 @@ class RestaurantFinder
     else
       avg_open_end = ends.max_by { |v| ends.inject(Hash.new(0)) { |h,v| h[v] += 1; h }[v] }
     end
+    if price_count == 0
+      avg_price = 2
+    else
+      avg_price = avg_price / price_count.round(0)
+    end
     for r in @invitation.restaurants
       r.open_start = avg_open_start if r.open_start == nil
       r.open_end = avg_open_end if r.open_end == nil
       r.open = (@invitation.time.to_i >= r.open_start.to_i and @invitation.time.to_i <= r.open_end.to_i) if r.open == nil
+      r.price = avg_price if r.price == nil
       r.save
     end
   end
