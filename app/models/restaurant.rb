@@ -56,7 +56,7 @@ serialize :categories
   end
   
   def computeTotalFoodScore
-    tot = 0.
+    tot = 0.0
     for u in self.invitation.users
       tot += computeFoodScore(u)
     end
@@ -64,7 +64,7 @@ serialize :categories
   end
 
   def computeTotalPriceScore
-    tot = 0.
+    tot = 0.0
     for u in self.invitation.users
       tot += computePriceScore(u)
     end

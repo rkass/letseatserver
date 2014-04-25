@@ -7,7 +7,7 @@ class Invitation < ActiveRecord::Base
   validate :validator
   
   has_and_belongs_to_many :users, :order => :id
-  has_many :restaurants, :order => 'percent_match DESC'
+  has_many :restaurants, :order => 'open DESC, percent_match DESC'
 
   attr_accessor :new_preferences
   def self.customNew(users, time, scheduleTime, central,minimum_attending, seconds_from_gmt, invitees, message = nil)
@@ -231,9 +231,11 @@ class Invitation < ActiveRecord::Base
   end 
     
   def updateRestaurants
+    rf = RestaurantFinder.new(self)
     if self.central
-      RestaurantFinder.find(newCategories, invitation)
-      fillGapsAndScore
+      rf.find(newCategories)
+      rf.fillGaps
+      self.restaurants.each{ |r| r.compute }
     else
       for r in self.restaurants
         if (r.votes == nil or r.votes == [])
@@ -242,8 +244,9 @@ class Invitation < ActiveRecord::Base
           r.computeDistance
         end
       end
-      RestaurantFinder.find(allCategories, invitation)
-      fillGapsAndScore
+      rf.find(allCategories)
+      rf.fillGaps
+      self.restaurants.each{ |r| r.compute }
     end
     self.with_lock do
       puts "Decrementing id: #{self.id} from current value of #{self.updatingRecommendations}"     

@@ -1,50 +1,42 @@
 class RestaurantFinder
 
+  @@translation_dict = {"american" => "newamerican,tradamerican,bbq,burgers,cheesesteaks,chicken_wings,comfortfood,sandwiches,soulfood,southern",
+                        "cafe" => "bubbletea,coffee,cafes",
+                        "chinese" => "chinese",
+                        "dessert" => "bakeries,cupcakes,desserts,donuts,gelato,icecream,juicebars,shavedice",
+                        "diner" => "diners",
+                        "indian" => "indpak",
+                        "italian" => "italian,pizza",
+                        "japanese" => "japanese,sushi",
+                        "korean" => "korean",
+                        "mediterranean" => "mediterranean,greek,mideastern",
+                        "mexican" => "mexican,tex-mex,latin",
+                        "seafood" => "seafood", 
+                        "spanish" => "spanish,tapasmallplates",
+                        "steakhouse" => "steak",
+                        "thai" => "thai",
+                        "vegetarian" => "vegetarian,vegan",
+                        "vietnamese" => "vietnamese"
+  }
+  
   #restaurants is a dictionary representing restaurants
   attr_accessor :invitation, :restaurants, :restaurants_mutex, :x
-  def initialize(invitation, restaurants)
+  def initialize(invitation)
     @invitation = invitation
-    @x = 0
-    @restaurants = restaurants.map{ |r| r.attributes }
     @restaurants_mutex = Mutex.new
   end 
 
+  def self.translationDict
+    @@translation_dict
+  end
+
   def self.getAssociatedCategories(category)
-    if category.downcase == "american"
-      return "newamerican,tradamerican,bbq,burgers,cheesesteaks,chicken_wings,comfortfood,sandwiches,soulfood,southern"
-    elsif category.downcase == "cafe"
-      return "bubbletea,coffee,cafes"
-    elsif category.downcase == "chinese"
-      return "chinese"
-    elsif category.downcase == "dessert"
-      return "bakeries,cupcakes,desserts,donuts,gelato,icecream,juicebars,shavedice"
-    elsif category.downcase == "diner"
-      return "diners"
-    elsif category.downcase == "indian"
-      return "indpak"
-    elsif category.downcase == "italian"
-      return "italian,pizza"
-    elsif category.downcase == "japanese"
-      return "japanese,sushi"
-    elsif category.downcase == "korean"
-      return "korean"
-    elsif category.downcase == "mediterranean"  
-      return "mediterranean,greek,mideastern"
-    elsif category.downcase == "mexican"
-      return "mexican,tex-mex,latin"
-    elsif category.downcase == "seafood"
-      return "seafood"
-    elsif category.downcase == "spanish"
-      return "spanish,tapasmallplates"
-    elsif category.downcase == "steakhouse"
-      return "steak"
-    elsif category.downcase == "thai"
-      return "thai"
-    elsif category.downcase == "vegetarian"
-      return "vegetarian,vegan"
-    elsif category.downcase == "vietnamese"
-      return "vietnamese"
-    end
+    translationDict[category.downcase] 
+  end
+
+  def self.getLECategory(yelpCategory)
+    translationDict.each{ |k, v| return k if (v.include?yelpCategory)}
+    return nil
   end
 
   def find(categories, parallel = true)
@@ -72,7 +64,7 @@ class RestaurantFinder
     return false
   end
 
-  def fillInGaps
+  def fillGaps
     avg_open_start = 0
     avg_open_end = 0
     start_count = 0
@@ -104,7 +96,7 @@ class RestaurantFinder
     if parallel
       ActiveRecord::Base.connection.disconnect!
       results = Parallel.map(yelpResults) do |yelpResult|
-        if (not exists(yelpResult))
+        if (not @invitation.restaurants.where(url:yelpResult['mobile_url']).exists?)
           isOpenAndPrice = GooglePlaces.isOpenAndPrice(RestaurantFinder.getFormattedAddressFromYelpResult(yelpResult), dow, tod)
           os = OpenStruct.new
           os.restaurant = {:name => yelpResult['name'], :price => isOpenAndPrice.price, :address => yelpResult['location']['display_address'] * ",", :url => yelpResult['mobile_url'], :rating_img => yelpResult['rating_img_url'], :snippet_img => yelpResult['image_url'], :rating => yelpResult['rating'], :categories => yelpResult['categories'], :review_count => yelpResult['review_count'], :open_start => isOpenAndPrice.openStart, :open_end => isOpenAndPrice.openEnd, :open => isOpenAndPrice.open, :distance => yelpResult['distance']}
@@ -112,14 +104,14 @@ class RestaurantFinder
           os
         end
       end
-      ActiveRecord::Base.establish_connection
-      results.each do |os|
-        if os != nil
-          @invitation.restaurants.create(os.restaurant)
-          os.requests.each{ |req| Request.create(req) }
-          viableOptions += 1 if os.restaurant[:open]
-        end
-      end 
+    ActiveRecord::Base.establish_connection
+    results.each do |os|
+      if os != nil
+        @invitation.restaurants.create(os.restaurant)
+        os.requests.each{ |req| Request.create(req) }
+        viableOptions += 1 if os.restaurant[:open]
+      end
+    end 
     else
       yelpResults.each do |yelpResult|
         if (not @invitation.restaurants.where(url:yelpResult['mobile_url']).exists?)
