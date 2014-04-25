@@ -23,6 +23,7 @@ serialize :categories
   def computePrice(user)
     return 1 if userVoted(user)
     prefs = self.invitation.preferencesForUser(user)
+    return 0 if prefs == nil
     if self.price == 1
       min = 7
       max = 14
@@ -47,9 +48,10 @@ serialize :categories
   def computeFoodScore(user)
     self.rating_score = ((5 * self.invitation.responses.length - 4) + 5) if userVoted(user)
     prefs = self.invitation.preferencesForUser(user)
+    return 0 if prefs == nil
     cnt = 0
     while (cnt < prefs.types_list.length)
-      return ((5 * self.invitation.responses.length - 4) + (5 - cnt)) if prefs.types_list[cnt] != nil and self.getLECategories.include?prefs.types_list[cnt].downcase
+      return ((5 * (self.invitation.responses.length - 4) + (5 - cnt)) if self.getLECategories.include?prefs.types_list[cnt].downcase
       cnt += 1
     end
     return 0
@@ -60,7 +62,7 @@ serialize :categories
     for u in self.invitation.users
       tot += computeFoodScore(u)
     end
-    self.sum_food_scores = tot / (((5 * self.invitation.responses.length - 4) + 5) * self.invitation.responses.length)
+    self.sum_food_scores = tot / (((5 * self.invitation.responses.length - 4) + 5) * (self.invitation.responses.length - self.invitation.responses.count(nil)))
   end
 
   def computeTotalPriceScore
@@ -68,7 +70,7 @@ serialize :categories
     for u in self.invitation.users
       tot += computePriceScore(u)
     end
-    self.sum_price_scores = tot / self.invitation.responses.length
+    self.sum_price_scores = tot / (self.invitation.responses.length - self.invitation.responses.count(nil))
   end
 
   def computeDistanceScore
