@@ -54,7 +54,7 @@ class RestaurantFinder
         searchCategory(0, category, 2000, loc, dow, tod,false)
       end
     end
-    self.searchCategory(0, "restaurants", 2000, loc, dow, tod) if (@invitation.restaurants.select{|r| r.open} < 15)
+    self.searchCategory(0, "restaurants", 2000, loc, dow, tod) if (@invitation.restaurants.select{|r| r.open}.length < 15)
   end
 
   def exists(yelpResult)
