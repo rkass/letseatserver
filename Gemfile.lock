@@ -1,5 +1,6 @@
-PATH
-  remote: vendor/gems/places
+GIT
+  remote: https://github.com/rkass/places.git
+  revision: f57cf0ec5cfc97a04ff95ee4690d7b4ed9ddf87a
   specs:
     places (0.0.1)
       hashie
@@ -79,7 +80,7 @@ GEM
     houston (2.0.1)
       commander (~> 4.1)
       json
-    httparty (0.13.0)
+    httparty (0.13.1)
       json (~> 1.8)
       multi_xml (>= 0.5.2)
     i18n (0.6.9)
