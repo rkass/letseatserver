@@ -6,6 +6,9 @@ class GooglePlaces
 
   @@api_key = 'AIzaSyBITjgfUC0tbWp9-0SRIRR-PYAultPKDbA'
 
+  include HTTParty
+  base_uri ""
+
   def self.isOpenAndPrice(formattedAddress, dayOfWeek, time)
     refStruct = self.getReference(formattedAddress)
     returnStruct = self.isOpenAndPriceHelper(refStruct.ref, dayOfWeek, time)
@@ -19,7 +22,7 @@ class GooglePlaces
     retStruct = OpenStruct.new
     query = CGI::escape(formattedAddress)
     str = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=#{query}&sensor=false&key=#{@@api_key}"
-    result = open(str).read
+    result = self.class.get(str).body
     retStruct.request = {:api => 'google', :result => result, :url => str}
     response = JSON.parse(result)
     return retStruct if (response == nil or response['results'] == nil or response['results'][0] == nil)
@@ -50,7 +53,7 @@ class GooglePlaces
     return OpenStruct.new if ref == nil
     str = "https://maps.googleapis.com/maps/api/place/details/json?reference=#{ref}&sensor=false&key=#{@@api_key}"
     ret = OpenStruct.new
-    result = open(str).read
+    result = self.class.get(str).body
     ret.request = {:api => 'google', :result => result, :url => str}
     deets = JSON.parse(result)
     if deets == nil or deets['result'] == nil

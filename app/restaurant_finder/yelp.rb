@@ -16,7 +16,7 @@ class Yelp
     access_token = OAuth::AccessToken.new(consumer, @@token, @@token_secret)
     url = URI::encode("/v2/search?ll=#{location}&category_filter=#{category}&radius_filter=#{radius}")
     result = access_token.get(url).body
-    Request.create({:api => 'yelp', :url => url, :result => result})
+   # Request.create({:api => 'yelp', :url => url, :result => result})
     return JSON.parse(result)['businesses']
   end
 
