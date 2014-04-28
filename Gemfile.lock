@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/rkass/places.git
-  revision: 40c7e0b246371a98d214dc7fb833e09bc4e34ee8
+  revision: cb3cb9d0e222fd624a59d69dfba816497cdf1711
   specs:
     places (0.0.1)
       hashie
