@@ -26,7 +26,7 @@ gem 'delayed_job_active_record'
 
 gem 'similar_text'
 
-gem 'places'
+gem 'places', :path => "vendor/gems/places"
 
 # Use postgresql as the database for Active Record
 gem 'pg'

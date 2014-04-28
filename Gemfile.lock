@@ -1,3 +1,11 @@
+PATH
+  remote: vendor/gems/places
+  specs:
+    places (0.0.1)
+      hashie
+      httparty
+      json
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -98,10 +106,6 @@ GEM
     orm_adapter (0.5.0)
     parallel (1.0.0)
     pg (0.17.1)
-    places (0.0.1)
-      hashie
-      httparty
-      json
     polyglot (0.3.3)
     rack (1.5.2)
     rack-test (0.6.2)
@@ -189,7 +193,7 @@ DEPENDENCIES
   oauth
   parallel
   pg
-  places
+  places!
   rails (= 4.0.2)
   rails_12factor
   sass-rails (~> 4.0.0)
