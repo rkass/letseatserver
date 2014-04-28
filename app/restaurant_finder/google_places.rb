@@ -4,10 +4,10 @@ require 'similar_text'
 
 class GooglePlaces
 
-  @@api_key = 'AIzaSyBITjgfUC0tbWp9-0SRIRR-PYAultPKDbA'
 
   include HTTParty
-  base_uri ""
+  
+@@api_key = 'AIzaSyBITjgfUC0tbWp9-0SRIRR-PYAultPKDbA'
 
   def self.isOpenAndPrice(formattedAddress, dayOfWeek, time)
     refStruct = self.getReference(formattedAddress)
