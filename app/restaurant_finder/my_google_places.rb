@@ -15,6 +15,10 @@ class MyGooglePlaces
     return returnStruct
   end
 
+  def self.api_key
+    @@api_key
+  end
+
   #location like "40.72918605727255,-73.9608789"
   #name like "Russo Mozzarella & Pasta"
   def self.getReference(formattedAddress)
