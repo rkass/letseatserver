@@ -24,7 +24,7 @@ class RestaurantFinder
   attr_accessor :invitation, :client
   def initialize(invitation)
     @invitation = invitation
-    @client = Places::Client.new(MyGooglePlaces.api_key)
+    @client = Places::Client.new({:api_key => MyGooglePlaces.api_key})
   end 
 
   def self.translationDict
