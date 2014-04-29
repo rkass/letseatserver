@@ -6,6 +6,8 @@ gem 'rails', '4.0.2'
 
 gem 'gem-open'
 
+gem 'google_places'
+
 gem 'twilio-ruby', '~> 3.11'
 
 gem 'nokogiri'

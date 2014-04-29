@@ -72,6 +72,8 @@ GEM
       faraday_middleware (>= 0.8)
       hashie (>= 1.0, < 3.0.0)
     gem-open (0.1.7)
+    google_places (0.20.0)
+      httparty
     hashie (2.1.1)
     highline (1.6.21)
     hike (1.2.3)
@@ -187,6 +189,7 @@ DEPENDENCIES
   devise
   foursquare2
   gem-open
+  google_places
   hirefire-resource
   houston
   jbuilder (~> 1.2)
