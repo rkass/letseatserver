@@ -27,8 +27,9 @@ class MyGooglePlaces
     str = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=#{query}&sensor=false&key=#{@@api_key}"
     
     result = client.search({:query => query})
+    response = result
     retStruct.request = {:api => 'google', :result => result, :url => str}
-    return retStruct if (response == nil or response['results'] == nil or response['results'][0] == nil)
+    return retStruct if (response == nil or response.results == nil or response.results[0] == nil)
     sim = self.getSim(formattedAddress, response.results[0])
     ref = response.results[0].reference
     cnt = 0
