@@ -8,8 +8,8 @@ class MyGooglePlaces
   
 @@api_key = 'AIzaSyBITjgfUC0tbWp9-0SRIRR-PYAultPKDbA'
 
-  def self.isOpenAndPrice(formattedAddress, dayOfWeek, time, client)
-    refStruct = self.getReference(formattedAddress, client)
+  def self.isOpenAndPrice(formattedAddress, dayOfWeek, time, client, lat, lng, name)
+    refStruct = self.getReference(formattedAddress, client, lat, lng, name)
     returnStruct = self.isOpenAndPriceHelper(refStruct.ref, dayOfWeek, time, client)
     returnStruct.requests = [returnStruct.request, refStruct.request]
     return returnStruct
@@ -21,12 +21,12 @@ class MyGooglePlaces
 
   #location like "40.72918605727255,-73.9608789"
   #name like "Russo Mozzarella & Pasta"
-  def self.getReference(formattedAddress, client)
+  def self.getReference(formattedAddress, client, lat, lng, name)
     retStruct = OpenStruct.new
     query = CGI::escape(formattedAddress)
     str = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=#{query}&sensor=false&key=#{@@api_key}"
     
-    result = client.search({:query => query})
+    result = client.search(:lat => lat, :lng => lng, :radius =>40000, :sensor =>false, :name => name)
     response = result
     retStruct.request = {:api => 'google', :result => result, :url => str}
     return retStruct if (response == nil or response.results == nil or response.results[0] == nil)
@@ -48,7 +48,7 @@ class MyGooglePlaces
   end
 
   def self.getSim(formattedAddress, results)
-    formattedAddress.similar(results.name + ", " + results.formatted_address)
+    formattedAddress.similar(results.name + ", " + results.vicinity)
   end
 
   #time like "2000" for 8pm and "0930" for 9:30 am

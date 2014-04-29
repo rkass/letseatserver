@@ -102,11 +102,13 @@ class RestaurantFinder
     assoc_categories = RestaurantFinder.getAssociatedCategories(category)
     viableOptions = viableOptions
     yelpResults = Yelp.getResults(location, assoc_categories, radius)
+    lat = @invitation.location.split(',')[0].to_f
+    lng = @invitation.location.split(',')[1].to_f
     if parallel
       ActiveRecord::Base.connection.disconnect!
       results = Parallel.map(yelpResults) do |yelpResult|
         if (not @invitation.restaurants.where(url:yelpResult['mobile_url']).exists?)
-          isOpenAndPrice = MyGooglePlaces.isOpenAndPrice(RestaurantFinder.getFormattedAddressFromYelpResult(yelpResult), dow, tod, @client)
+          isOpenAndPrice = MyGooglePlaces.isOpenAndPrice(RestaurantFinder.getFormattedAddressFromYelpResult(yelpResult), dow, tod, @client, lat, lng, yelpResult['name'])
           os = OpenStruct.new
           os.restaurant = {:name => yelpResult['name'], :price => isOpenAndPrice.price, :address => yelpResult['location']['display_address'] * ",", :url => yelpResult['mobile_url'], :rating_img => yelpResult['rating_img_url'], :snippet_img => yelpResult['image_url'], :rating => yelpResult['rating'], :categories => yelpResult['categories'], :review_count => yelpResult['review_count'], :open_start => isOpenAndPrice.open_start, :open_end => isOpenAndPrice.open_end, :open => isOpenAndPrice.open, :distance => yelpResult['distance']}
           os.requests = isOpenAndPrice.requests 
@@ -144,7 +146,8 @@ class RestaurantFinder
   end
 
   def self.getFormattedAddressFromYelpResult(yelpDict)
-    nilEscape(yelpDict['name']) + ", " + nilEscape(yelpDict['location']['address'][0]) + ", " + nilEscape(yelpDict['location']['city']) + ", " + nilEscape(yelpDict['location']['state_code']) + " " + nilEscape(yelpDict['location']['postal_code']) + ", " + nilEscape(yelpDict['location']['country_code'])
+    nilEscape(yelpDict['name']) + ", " + nilEscape(yelpDict['location']['address'][0]) + ', '+ nilEscape(yelpDict['location']['city'])
+    #nilEscape(yelpDict['name']) + ", " + nilEscape(yelpDict['location']['address'][0]) + ", " + nilEscape(yelpDict['location']['city']) + ", " + nilEscape(yelpDict['location']['state_code']) + " " + nilEscape(yelpDict['location']['postal_code']) + ", " + nilEscape(yelpDict['location']['country_code'])
   end
 
 =begin
