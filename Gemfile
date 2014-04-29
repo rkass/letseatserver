@@ -28,7 +28,7 @@ gem 'delayed_job_active_record'
 
 gem 'similar_text'
 
-gem 'places', :git => 'https://github.com/rkass/places.git'
+gem 'places'
 
 # Use postgresql as the database for Active Record
 gem 'pg'
