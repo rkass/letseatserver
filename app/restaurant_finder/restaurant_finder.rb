@@ -21,10 +21,10 @@ class RestaurantFinder
   }
   
   #restaurants is a dictionary representing restaurants
-  attr_accessor :invitation, :restaurants, :restaurants_mutex, :x
+  attr_accessor :invitation, :client
   def initialize(invitation)
     @invitation = invitation
-    @restaurants_mutex = Mutex.new
+    @client = Places::Client.new
   end 
 
   def self.translationDict
@@ -55,15 +55,6 @@ class RestaurantFinder
       end
     end
     self.searchCategory(0, "restaurants", 2000, loc, dow, tod) if (@invitation.restaurants.select{|r| r.open}.length < 15)
-  end
-
-  def exists(yelpResult)
-    @restaurants_mutex.synchronize{
-      for r in @restaurants
-        return true if r[:url] == yelpResult['mobile_url']
-      end
-    }
-    return false
   end
 
   def fillGaps
