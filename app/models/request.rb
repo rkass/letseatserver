@@ -12,7 +12,7 @@ class Request < ActiveRecord::Base
     if self.url.include?"detail"
       client.spot(self.referenceNumber)
     else
-      client.spot_by_query(self.query)
+      client.spots_by_query(self.query)
     end
   end
 
