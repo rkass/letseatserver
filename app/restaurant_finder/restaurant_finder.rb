@@ -115,7 +115,7 @@ class RestaurantFinder
       ActiveRecord::Base.connection.disconnect!
       results = Parallel.map(yelpResults) do |yelpResult|
         if (not @invitation.restaurants.where(url:yelpResult['mobile_url']).exists?)
-          isOpenAndPrice = GooglePlaces.isOpenAndPrice(RestaurantFinder.getFormattedAddressFromYelpResult(yelpResult), dow, tod)
+          isOpenAndPrice = MyGooglePlaces.isOpenAndPrice(RestaurantFinder.getFormattedAddressFromYelpResult(yelpResult), dow, tod)
           os = OpenStruct.new
           os.restaurant = {:name => yelpResult['name'], :price => isOpenAndPrice.price, :address => yelpResult['location']['display_address'] * ",", :url => yelpResult['mobile_url'], :rating_img => yelpResult['rating_img_url'], :snippet_img => yelpResult['image_url'], :rating => yelpResult['rating'], :categories => yelpResult['categories'], :review_count => yelpResult['review_count'], :open_start => isOpenAndPrice.open_start, :open_end => isOpenAndPrice.open_end, :open => isOpenAndPrice.open, :distance => yelpResult['distance']}
           os.requests = isOpenAndPrice.requests 
@@ -133,7 +133,7 @@ class RestaurantFinder
     else
       yelpResults.each do |yelpResult|
         if (not @invitation.restaurants.where(url:yelpResult['mobile_url']).exists?)
-          isOpenAndPrice = GooglePlaces.isOpenAndPrice(RestaurantFinder.getFormattedAddressFromYelpResult(yelpResult), dow,tod)
+          isOpenAndPrice = MyGooglePlaces.isOpenAndPrice(RestaurantFinder.getFormattedAddressFromYelpResult(yelpResult), dow,tod)
           restaurant = @invitation.restaurants.create({:name => yelpResult['name'], :price => isOpenAndPrice.price, :address => yelpResult['location']['display_address'] * ",", :url => yelpResult['mobile_url'], :rating_img => yelpResult['rating_img_url'], :snippet_img => yelpResult['image_url'], :rating => yelpResult['rating'], :categories => yelpResult['categories'], :review_count => yelpResult['review_count'], :open_start => isOpenAndPrice.open_start, :open_end => isOpenAndPrice.open_end, :open => isOpenAndPrice.open, :distance => yelpResult['distance']})
           viableOptions += 1 if restaurant.open 
         end
@@ -157,7 +157,7 @@ class RestaurantFinder
 
 =begin
   def yelpToRestaurant(yelpDict, dow, time)
-    isOpenAndPrice = GooglePlaces.isOpenAndPrice(getYelpFormattedAddress(yelpDict), dow, time)
+    isOpenAndPrice = MyGooglePlaces.isOpenAndPrice(getYelpFormattedAddress(yelpDict), dow, time)
     Restaurant.new(yelpDict['name'], isOpenAndPrice.price, yelpDict['location']['display_address'] * ",", yelpCategoriesToLECategories(yelpDict['categories']), yelpDict['mobile_url'], yelpDict['rating_img_url'], yelpDict['image_url'], yelpDict['rating'], yelpDict['categories'], yelpDict['review_count'])
   end
 =end
