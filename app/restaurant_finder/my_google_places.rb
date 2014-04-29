@@ -2,7 +2,7 @@ require 'open-uri'
 require 'ostruct'
 require 'similar_text'
 
-class MyMyGooglePlaces
+class MyGooglePlaces
 
 
   
