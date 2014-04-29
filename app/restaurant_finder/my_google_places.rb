@@ -22,7 +22,6 @@ class MyGooglePlaces
   #location like "40.72918605727255,-73.9608789"
   #name like "Russo Mozzarella & Pasta"
   def self.getReference(formattedAddress, client, lat, lng, name)
-    print "Getting reference"
     retStruct = OpenStruct.new
     query = CGI::escape(formattedAddress)
     str = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=#{query}&sensor=false&key=#{@@api_key}"
@@ -44,7 +43,6 @@ class MyGooglePlaces
       end
       cnt += 1
     end
-    print "reference is #{ref}"
     retStruct.ref = ref
     return retStruct
   end
@@ -59,7 +57,6 @@ class MyGooglePlaces
     return OpenStruct.new if ref == nil
     str = "https://maps.googleapis.com/maps/api/place/details/json?reference=#{ref}&sensor=false&key=#{@@api_key}"
     ret = OpenStruct.new
-    puts "Searching reference #{ref}"
     result = client.details({:reference => ref})
     ret.request = {:api => 'google', :result => result, :url => str}
     deets = result
