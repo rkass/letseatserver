@@ -108,6 +108,7 @@ class RestaurantFinder
       ActiveRecord::Base.connection.disconnect!
       results = Parallel.map(yelpResults) do |yelpResult|
         if (not @invitation.restaurants.where(url:yelpResult['mobile_url']).exists?)
+          puts "isopeningandprice"
           isOpenAndPrice = MyGooglePlaces.isOpenAndPrice(RestaurantFinder.getFormattedAddressFromYelpResult(yelpResult), dow, tod, @client, lat, lng, yelpResult['name'])
           os = OpenStruct.new
           os.restaurant = {:name => yelpResult['name'], :price => isOpenAndPrice.price, :address => yelpResult['location']['display_address'] * ",", :url => yelpResult['mobile_url'], :rating_img => yelpResult['rating_img_url'], :snippet_img => yelpResult['image_url'], :rating => yelpResult['rating'], :categories => yelpResult['categories'], :review_count => yelpResult['review_count'], :open_start => isOpenAndPrice.open_start, :open_end => isOpenAndPrice.open_end, :open => isOpenAndPrice.open, :distance => yelpResult['distance']}
