@@ -1,4 +1,5 @@
 class Request < ActiveRecord::Base
+serialize :result
 
   def referenceNumber
     self.url[self.url.index('=') + 1..self.url.index('&') - 1]
