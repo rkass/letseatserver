@@ -57,7 +57,7 @@ class MyGooglePlaces
     return OpenStruct.new if ref == nil
     str = "https://maps.googleapis.com/maps/api/place/details/json?reference=#{ref}&sensor=false&key=#{@@api_key}"
     ret = OpenStruct.new
-    result = client.details(ref)
+    result = client.details({:reference => ref})
     ret.request = {:api => 'google', :result => result, :url => str}
     deets = result
     if deets == nil or deets.result == nil
