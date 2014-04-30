@@ -70,7 +70,7 @@ class ::Api::V1::InvitationsController < ApplicationController
     user = User.find_by_auth_token(params[:auth_token])
     invitation.respondYes(user, r)
     print "back from model call"
-    invitation.saveAndUpdateRecommendations
+    invitation.saveAndUpdateRecommendations(false)
     print "back from save and update call"
     respondWithInvitation("respond_yes", user, invitation)
   end
@@ -83,9 +83,8 @@ class ::Api::V1::InvitationsController < ApplicationController
  def vote
     user = User.find_by_auth_token(params[:auth_token])
     i = Invitation.find(params[:invitation])
-    restaurant = Restaurant.new(params[:name], params[:price], params[:address], params[:types], params[:url], params[:ratingImg], params[:snippetImg])
-    i.vote(user, restaurant)
-    i.saveAndUpdateRecommendations
+    i.vote(user, params[:url])
+    i.saveAndUpdateRecommendations(true)
     respondWithInvitation("cast_vote", user, i)
   end
   def unvote
@@ -93,7 +92,7 @@ class ::Api::V1::InvitationsController < ApplicationController
     i = Invitation.find(params[:invitation])
     restaurant = Restaurant.new(params[:name], params[:price], params[:address], params[:types], params[:url], params[:ratingImg], params[:snippetImg])
     i.unvote(user, restaurant)
-    i.saveAndUpdateRecommendations
+    i.saveAndUpdateRecommendations(true)
     respondWithInvitation("cast_unvote", user, i)
   end
   def create
@@ -135,7 +134,7 @@ class ::Api::V1::InvitationsController < ApplicationController
       for num in invitation.invitees
         sendInviteText(params[:foodList], invitation.time, num)
       end
-      invitation.saveAndUpdateRecommendations
+      invitation.saveAndUpdateRecommendations(false)
       respondWithInvitation("create_invitation", User.find_by_auth_token(params[:auth_token]), invitation) 
     else
       render :json => {:success => false}, :status =>422
