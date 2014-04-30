@@ -130,6 +130,7 @@ class Invitation < ActiveRecord::Base
     ret["responses"] = []
     ret["messages"] = []
     ret["preferences"] = []
+    withRestaurants = (self.updatingRecommendations == 0)
     if withRestaurants
       ret["restaurants"] = []
     end
