@@ -100,7 +100,7 @@ class RestaurantFinder
 
   def self.isOpen(openStart, openEnd, time)
     openEnd += 24 if openEnd <= 6
-    time >= open_start and time <= open_end
+    time >= openStart and time <= openEnd
   end
     
 
