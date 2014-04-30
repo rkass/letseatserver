@@ -104,6 +104,14 @@ class RestaurantFinder
   end
     
 
+  def getCoordinates(address)
+    res = HTTParty.get("https://maps.googleapis.com/maps/api/geocode/json?address=#{address}&sensor=false&key=AIzaSyBITjgfUC0tbWp9-0SRIRR-PYAultPKDbA")
+    lat = ""
+    lng = ""
+    lat = res.parsed_response['results'][0]['geometry']['location']['lat'] if (res.parsed_response != nil and res.parsed_response['results'] != nil and res.parsed_response['results'][0]['geometry'] != nil)
+    lng = res.parsed_response['results'][0]['geometry']['location']['lng'] if (res.parsed_response != nil and res.parsed_response['results'] != nil and res.parsed_response['results'][0]['geometry'] != nil)
+    "#{lat.to_s},#{lng.to_s}"
+
   def searchCategory(viableOptions, category, radius, location, dow, tod,parallel = true)
     assoc_categories = RestaurantFinder.getAssociatedCategories(category)
     viableOptions = viableOptions

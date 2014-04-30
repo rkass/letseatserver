@@ -234,14 +234,7 @@ class Invitation < ActiveRecord::Base
       rf.fillGaps
       self.restaurants.each{ |r| r.compute(1, 1,1,1) }
     else
-      for r in self.restaurants
-        if (r.votes == nil or r.votes == [])
-          puts "Destroying"
-          r.destroy
-        else
-          r.computeDistance
-        end
-      end
+      self.restaurants
       rf.find(allCategories)
       rf.fillGaps
       self.restaurants.each{ |r| r.compute(1, 1, 1, 1) }

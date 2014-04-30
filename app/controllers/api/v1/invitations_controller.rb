@@ -55,8 +55,9 @@ class ::Api::V1::InvitationsController < ApplicationController
     DateTime.new(year, monthNum, dayOfMonth, hour, minutes) - secondsFromGMT.seconds
   end
   def respondWithInvitation(call, user, invitation)
-    print "rendering"
-    render :json => {:success => true, :call => call, :invitation => invitation.serialize(user, true)}
+    withRestaurants = false
+    withRestaurants = true if self.updatingRecommnedations == 0
+    render :json => {:success => true, :call => call, :invitation => invitation.serialize(user, withRestaurants)}
   end    
   def respondNo
     Invitation.find(params[:id]).respondNo(User.find_by_auth_token(params[:auth_token]), params[:message])
