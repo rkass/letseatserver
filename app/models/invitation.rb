@@ -128,7 +128,7 @@ class Invitation < ActiveRecord::Base
     ret[0..index - 2]
   end
 
-  def serialize(arguser)
+  def serialize(arguser, withRestaurants)
     ret = {}
     ret["people"] = []
     ret["responses"] = []
