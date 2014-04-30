@@ -174,7 +174,7 @@ class Invitation < ActiveRecord::Base
       end
       if withRestaurants
         if self.restaurants != nil
-          ret["restaurants"] = self.restaurants.first(15).map do |rest|
+          ret["restaurants"] = self.restaurants.where(open:true).first(15).map do |rest|
             rest.serialize(arguser)
           end
         end
@@ -225,9 +225,11 @@ class Invitation < ActiveRecord::Base
     ret
   end 
     
-  def updateRestaurants
+  def updateRestaurants(withVote)
     rf = RestaurantFinder.new(self)
-    if not self.central
+    if withVote
+      self.restaurants.each{ |r| r.compute(1, 1, 1, 1) }
+    elsif not self.central
       rf.find(newCategories)
       rf.fillGaps
       self.restaurants.each{ |r| r.compute(1, 1,1,1) }
@@ -250,48 +252,43 @@ class Invitation < ActiveRecord::Base
     end
   end
      
-  def vote(user, restaurant)
+  def vote(user, input_url)
     preferences = preferencesForUser(user)
     voted_restaurant = nil
     other_restaurants = []
     self.with_lock do
-      count = 0
-      while (count < 15)
-        dict = self.restaurants[count]
-        if dict.keys[0].equals(restaurant)
-          voted_restaurant = dict.keys[0] 
-          dict[dict.keys[0]].append(user.id)
-          self.restaurants[count] = dict
+      for r in self.restaurants
+        if r.url == input_url
+          r.votes.append(user.id)
+          r.save
+          voted_restaurant = r.serialize(user)
         else
-          other_restaurants.append(dict.keys[0])
+          other_restaurants.append(r.serialize(user))
         end
-        count += 1
       end
       self.save
     end
     Vote.create(:preferences => preferences, :voted_restaurant => voted_restaurant, :other_restaurants => other_restaurants)
-  end   
+  end 
+  
   def unvote(user, restaurant)
     self.with_lock do
-      count = 0
-      while (count < 15)
-        dict = self.restaurants[count]
-        if dict.keys[0].equals(restaurant)
-          dict[dict.keys[0]].delete(user.id)
-          self.restaurants[count] = dict
+      for r in self.restaurants
+        if r.url == input_url 
+          r.votes.delete(user.id)
+          r.save
           break
         end
-        count += 1
       end 
       self.save 
     end
   end   
-  def saveAndUpdateRecommendations
+  def saveAndUpdateRecommendations(withVote)
     ret = nil
     self.with_lock do
       ret = self.update_attributes(:updatingRecommendations => self.updatingRecommendations + 1)
     end
-    self.delay.updateRestaurants
+    self.delay.updateRestaurants(withVote)
     ret
   end
   def hundredSerial

@@ -81,6 +81,7 @@ serialize :categories
   def serialize(user)
     ret = self.attributes
     ret['user_voted'] = self.votes.include?user.id
+    ret['votes'] = self.votes.length
     ret
   end
 
