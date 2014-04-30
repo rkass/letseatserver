@@ -183,8 +183,8 @@ class Invitation < ActiveRecord::Base
             rest.serialize(arguser)
           end
         end
-        ret["updatingRecommendations"] = self.updatingRecommendations
       end
+    ret["updatingRecommendations"] = self.updatingRecommendations
     ret["time"] = self.serializeTime(ret["time"] + self.seconds_from_gmt.seconds)
     ret["scheduleTime"] = self.serializeTime(ret["scheduleTime"])
     ret
