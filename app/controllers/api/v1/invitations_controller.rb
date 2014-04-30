@@ -56,7 +56,7 @@ class ::Api::V1::InvitationsController < ApplicationController
   end
   def respondWithInvitation(call, user, invitation)
     withRestaurants = false
-    withRestaurants = true if self.updatingRecommnedations == 0
+    withRestaurants = true if self.updatingRecommendations == 0
     render :json => {:success => true, :call => call, :invitation => invitation.serialize(user, withRestaurants)}
   end    
   def respondNo
