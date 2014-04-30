@@ -9,7 +9,6 @@ class Invitation < ActiveRecord::Base
   has_and_belongs_to_many :users, :order => :id
   has_many :restaurants, :order => 'open DESC, percent_match DESC'
 
-  attr_accessor :new_preferences
   def self.customNew(users, time, scheduleTime, central,minimum_attending, seconds_from_gmt, invitees, message = nil)
     i = Invitation.new
     i.users = users
