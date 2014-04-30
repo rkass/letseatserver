@@ -92,7 +92,7 @@ class RestaurantFinder
     for r in @invitation.restaurants
       r.open_start = avg_open_start if r.open_start == nil
       r.open_end = avg_open_end if r.open_end == nil
-      r.open = RestaurantFinder.isOpen(r.open_start.to_i, r.open_end.to_i, @invitation.time_to_i) if r.open == nil
+      r.open = RestaurantFinder.isOpen(r.open_start.to_i, r.open_end.to_i, @invitation.time.to_i) if r.open == nil
       r.price = avg_price if r.price == nil
       r.save
     end

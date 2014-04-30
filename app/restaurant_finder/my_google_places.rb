@@ -79,7 +79,7 @@ class MyGooglePlaces
     if open_start == nil or open_end == nil
       ret.open = nil
     else
-      ret.open = (time.to_i >= open_start and time.to_i <= open_end)
+      ret.open = RestaurantFinder.isOpen(open_start.to_i, open_end.to_i, time.to_i)
     end
     ret.open_start = open_start
     ret.open_end = open_end
