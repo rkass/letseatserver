@@ -227,18 +227,21 @@ class Invitation < ActiveRecord::Base
     
   def updateRestaurants(withVote)
     rf = RestaurantFinder.new(self)
-    if withVote
-      self.restaurants.each{ |r| r.compute(1, 1, 1, 1) }
-    elsif not self.central
-      rf.find(newCategories)
-      rf.fillGaps
-      self.restaurants.each{ |r| r.compute(1, 1,1,1) }
-    else
-      self.restaurants
+    if not self.central
+      for r in self.restaurants
+        if r.votes != []
+          r.recalculateDistance
+        else
+          r.destroy
+        end
+      end
       rf.find(allCategories)
       rf.fillGaps
-      self.restaurants.each{ |r| r.compute(1, 1, 1, 1) }
+    else
+      rf.find(newCategories)
+      rf.fillGaps
     end
+    self.restaurant.each{ |r| r.compute(1, 1, 1, 1)}
     self.with_lock do
       puts "Decrementing id: #{self.id} from current value of #{self.updatingRecommendations}"     
       self.update_attributes(:updatingRecommendations => self.updatingRecommendations - 1)
