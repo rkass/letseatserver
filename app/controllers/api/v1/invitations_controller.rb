@@ -55,7 +55,7 @@ class ::Api::V1::InvitationsController < ApplicationController
     DateTime.new(year, monthNum, dayOfMonth, hour, minutes) - secondsFromGMT.seconds
   end
   def respondWithInvitation(call, user, invitation)
-    render :json => {:success => true, :call => call, :invitation => invitation.serialize(user)}
+    render :json => {:success => true, :call => call, :invitation => invitation.serialize(user, true)}
   end    
   def respondNo
     Invitation.find(params[:id]).respondNo(User.find_by_auth_token(params[:auth_token]), params[:message])
@@ -155,7 +155,7 @@ class ::Api::V1::InvitationsController < ApplicationController
     invitations = []
     meals = (call == "get_meals")
     for invitation in user.invitations.find_all_by_scheduled(meals)
-      invitations.append(invitation.serialize(user)) if ((not invitation.declined(user)) or (not meals))
+      invitations.append(invitation.serialize(user, false)) if ((not invitation.declined(user, false)) or (not meals))
     end
     render :json => {:success => true, :invitations => invitations, :call => call}
     return

@@ -128,13 +128,12 @@ class Invitation < ActiveRecord::Base
     ret[0..index - 2]
   end
 
-  def serialize(arguser, withRestaurants = false)
+  def serialize(arguser)
     ret = {}
     ret["people"] = []
     ret["responses"] = []
     ret["messages"] = []
     ret["preferences"] = []
-    withRestaurants = (self.updatingRecommendations == 0)
     if withRestaurants
       ret["restaurants"] = []
     end
