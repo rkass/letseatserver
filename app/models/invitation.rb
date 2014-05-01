@@ -271,7 +271,7 @@ class Invitation < ActiveRecord::Base
     Vote.create(:preferences => preferences, :voted_restaurant => voted_restaurant, :other_restaurants => other_restaurants)
   end 
   
-  def unvote(user, restaurant)
+  def unvote(user, input_url)
     self.with_lock do
       for r in self.restaurants
         if r.url == input_url 
@@ -290,9 +290,6 @@ class Invitation < ActiveRecord::Base
     end
     if delay
       self.delay.updateRestaurants(withVote)
-    else
-      self.updateRestaurants(withVote)
-    end
     ret
   end
   def hundredSerial
