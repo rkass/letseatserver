@@ -292,6 +292,7 @@ class Invitation < ActiveRecord::Base
       self.delay.updateRestaurants(withVote)
     else
       self.updateRestaurants(withVote)
+    end
     ret
   end
   def hundredSerial
