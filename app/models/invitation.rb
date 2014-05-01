@@ -178,7 +178,7 @@ class Invitation < ActiveRecord::Base
       end
       if withRestaurants
         if self.restaurants != nil
-          ret["restaurants"] = self.restaurants.where(open:true).first(15).map do |rest|
+          ret["restaurants"] = self.restaurants.where('percent_match is not null').where(open:true).first(15).map do |rest|
             rest.serialize(arguser)
           end
         end
