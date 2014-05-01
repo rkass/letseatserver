@@ -283,12 +283,15 @@ class Invitation < ActiveRecord::Base
       self.save 
     end
   end   
-  def saveAndUpdateRecommendations(withVote)
+  def saveAndUpdateRecommendations(withVote, delay = true)
     ret = nil
     self.with_lock do
       ret = self.update_attributes(:updatingRecommendations => self.updatingRecommendations + 1)
     end
-    self.delay.updateRestaurants(withVote)
+    if delay
+      self.delay.updateRestaurants(withVote)
+    else
+      self.updateRestaurants(withVote)
     ret
   end
   def hundredSerial
