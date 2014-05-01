@@ -89,8 +89,7 @@ class ::Api::V1::InvitationsController < ApplicationController
   def unvote
     user = User.find_by_auth_token(params[:auth_token])
     i = Invitation.find(params[:invitation])
-    restaurant = Restaurant.new(params[:name], params[:price], params[:address], params[:types], params[:url], params[:ratingImg], params[:snippetImg])
-    i.unvote(user, restaurant)
+    i.unvote(user, params[:url])
     i.saveAndUpdateRecommendations(true, false)
     respondWithInvitation("cast_unvote", user, i)
   end
