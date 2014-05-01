@@ -90,6 +90,7 @@ serialize :categories
     ret = self.attributes
     ret['user_voted'] = self.votes.include?user.id
     ret['votes'] = self.votes.length
+    ret['percent_match'] = (self.percent_match*100).round / 100.0
     ret
   end
 
