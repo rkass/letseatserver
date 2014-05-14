@@ -185,6 +185,7 @@ class RestaurantFinder
     threshold = 5 if category != "restaurants"
     if ((viableOptions < threshold) and (radius < 40000))
       searchCategory(viableOptions, category,  [40000, (radius * 2)].min, location, dow, tod, parallel)
+    end
     viableOptions
   end
 
