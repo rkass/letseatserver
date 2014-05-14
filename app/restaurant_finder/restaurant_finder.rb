@@ -54,9 +54,13 @@ class RestaurantFinder
       if newPrefsOnly
         vo = 0
         twos = @invitation.new_preferences.getCategoriesRated(2)
+        puts "Searching twos"
+        puts twos
         vo = self.searchCategory(0, twos, 2000, loc, dow, tod) if twos != ""
         if vo <= 10
           ones = @invitation.new_preferences.getCategoriesRated(1)
+          puts "searching ones"
+          puts ones
           self.searchCategory(0, ones, 2000, loc, dow, tod) if ones != ""
         end
       else
