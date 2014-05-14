@@ -146,8 +146,8 @@ class RestaurantFinder
     "#{lat.to_s},#{lng.to_s}"
   end
 
-  def searchCategory(viableOptions, cats, radius, location, dow, tod,parallel = true)
-    assoc_categories = cats
+  def searchCategory(viableOptions, category, radius, location, dow, tod,parallel = true)
+    assoc_categories = category
     viableOptions = viableOptions
     yelpResults = Yelp.getResults(location, assoc_categories, radius)
     lat = @invitation.location.split(',')[0].to_f
