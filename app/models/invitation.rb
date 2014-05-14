@@ -48,8 +48,6 @@ class Invitation < ActiveRecord::Base
   end
   def insertPreferences(user, preferences, creator = false)
    self.new_preferences = preferences
-   puts "New preferences inserted..types list"
-    puts self.new_preferences.types_list
    self.creator_index = self.users.index(user) if creator
    self.responses[self.users.index(user)] = preferences
    self.save 
@@ -159,7 +157,7 @@ class Invitation < ActiveRecord::Base
         if response == nil
           ret["preferences"].append([])
         else
-          ret["preferences"].append(response.types_list)
+          ret["preferences"].append(response.ratings_dict)
         end
         count += 1
       end
@@ -222,8 +220,8 @@ class Invitation < ActiveRecord::Base
   def allCategories
     ret = []
     for pref in (self.responses.select{|r| r!= nil})
-      for t in pref.types_list
-        ret.append(t) if (not ret.include?t)
+      for t in pref.ratings_dict.keys
+        ret.append(t) if (not ret.include?t) and (pref.ratings_dict[t] > 
       end
     end
     ret
@@ -239,10 +237,10 @@ class Invitation < ActiveRecord::Base
           r.destroy
         end
       end
-      rf.find(allCategories)
+      rf.find(false)
       rf.fillGaps
     else
-      rf.find(newCategories)
+      rf.find(true)
       rf.fillGaps
     end
     self.restaurants.each{ |r| r.compute(1, 1, 1, 1)}

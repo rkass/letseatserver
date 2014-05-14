@@ -19,6 +19,8 @@ class RestaurantFinder
                         "vietnamese" => "vietnamese",
                         "restaurants" => "restaurants"
   }
+
+  @@categories_dict = {"subUkrainian"=>"ukranian", "subLatin American"=>"latinamerican", "subBrazilian"=>"brazilian", "subSingaporean"=>"singaporean", "subRussian"=>"russian", "subFood Court"=>"foo_ccourt", "subCambodian"=>"cambodian", "subBritish"=>"british", "subAustralian"=>"australian", "subIndonesian"=>"indonesian", "subSoup"=>"soup", "subModern European"=>"moderneuropean", "subCupcakes"=>"cupcakes", "subAfrican"=>"african", "subPakistani"=>"pakistani", "subMalaysian"=>"malaysian", "subCheesesteaks"=>"cheese_steaks", "subCantonese"=>"cantonese", "subArabian"=>"arabian", "subBrunch"=>"brunch", "subDominican"=>"dominican", "subCoffee & Tea"=>"coffee", "subVenezuelan"=>"venezuelan", "subCrepery"=>"crepery", "subAfghan"=>"afghan", "subTurkish"=>"turkish", "subPolish"=>"polish", "subPortuguese"=>"portuguese", "subDiners"=>"diners", "subChinese"=>"chinese", "subSouth African"=>"southafrican", "subSoul Food"=>"soulfood", "Spanish"=>"spanish", "subLebanese"=>"lebanese", "subThai"=>"thai", "subBrasseries"=>"brasseries", "subGastropubs"=>"gastropubs", "subMediterranean"=>"mediterranean", "subIndian"=>"indpak", "subHaitian"=>"haitian", "subAsian Fusion"=>"asianfusion", "subGluten Free"=>"gluten_free", "subMongolian"=>"mongolian", "subBurgers"=>"burgers", "subCafeteria"=>"cafeteria", "subHot Dogs"=>"hotdog", "subCatalan"=>"catalan", "subSalvadoran"=>"salvadoran", "subPuetro Rican"=>"puertorican", "subIrish"=>"irish", "subKosher"=>"kosher", "subMiddle Eastern"=>"middleeastern", "subColombian"=>"columbian", "subAmerican"=>"newamerican", "subDeli"=>"deli", "subFondue"=>"fondue", "subJapanese"=>"japanese", "subDonuts"=>"donuts", "subArmenian"=>"armenian", "subPeruvian"=>"peruvian", "subFish & Chips"=>"fishnchips", "subGerman"=>"german", "subScottish"=>"scottish", "subSteakhouse"=>"steak", "subBelgian"=>"belgian", "subCuban"=>"cuban", "subSandwiches"=>"sandwiches", "subJuice Bar"=>"juicebars", "subVegan"=>"vegan", "subFilipino"=>"filipino", "subSlovakian"=>"slovakian", "subTapas"=>"tapassmallplates", "subAustrian"=>"austrian", "subFalafel"=>"falafel", "subSzechuan"=>"szechuan", "subCzech"=>"czech", "subSouthern Food"=>"southernfood", "subGelato"=>"gelato", "subEthiopian"=>"ethiopian", "subChicken Wings"=>"chicken_wings", "subPersian Iranian"=>"persian", "subBBQ"=>"bbq", "subSpanish"=>"spanish", "subDim Sum"=>"dimsum", "subSeafood"=>"seafood", "subFrench"=>"french", "subBangladeshi"=>"bangladeshi", "subVietnamese"=>"vietnamese", "subTrinidadian"=>"trinidadian", "subBagels"=>"bagels", "subScandinavian"=>"scandinavian", "subBasque"=>"basque", "subBuffet"=>"buffet", "subVegetarian"=>"vegetarian", "subHungarian"=>"hungarian", "subCajun"=>"cajun", "subDessert"=>"dessert", "subSushi"=>"sushi",  "subHawaiian"=>"hawaiian", "subEgyptian"=>"egyptian", "subMoroccan"=>"moroccan", "subCaribbean"=>"caribbean", "subRaw"=>"raw_food", "subFood Stand"=>"foodstand", "subComfort Food"=>"comfortfood", "subCafe"=>"cafe", "subTex-Mex"=>"texmex", "subLaotian"=>"laotian", "subArgentine"=>"argentine", "subSenegalese"=>"senegalese", "subItalian"=>"italian", "subGreek"=>"greek", "subBurmese"=>"burmese", "subShanghainese"=>"shanghainese", "subIberian"=>"iberian", "subHimalayan/Nepalese"=>"himalayan", "subTaiwanese"=>"taiwanese", "subPizza"=>"pizza", "subIce Cream/Frozen Yogurt"=>"icecream", "subKorean"=>"korean", "subHot Pot"=>"hotpot", "subMexican"=>"mexican", "subFast Food"=>"hotdogs", "subHalal"=>"halal"}
   
   #restaurants is a dictionary representing restaurants
   attr_accessor :invitation, :client
@@ -40,21 +42,35 @@ class RestaurantFinder
     return nil
   end
 
-  def find(categories, parallel = true)
+  def find(newPrefsOnly, parallel = true)
     loc = @invitation.location
     dow = @invitation.dayOfWeek
     tod = @invitation.timeOfDay
     if parallel
-      categories.each do |category|
-        #ActiveRecord::Base.connection.reconnect!
-        self.searchCategory(0, category, 2000, loc, dow, tod)
+      if newPrefsOnly
+        vo = 0
+        twos = @invitation.new_preferences.getCategoriesRated(2)
+        vo = self.searchCategory(0, twos, 2000, loc, dow, tod) if twos != ""
+        if vo <= 10
+          ones = @invitation.new_preferences.getCategoriesRated(1)
+          self.searchCategory(0, ones, 2000, loc, dow, tod) if ones != ""
+        end
+      else
+        for r in @invitation.responses.select{|r| r!= nil}
+          vo = 0
+          twos = r.getCategoriesRated(2)
+          vo = self.searchCategory(0, twos, 2000, loc, dow, tod) if twos != ""
+          if vo <= 10
+            ones = r.getCategoriesRated(1)
+            self.searchCategory(0, ones, 2000, loc, dow, tod) if ones != ""
+          end
+        end
       end
     else
       categories.each do |category|
         searchCategory(0, category, 2000, loc, dow, tod,false)
       end
     end
-    self.searchCategory(0, "restaurants", 2000, loc, dow, tod) if (@invitation.restaurants.select{|r| r.open}.length < 15)
   end
 
   def fillGaps
@@ -130,8 +146,8 @@ class RestaurantFinder
     "#{lat.to_s},#{lng.to_s}"
   end
 
-  def searchCategory(viableOptions, category, radius, location, dow, tod,parallel = true)
-    assoc_categories = RestaurantFinder.getAssociatedCategories(category)
+  def searchCategory(viableOptions, cats, radius, location, dow, tod,parallel = true)
+    assoc_categories = cats
     viableOptions = viableOptions
     yelpResults = Yelp.getResults(location, assoc_categories, radius)
     lat = @invitation.location.split(',')[0].to_f
@@ -167,7 +183,9 @@ class RestaurantFinder
     end
     threshold = 15 if category == "restaurants"
     threshold = 5 if category != "restaurants"
-    searchCategory(viableOptions, category,  [40000, (radius * 2)].min, location, dow, tod, parallel) if ((viableOptions < threshold) and (radius < 40000))
+    if ((viableOptions < threshold) and (radius < 40000))
+      searchCategory(viableOptions, category,  [40000, (radius * 2)].min, location, dow, tod, parallel)
+    viableOptions
   end
 
   def self.nilEscape(str)

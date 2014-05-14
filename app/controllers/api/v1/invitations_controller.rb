@@ -64,7 +64,7 @@ class ::Api::V1::InvitationsController < ApplicationController
   end
   def respondYes
     print "responding yest"
-    r = Response.new(true, nil, params[:foodList], params[:location], params[:minPrice], params[:maxPrice])
+    r = Response.new(true, nil, params[:ratingsDict], params[:location], params[:minPrice], params[:maxPrice])
     invitation = Invitation.find(params[:id])
     user = User.find_by_auth_token(params[:auth_token])
     invitation.respondYes(user, r)
@@ -103,7 +103,7 @@ class ::Api::V1::InvitationsController < ApplicationController
         end
       end
     end
-    p = Preferences.new(params[:foodList], params[:location], params[:minPrice], params[:maxPrice])
+    p = Preferences.new(params[:ratingsDict], params[:location], params[:minPrice], params[:maxPrice])
     scheduleTime = nil
     if (params[:scheduleAfter] == "15 Minutes")
       scheduleTime = DateTime.now + 15.minutes
@@ -130,7 +130,7 @@ class ::Api::V1::InvitationsController < ApplicationController
         cnt += 1
       end
       for num in invitation.invitees
-        sendInviteText(params[:foodList], invitation.time, num)
+        sendInviteText(p.getCategoriesRated(2), invitation.time, num)
       end
       invitation.saveAndUpdateRecommendations(false)
       respondWithInvitation("create_invitation", User.find_by_auth_token(params[:auth_token]), invitation) 

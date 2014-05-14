@@ -23,18 +23,9 @@ class ApplicationController < ActionController::Base
     devise_parameter_sanitizer.for(:sign_up) { |u| u.permit(:username, :password, :phone_number) }
   end
 
-  def sendInviteText(typesList, date, phoneNumber)
+  def sendInviteText(ratings, date, phoneNumber)
     date = date.strftime('%b %e, %l:%M %p')
-    typesString = ""
-    typesString = typesList[0] + " food" if typesList.length == 1
-    if typesList.length > 1
-      cnt = 0
-      while (cnt < (typesList.length - 1))
-        typesString += typesList[cnt] + ", "
-        cnt += 1
-      end
-      typesString += "or " + typesList[cnt] + " food"
-    end
+    typesString = ratings
     msg = phoneNumber + " has invited you to go out for " + typesString + " on " + date + ". " + "Click here to respond by downloading Let's Eat." if typesList.length > 0
     msg = phoneNumber + " has invited you out to eat " + " on " + date + ". " + "Click here to respond by downloading Let's Eat." if typesList.length == 0
     account_sid = 'AC2f765a199ace2dc474a668b9daa59b5c' 
