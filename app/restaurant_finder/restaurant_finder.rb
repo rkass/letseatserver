@@ -65,6 +65,7 @@ class RestaurantFinder
         end
       else
         for r in @invitation.responses.select{|r| r!= nil}
+          puts r
           vo = 0
           twos = r.getCategoriesRated(2)
           puts "searching twos all prefs"
