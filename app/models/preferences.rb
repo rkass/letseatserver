@@ -17,10 +17,13 @@ class Preferences
   end
 
   def normalizeRatingsDict
-    return if @ratings_dict.length != 141
+    if @ratings_dict.length != 141
+      print "Returning cause length is"
+      print @ratings_dict.length
+    end
     rd = {}
     for k in @ratings_dict.keys
-      rd[RestaurantFinder.categories_dict[k]] = @ratings_dict[k] if RestaurantFinder.categories_dict.include?k
+      rd[RestaurantFinder.categoriesDict[k]] = @ratings_dict[k] if RestaurantFinder.categoriesDict.include?k
     end
     @ratings_dict = rd
   end

@@ -33,6 +33,10 @@ class RestaurantFinder
     @@translation_dict
   end
 
+  def self.categoriesDict
+    @@categories_dict
+  end
+
   def self.getAssociatedCategories(category)
     translationDict[category.downcase] 
   end
