@@ -62,7 +62,7 @@ class Invitation < ActiveRecord::Base
     min = newt.min.to_s
     min = "0" + min if min.length == 1
     h + min
-  end
+  end 
   def location
     return self.responses[self.creator_index].location if (not central) 
     lat = 0
@@ -81,6 +81,7 @@ class Invitation < ActiveRecord::Base
     lng = lng / cnt
     lat.to_s + "," + lng.to_s
   end
+
   def categories
     cats = {}
     cnt = 0
@@ -111,6 +112,7 @@ class Invitation < ActiveRecord::Base
     self.scheduleTime = DateTime.now + 5.minutes if ((self.responses.count - self.responses.count(nil) == self.responses.count) and (self.responses.count > 1))
     self.save
   end
+
   def respondYes(arguser, response)
     responses = self.responses
     responses[self.users.index(arguser)] = response
@@ -119,6 +121,7 @@ class Invitation < ActiveRecord::Base
     self.save
     self.sortScheduled(arguser)
   end
+
   def serializeTime(time)
     ret = time.to_formatted_s(:rfc822)
     index = ret.index("+")
@@ -203,30 +206,6 @@ class Invitation < ActiveRecord::Base
     end 
   end
 
-  def newCategories
-    ret = self.new_preferences.types_list.dup
-    return ret if ret == []
-    for pref in (self.responses.select{|r| r!= nil})
-      if pref != self.new_preferences
-        for t in pref.types_list
-          ret.delete(t)
-          return ret if ret == []
-        end 
-      end
-    end
-    ret
-  end
-
-  def allCategories
-    ret = []
-    for pref in (self.responses.select{|r| r!= nil})
-      for t in pref.ratings_dict.keys
-        ret.append(t) if (not ret.include?t) and (pref.ratings_dict[t] > 
-      end
-    end
-    ret
-  end 
-    
   def updateRestaurants(withVote)
     rf = RestaurantFinder.new(self)
     if not self.central
@@ -293,66 +272,5 @@ class Invitation < ActiveRecord::Base
     end
     ret
   end
-  def hundredSerial
-    r = []
-    #m = Mutex.new
-    cnt = 0
-    while (cnt < 100)
-      res = Yelp.getResults("40.727676,-73.984593", "pizza", 2000)
-     # m.synchronize{
-        r.append(res)
-     # }
-      cnt += 1
-    end
-  end
-  def hundredMapped
-    r = []
-    m = Mutex.new
-    Parallel.each([0]*100) do |chunk|
-      res = Yelp.getResults("40.727676,-73.984593", "pizza", 2000)
-      m.synchronize{
-        r.append(res)
-      }
-    end
-  end
-  def hundredNoProcesses
-    r = []
-    m = Mutex.new
-    Parallel.map([0]*100, :in_processes=>0) do |chunk|
-      res = Yelp.getResults("40.727676,-73.984593", "pizza", 2000)
-      m.synchronize{
-        r.append(res)
-      }   
-    end 
-  end 
-  def hundredNoThreading
-    r = []
-    m = Mutex.new
-    Parallel.map([0]*100, :in_threads=>0) do |chunk|
-      res = Yelp.getResults("40.727676,-73.984593", "pizza", 2000)
-      m.synchronize{
-        r.append(res)
-      }   
-    end 
-  end 
-  def benchmarkRestFinder
-    rf = RestaurantFinder.new(self, [])
-    puts "Running restaurant finder with parallelism..."
-    x = Benchmark.measure{rf.find(self.responses[0].types_list)}
-    puts "Time Results..."
-    puts x
-    puts "Generating #{self.restaurants.length} restaurants"
-    puts "Running restaurant finder without parallelism...starting from #{self.restaurants.length} restaurants..."
-    x = Benchmark.measure{rf.find(self.responses[0].types_list, false)}
-    puts "Time Results..."
-    puts x
-    puts "Generating #{self.restaurants.length} restaurants"
-=begin
-    x = Benchmark.measure{hundredSerial}
-    print x
-    print "Running one hundred requests using map..."
-    x = Benchmark.measure{hundredMapped}
-    print x
-=end
-  end
 end
+
