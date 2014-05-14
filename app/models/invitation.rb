@@ -216,10 +216,10 @@ class Invitation < ActiveRecord::Base
           r.destroy
         end
       end
-      rf.find(false)
+      rf.find(true)
       rf.fillGaps
     else
-      rf.find(true)
+      rf.find(false)
       rf.fillGaps
     end
     self.restaurants.each{ |r| r.compute(1, 1, 1, 1)}

@@ -67,9 +67,11 @@ class RestaurantFinder
         for r in @invitation.responses.select{|r| r!= nil}
           vo = 0
           twos = r.getCategoriesRated(2)
+          puts "searching twos all prefs"
           vo = self.searchCategory(0, twos, 2000, loc, dow, tod) if twos != ""
           if vo <= 10
             ones = r.getCategoriesRated(1)
+            puts "searching ones"
             self.searchCategory(0, ones, 2000, loc, dow, tod) if ones != ""
           end
         end
@@ -192,7 +194,7 @@ class RestaurantFinder
     threshold = 15 if category == "restaurants"
     threshold = 5 if category != "restaurants"
     if ((viableOptions < threshold) and (radius < 40000))
-      searchCategory(viableOptions, category,  [39000, (radius * 2)].min, location, dow, tod, parallel)
+      searchCategory(viableOptions, category,  [40000, (radius * 2)].min, location, dow, tod, parallel)
     end
     viableOptions
   end
