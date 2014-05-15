@@ -130,7 +130,7 @@ class Invitation < ActiveRecord::Base
   end
 
   def top5(response)
-    response.ratings_dict.sort_by {|_key, value| value}.reverse[0..4].map{|x|x[0]}
+    response.ratings_dict.sort_by {|_key, value| value}.reverse[0..4].map{|x|RestaurantFinder.categoriesDict.select{|key, hash| hash == x[0]}.sort_by {|_keey,valuee| valuee}.map{|x|x[0].gsub("sub", "") }[0]}
   end
 
   def serialize(arguser, withRestaurants)
