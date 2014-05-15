@@ -83,7 +83,11 @@ serialize :categories
   end
 
   def computeDistanceScore
-    self.distance_score = [(1 - (self.distance / 40000))**2,0].max
+    if self.distance == nil
+      self.distance_score = 0
+    else
+      self.distance_score = [(1 - (self.distance / 40000))**2,0].max
+    end
   end
 
   def serialize(user)
