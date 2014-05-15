@@ -164,7 +164,7 @@ class Invitation < ActiveRecord::Base
         if response == nil
           ret["preferences"].append([])
         else
-          ret["preferences"].append(top5)
+          ret["preferences"].append(top5(response))
         end
         count += 1
       end
