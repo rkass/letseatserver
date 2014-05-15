@@ -129,6 +129,10 @@ class Invitation < ActiveRecord::Base
     ret[0..index - 2]
   end
 
+  def top5(response)
+    response.ratings_dict.sort_by {|_key, value| value}.reverse[0..4].map{|x|x[0]}
+  end
+
   def serialize(arguser, withRestaurants)
     ret = {}
     ret["people"] = []
@@ -160,7 +164,7 @@ class Invitation < ActiveRecord::Base
         if response == nil
           ret["preferences"].append([])
         else
-          ret["preferences"].append(response.ratings_dict)
+          ret["preferences"].append(top5)
         end
         count += 1
       end
