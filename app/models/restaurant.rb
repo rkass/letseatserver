@@ -18,6 +18,7 @@ serialize :categories
   end 
   
   def recalculateDistance
+    puts "RECALCING DISTANCE"
     self.location = RestaurantFinder.getCoordinates(self.address)
     inviation_arr = [self.invitation.location.split(',')[0].to_f, self.invitation.location.split(',')[1].to_f]
     loc_arr = [self.location.split(',')[0].to_f, self.location.split(',')[1].to_f]
