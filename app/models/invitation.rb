@@ -212,19 +212,21 @@ class Invitation < ActiveRecord::Base
 
   def updateRestaurants(withVote)
     rf = RestaurantFinder.new(self)
-    if not self.central
-      for r in self.restaurants
-        if r.votes != []
-          r.recalculateDistance
-        else
-          r.destroy
+    if not withVote
+      if not self.central
+        for r in self.restaurants
+          if r.votes != []
+            r.recalculateDistance
+          else
+            r.destroy
+          end
         end
+        rf.find(true)
+        rf.fillGaps
+      else
+        rf.find(false)
+        rf.fillGaps
       end
-      rf.find(true)
-      rf.fillGaps
-    else
-      rf.find(false)
-      rf.fillGaps
     end
     self.restaurants.each{ |r| r.compute(1, 1, 1, 1)}
     self.with_lock do
