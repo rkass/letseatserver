@@ -161,6 +161,12 @@ class RestaurantFinder
     puts "here1"
     assoc_categories = category
     viableOptions = viableOptions
+    puts "cats"
+    puts assoc_categories
+    puts "location"
+    puts location 
+    puts "radius"
+    puts radius
     yelpResults = Yelp.getResults(location, assoc_categories, radius)
     lat = @invitation.location.split(',')[0].to_f
     lng = @invitation.location.split(',')[1].to_f
