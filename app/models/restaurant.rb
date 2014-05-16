@@ -35,12 +35,12 @@ serialize :categories
     return 0 if prefs == nil
     if self.price == 1
       min = 7
-      max = 14
+      max = 12
     elsif self.price == 2
-      min = 15
-      max = 25
+      min = 13
+      max = 19
     elsif self.price == 3
-      min = 26
+      min = 20
       max = 49
     elsif self.price == 4
       min = 50

@@ -15,6 +15,14 @@ class Preferences
     end
     ret.collect{|c| c}.join(",")
   end
+  
+  def ones
+    getCategoriesRated(1)
+  end
+  
+  def twos
+    getCategoriesRated(2)
+  end
 
   def normalizeRatingsDict
     return if @ratings_dict == nil or @ratings_dict["indpak"] != nil
