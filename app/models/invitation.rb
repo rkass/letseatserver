@@ -214,16 +214,13 @@ class Invitation < ActiveRecord::Base
     rf = RestaurantFinder.new(self)
     if not withVote
       if not self.central
-        for r in self.restaurants
-          if r.votes != []
-            r.recalculateDistance
-          else
-            r.destroy
-          end
-        end
         rf.find(true)
         rf.fillGaps
       else
+        #central
+        for r in self.restaurants
+          r.destroy
+        end
         rf.find(false)
         rf.fillGaps
       end
