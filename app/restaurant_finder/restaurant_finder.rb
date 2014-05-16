@@ -149,7 +149,7 @@ class RestaurantFinder
   end
   
   def self.getCoordinates(address)
-    res = HTTParty.get("https://maps.googleapis.com/maps/api/geocode/json?address=#{address}&sensor=false&key=AIzaSyBITjgfUC0tbWp9-0SRIRR-PYAultPKDbA")
+    res = HTTParty.get("https://maps.googleapis.com/maps/api/geocode/json?address=#{CGI::escape(address)}&sensor=false&key=AIzaSyBITjgfUC0tbWp9-0SRIRR-PYAultPKDbA")
     lat = ""
     lng = ""
     lat = res.parsed_response['results'][0]['geometry']['location']['lat'] if (res.parsed_response != nil and res.parsed_response['results'] != nil and res.parsed_response['results'][0]['geometry'] != nil)
