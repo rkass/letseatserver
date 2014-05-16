@@ -17,7 +17,7 @@ class Preferences
   end
 
   def normalizeRatingsDict
-    if @ratings_dict.length != 141
+    if @ratings_dict != nil and @ratings_dict.length != 141
       print "Returning cause length is"
       print @ratings_dict.length
     end
