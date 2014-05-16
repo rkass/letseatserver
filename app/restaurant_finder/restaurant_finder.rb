@@ -158,23 +158,30 @@ class RestaurantFinder
   end
 
   def searchCategory(viableOptions, category, radius, location, dow, tod,parallel = true)
+    puts "here1"
     assoc_categories = category
     viableOptions = viableOptions
     yelpResults = Yelp.getResults(location, assoc_categories, radius)
     lat = @invitation.location.split(',')[0].to_f
     lng = @invitation.location.split(',')[1].to_f
+    puts "here2"
     if parallel
+      puts "here3"
       ActiveRecord::Base.connection.disconnect!
+      puts "here4"
       results = Parallel.map(yelpResults) do |yelpResult|
         if (not @invitation.restaurants.where(url:yelpResult['mobile_url']).exists?)
+          puts "here5"
           isOpenAndPrice = MyGooglePlaces.isOpenAndPrice(RestaurantFinder.getFormattedAddressFromYelpResult(yelpResult), dow, tod, @client, lat, lng, yelpResult['name'])
           os = OpenStruct.new
           os.restaurant = {:name => yelpResult['name'], :price => isOpenAndPrice.price, :address => yelpResult['location']['display_address'] * ",", :url => yelpResult['mobile_url'], :rating_img => yelpResult['rating_img_url'], :snippet_img => yelpResult['image_url'], :rating => yelpResult['rating'], :categories => yelpResult['categories'], :review_count => yelpResult['review_count'], :open_start => isOpenAndPrice.open_start, :open_end => isOpenAndPrice.open_end, :open => isOpenAndPrice.open, :distance => yelpResult['distance'], :types_list => yelpResult['categories'].map{|p| p[0]}}
           os.requests = isOpenAndPrice.requests 
-          os
+          os    
+          puts "here6"
         end
       end
     ActiveRecord::Base.establish_connection
+    puts "here7"
     results.each do |os|
       if os != nil
         @invitation.restaurants.create(os.restaurant)
@@ -194,6 +201,7 @@ class RestaurantFinder
     end
     threshold = 15 if category == "restaurants"
     threshold = 5 if category != "restaurants"
+    puts "here8"
     if ((viableOptions < threshold) and (radius < 40000))
       searchCategory(viableOptions, category,  [40000, (radius * 2)].min, location, dow, tod, parallel)
     end
