@@ -60,8 +60,8 @@ serialize :categories
     return 0 if prefs == nil
     score = 0
     for category in self.categories 
-      score = self.invitation.responses.length - 1 if prefs.ratings_dict[category] == 1
-      return self.invitation.responses.length if prefs.ratings_dict[category] == 2
+      score = self.invitation.responses.length - 1 if prefs.ratings_dict[category[1]] == 1
+      return self.invitation.responses.length if prefs.ratings_dict[category[1]] == 2
     end
     return score
   end
