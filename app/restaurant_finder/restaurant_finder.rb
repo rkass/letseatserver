@@ -182,8 +182,8 @@ class RestaurantFinder
           os = OpenStruct.new
           os.restaurant = {:name => yelpResult['name'], :price => isOpenAndPrice.price, :address => yelpResult['location']['display_address'] * ",", :url => yelpResult['mobile_url'], :rating_img => yelpResult['rating_img_url'], :snippet_img => yelpResult['image_url'], :rating => yelpResult['rating'], :categories => yelpResult['categories'], :review_count => yelpResult['review_count'], :open_start => isOpenAndPrice.open_start, :open_end => isOpenAndPrice.open_end, :open => isOpenAndPrice.open, :distance => yelpResult['distance'], :types_list => yelpResult['categories'].map{|p| p[0]}}
           os.requests = isOpenAndPrice.requests 
-          os    
           puts "here6"
+          os    
         end
       end
     ActiveRecord::Base.establish_connection
