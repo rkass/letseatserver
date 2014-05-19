@@ -163,9 +163,13 @@ class Invitation < ActiveRecord::Base
           ret["responses"].append("no")
           ret["messages"].append(self.responses[count].message)
         end
+        puts "count"
+        puts count
         if response == nil
+          puts "here10"
           ret["preferences"].append([])
         else
+          puts "here11"
           ret["preferences"].append(top5(response))
         end
         count += 1
