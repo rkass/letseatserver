@@ -225,7 +225,7 @@ class Invitation < ActiveRecord::Base
         rf.fillGaps
       end
     end
-    self.restaurants.each{ |r| r.compute(1, 1, 1, 1)}
+    self.restaurants.each{ |r| r.compute(3, 1, 1, .5)}
     self.with_lock do
       puts "Decrementing id: #{self.id} from current value of #{self.updatingRecommendations}"     
       self.update_attributes(:updatingRecommendations => self.updatingRecommendations - 1)
