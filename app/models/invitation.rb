@@ -130,8 +130,8 @@ class Invitation < ActiveRecord::Base
   end
 
   def top5(response)
-    print "invitation id"  
-    print self.id
+    puts "invitation id"  
+    puts self.id
     response.ratings_dict.sort_by {|_key, value| value}.reverse[0..4].map{|x| if (x[1] > 0) then RestaurantFinder.categoriesDict.select{|key, hash| hash == x[0]}.sort_by {|_keey,valuee| valuee}.map{|x|x[0].gsub("sub", "") }[0] else nil end}.select{|o| o != nil}
   end
 
