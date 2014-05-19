@@ -161,8 +161,6 @@ class Invitation < ActiveRecord::Base
           ret["responses"].append("no")
           ret["messages"].append(self.responses[count].message)
         end
-        puts "count"
-        puts count
         if response == nil or (count != self.creator_index and (not response.going))
           ret["preferences"].append([])
         else
