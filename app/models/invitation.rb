@@ -163,7 +163,7 @@ class Invitation < ActiveRecord::Base
         end
         puts "count"
         puts count
-        if response == nil or (not response.going)
+        if response == nil or (count != self.creator_index and (not response.going))
           ret["preferences"].append([])
         else
           ret["preferences"].append(top5(response))
