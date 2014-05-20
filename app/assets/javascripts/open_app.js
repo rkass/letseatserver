@@ -1,6 +1,6 @@
 var timeout;
 function open_appstore() {
-  window.location='letsEat://';
+  window.location='http://google.com';
 }
 
 function try_to_open_app() {
