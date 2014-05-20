@@ -1,4 +1,4 @@
-<%= javascript_include_tag "open_app" %>
+javascript_include_tag "open_app"
 
 class ReglinkController < ApplicationController
 
