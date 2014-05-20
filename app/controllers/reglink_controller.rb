@@ -1,7 +1,10 @@
 class ReglinkController < ApplicationController
 
-  def withLink
-    render js: "alert('Hello World');"
+  def withlink
+    render do |page|
+      page.html {}
+      page.js {}
+    end
   end
 
 end

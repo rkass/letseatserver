@@ -4,7 +4,7 @@ Letseatserver::Application.routes.draw do
   get "sessions/destroy"
   devise_for :users
   
-  get "/register", :to => 'reglink#withLink'
+  get "/register", :to => 'reglink#withlink'
 
   namespace :api do
     namespace :v1 do
