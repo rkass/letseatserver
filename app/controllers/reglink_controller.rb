@@ -1,10 +1,7 @@
 class ReglinkController < ApplicationController
 
-
   def withLink
-    respond_to do |format|
-      format.js { render :js => "alert('helloworld');" }
-    end
+    render :js => "alert('Hello World');"
   end
 
 end
