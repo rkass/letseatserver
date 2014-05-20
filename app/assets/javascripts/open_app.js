@@ -1,6 +1,6 @@
 var timeout;
 function open_appstore() {
-  window.location='http://itunes.com/';
+  window.location='letsEat://';
 }
 
 function try_to_open_app() {
