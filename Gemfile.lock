@@ -31,10 +31,9 @@ GEM
       nokogiri (>= 1.4.4)
       uuidtools (~> 2.1)
     bcrypt (3.1.7)
-    bitly (0.10.1)
-      httparty (>= 0.7.6)
-      multi_json (~> 1.3)
-      oauth2 (>= 0.5.0, < 0.10)
+    bitly-oauth (0.2.3)
+      httparty
+      oauth2
     builder (3.1.4)
     coffee-rails (4.0.1)
       coffee-script (>= 2.2.0)
@@ -189,7 +188,7 @@ PLATFORMS
 
 DEPENDENCIES
   aws-sdk (~> 1.38.0)
-  bitly (~> 0.10.1)
+  bitly-oauth
   coffee-rails (~> 4.0.0)
   delayed_job_active_record
   devise
