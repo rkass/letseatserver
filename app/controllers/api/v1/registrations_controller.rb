@@ -7,12 +7,15 @@ class Api::V1::RegistrationsController < ApplicationController
     return
   end
 
-  def create  
-    username = User.count.to_s
-    o = [('a'..'z'), ('A'..'Z')].map { |i| i.to_a }.flatten
-    password = (0...50).map { o[rand(o.length)] }.join
-    user = User.new(:username => username, :password => password, 
+  def create 
+    user = User.where(phone_number: phoneStrip(params[:phoneNumber]))
+    if u == nil 
+      username = User.count.to_s
+      o = [('a'..'z'), ('A'..'Z')].map { |i| i.to_a }.flatten
+      password = (0...50).map { o[rand(o.length)] }.join
+      user = User.new(:username => username, :password => password, 
       :phone_number => phoneStrip(params[:phoneNumber]), :auth_token => Digest::SHA1.hexdigest(params[:username] + params[:password]))
+    end
     invs = Invitation.where("invitees like ?", "%" + user.phone_number + "%")
     if user.save
       sendRegistrationText(user.auth_token, '+1' + user.phone_number)
