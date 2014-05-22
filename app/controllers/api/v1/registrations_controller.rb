@@ -1,6 +1,12 @@
 class Api::V1::RegistrationsController < ApplicationController
   respond_to :json
-  
+ 
+  def validate
+    user = User.find(params[:username].to_i)
+    render :json=> {:validated=> (user.auth_token == params[:auth_token], :auth_token => user.auth_token, :username => user.username, :request=>"validate"}    , :status=>201
+    return
+  end
+
   def create  
     username = User.count.to_s
     o = [('a'..'z'), ('A'..'Z')].map { |i| i.to_a }.flatten

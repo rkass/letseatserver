@@ -24,6 +24,7 @@ Letseatserver::Application.routes.draw do
       post "/cast_vote", :to => 'invitations#vote'
       post "/cast_unvote", :to => 'invitations#unvote'
       post "/update_token", :to => 'sessions#updateToken'
+      post "/verify_user", :to => 'registrations#validate'
     end
   end
   # The priority is based upon order of creation: first created -> highest priority.
