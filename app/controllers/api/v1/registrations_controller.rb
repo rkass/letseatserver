@@ -9,6 +9,7 @@ class Api::V1::RegistrationsController < ApplicationController
       :phone_number => phoneStrip(params[:phoneNumber]), :auth_token => Digest::SHA1.hexdigest(params[:username] + params[:password]))
     invs = Invitation.where("invitees like ?", "%" + user.phone_number + "%")
     if user.save
+      sendRegistrationText(user.auth_token, '+1' + user.phone_number)
       for inv in invs
         inv.users.append(user)
         inv.save
