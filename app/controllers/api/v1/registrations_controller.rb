@@ -9,7 +9,7 @@ class Api::V1::RegistrationsController < ApplicationController
 
   def create 
     user = User.where(phone_number: phoneStrip(params[:phoneNumber]))
-    if u == nil 
+    if user == nil 
       username = User.count.to_s
       o = [('a'..'z'), ('A'..'Z')].map { |i| i.to_a }.flatten
       password = (0...50).map { o[rand(o.length)] }.join
