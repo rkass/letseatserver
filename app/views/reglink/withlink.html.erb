@@ -1,4 +1,4 @@
 <%= javascript_include_tag 'open_app' %>
 <%= javascript_tag do %>
-  try_to_open_app();
+  try_to_open_app(params[:auth_token]);
 <% end %>

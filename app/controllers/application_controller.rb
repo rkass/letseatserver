@@ -39,6 +39,14 @@ class ApplicationController < ActionController::Base
       :to => phoneNumber,
       :body => msg, 
     })
-  end  
+  end 
 
+  def sendRegistrationText(auth_token, phoneNumber)
+    @client = Twilio::REST::Client.new account_sid, auth_token
+    @client.account.messages.create({
+      :from => '+15162520417',
+      :to => phoneNumber,
+      :body => "Click this link to confirm your registration and start using Let\'s Eat! http://immense-fortress-7865.herokuapp.com/register?auth_token=#{auth_token}" 
+     })
+  end
 end

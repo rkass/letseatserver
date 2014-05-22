@@ -1,8 +1,11 @@
 class Api::V1::RegistrationsController < ApplicationController
   respond_to :json
   
-  def create
-    user = User.new(:username => params[:username], :password => params[:password], 
+  def create  
+    username = User.count.to_s
+    o = [('a'..'z'), ('A'..'Z')].map { |i| i.to_a }.flatten
+    password = (0...50).map { o[rand(o.length)] }.join
+    user = User.new(:username => username, :password => password, 
       :phone_number => phoneStrip(params[:phoneNumber]), :auth_token => Digest::SHA1.hexdigest(params[:username] + params[:password]))
     invs = Invitation.where("invitees like ?", "%" + user.phone_number + "%")
     if user.save
