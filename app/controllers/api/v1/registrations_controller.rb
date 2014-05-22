@@ -3,7 +3,7 @@ class Api::V1::RegistrationsController < ApplicationController
  
   def validate
     user = User.find(params[:username].to_i)
-    render :json=> {:validated=> (user.auth_token == params[:auth_token]), :auth_token => user.auth_token, :username => user.username, :request=>"validate"}    , :status=>201
+    render :json=> {:validated=> (user.auth_token == params[:auth_token]), :auth_token => user.auth_token, :username => user.username, :request=>"validate", :phone_number => user.phone_number}    , :status=>201
     return
   end
 
