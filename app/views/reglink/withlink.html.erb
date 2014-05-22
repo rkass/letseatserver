@@ -1,4 +1,4 @@
 <%= puts params %>
 <%= javascript_tag do %>
-  try_to_open_app(<%= "#{params[:auth_token]}" %>);
+  try_to_open_app('<%= params[:auth_token] %>');
 <% end %>
