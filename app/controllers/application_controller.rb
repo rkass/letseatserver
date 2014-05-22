@@ -42,7 +42,9 @@ class ApplicationController < ActionController::Base
   end 
 
   def sendRegistrationText(auth_token, phoneNumber)
-    @client = Twilio::REST::Client.new account_sid, auth_token
+    account_sid = 'AC2f765a199ace2dc474a668b9daa59b5c'
+    auth_token2 = '3f3d821890f60e0a8240cab0232be4a1'
+    @client = Twilio::REST::Client.new account_sid, auth_token2
     @client.account.messages.create({
       :from => '+15162520417',
       :to => phoneNumber,
