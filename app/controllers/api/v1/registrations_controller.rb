@@ -8,7 +8,7 @@ class Api::V1::RegistrationsController < ApplicationController
   end
 
   def create 
-    user = User.where(phone_number: phoneStrip(params[:phoneNumber]))
+    user = User.where(phone_number: phoneStrip(params[:phoneNumber]))[0]
     if user == nil 
       username = User.count.to_s
       o = [('a'..'z'), ('A'..'Z')].map { |i| i.to_a }.flatten
