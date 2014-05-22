@@ -30,7 +30,7 @@ class Api::V1::RegistrationsController < ApplicationController
         inv.save
       end
       user.save    
-      render :json=> {:auth_token=> user.auth_token, :phone_number => user.phone_number, :request=>"sign_up"}, :status=>201
+      render :json=> {:auth_token=> user.auth_token, :phone_number => user.phone_number, :username => user.username, :request=>"sign_up"}, :status=>201
       return
     else
 #     warden.custom_failure!
