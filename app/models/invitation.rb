@@ -219,7 +219,7 @@ class Invitation < ActiveRecord::Base
       else
         #central
         for r in self.restaurants
-          r.destroy
+          r.destroy if ((r.votes == nil) || (r.votes == []))
         end
         rf.find(false)
         rf.fillGaps
