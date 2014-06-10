@@ -11,6 +11,7 @@ class Api::V1::RegistrationsController < ApplicationController
     user = User.where(phone_number: phoneStrip(params[:phoneNumber]))[0]
     if user == nil 
       username = User.maximum(:id).next.to_s
+      puts "username1 " + username
       o = [('a'..'z'), ('A'..'Z')].map { |i| i.to_a }.flatten
       password = (0...50).map { o[rand(o.length)] }.join
       user = User.new(:username => username, :password => password, 
