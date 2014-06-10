@@ -9,14 +9,13 @@ class Api::V1::RegistrationsController < ApplicationController
 
   def create 
     user = User.where(phone_number: phoneStrip(params[:phoneNumber]))[0]
-    puts "user id :"
-    puts user.id
     if user == nil 
       username = User.maximum(:id).next.to_s
       o = [('a'..'z'), ('A'..'Z')].map { |i| i.to_a }.flatten
       password = (0...50).map { o[rand(o.length)] }.join
       user = User.new(:username => username, :password => password, 
       :phone_number => phoneStrip(params[:phoneNumber]), :auth_token => Digest::SHA1.hexdigest(params[:username] + params[:password]))
+      puts "Username " + user.username
     end
     invs = Invitation.where("invitees like ?", "%" + user.phone_number + "%")
     if user.save
