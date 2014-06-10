@@ -145,7 +145,7 @@ class RestaurantFinder
     end
     rests = @invitation.restaurants
     for r2 in rests
-      r2.open_start = avg_open_start if r2.open_start == nil
+      #r2.open_start = avg_open_start if r2.open_start == nil
       r2.open_end = avg_open_end if r2.open_end == nil
       r2.open = RestaurantFinder.isOpen(r2.open_start.to_i, r2.open_end.to_i, @invitation.time.to_i) if r2.open == nil
       r2.price = avg_price if r2.price == nil
