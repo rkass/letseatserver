@@ -64,16 +64,11 @@ class RestaurantFinder
           self.searchCategory(0, ones, 2000, loc, dow, tod) if ones != ""
         end
       else
-        for r in @invitation.responses.select{|r| r!= nil}
-          puts r
+        for r in self.getResponses#@invitation.responses.select{|r| r!= nil}
           vo = 0
-          twos = r.getCategoriesRated(2)
-          puts "searching twos all prefs"
-          vo = self.searchCategory(0, twos, 2000, loc, dow, tod) if twos != ""
-          if vo <= 10
-            ones = r.getCategoriesRated(1)
-            puts "searching ones"
-            self.searchCategory(0, ones, 2000, loc, dow, tod) if ones != ""
+          vo = self.searchCategory(0, r, 2000, loc, dow, tod) if r != ""
+          if vo >= 15
+            break
           end
         end
       end
@@ -82,6 +77,44 @@ class RestaurantFinder
         searchCategory(0, category, 2000, loc, dow, tod,false)
       end
     end
+  end
+
+  def getResponses
+    ret = ["", ""]
+    for r in @invitation.responses.select{ |r| r != nil}
+      twos = r.twos
+      n = true
+      if twos == ""
+        n = false
+        twos = r.ones
+      end
+      splitup = twos.split(',')
+      splitup = [] if twos == ""
+      for s in splitup
+        if (not ret[0].include?s)
+          if ret[0] == ""
+            ret[0] = s
+          else
+            ret[0] += "," + s
+          end
+        end
+      end
+      if n
+        ones = r.ones
+        splitup = ones.split(',')
+        splitup = [] if ones == ""
+        for s in splitup
+          if (not ret[1].include?s)
+            if ret[1] == ""
+              ret[1] = s
+            else
+              ret[1] += "," + s
+            end
+          end
+        end
+      end
+    end
+    ret
   end
 
   def fillGaps
