@@ -51,26 +51,20 @@ class RestaurantFinder
     dow = @invitation.dayOfWeek
     tod = @invitation.timeOfDay
     if parallel
+      vo = 0
       if newPrefsOnly
-        vo = 0
         twos = @invitation.new_preferences.getCategoriesRated(2)
-        puts "Searching twos"
-        puts twos
         vo = self.searchCategory(0, twos, 2000, loc, dow, tod) if twos != ""
-        if vo <= 10
-          ones = @invitation.new_preferences.getCategoriesRated(1)
-          puts "searching ones"
-          puts ones
-          self.searchCategory(0, ones, 2000, loc, dow, tod) if ones != ""
-        end
+        ones = @invitation.new_preferences.getCategoriesRated(1)
+        vo = self.searchCategory(0, ones, 2000, loc, dow, tod) if ones != ""
       else
-        for r in self.getResponses#@invitation.responses.select{|r| r!= nil}
-          vo = 0
+        responses = self.getResponses
+        for r in responses#@invitation.responses.select{|r| r!= nil}
           vo = self.searchCategory(0, r, 2000, loc, dow, tod) if r != ""
-          if vo >= 15
-            break
-          end
         end
+      end
+      if vo < 15
+        self.searchCategory(0, "restaurants", 2000, loc, dow, tod)
       end
     else
       categories.each do |category|
