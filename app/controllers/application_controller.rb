@@ -23,9 +23,9 @@ class ApplicationController < ActionController::Base
     devise_parameter_sanitizer.for(:sign_up) { |u| u.permit(:username, :password, :phone_number) }
   end
 
-  def sendInviteText(ratings, date, phoneNumber)
+  def sendInviteText(ratings, date, phoneNumber, from)
     date = date.strftime('%b %e, %l:%M %p')
-    msg = phoneNumber + " has invited you out to eat " + " on " + date + ". " + "Click here to reply and have your say about where you eat:"
+    msg = from + " has invited you out to eat " + " on " + date + ". " + "Click here to reply and have your say about where you eat:"
     account_sid = 'AC2f765a199ace2dc474a668b9daa59b5c' 
     auth_token = '3f3d821890f60e0a8240cab0232be4a1' 
     msg += "  immense-fortress-7865.herokuapp.com/invited" 

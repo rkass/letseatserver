@@ -134,7 +134,7 @@ class ::Api::V1::InvitationsController < ApplicationController
         cnt += 1
       end
       for num in invitation.invitees
-        sendInviteText(p.getCategoriesRated(2), invitation.time, num)
+        sendInviteText(p.getCategoriesRated(2), invitation.time, num, invitation.users[invitation.creator_index].phone_number)
       end
       invitation.saveAndUpdateRecommendations(false)
       respondWithInvitation("create_invitation", User.find_by_auth_token(params[:auth_token]), invitation) 
