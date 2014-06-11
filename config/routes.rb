@@ -5,6 +5,7 @@ Letseatserver::Application.routes.draw do
   devise_for :users
   
   get "/register", :to => 'reglink#withlink'
+  get "/invited", :to => 'invitelink#withlink'
 
   namespace :api do
     namespace :v1 do

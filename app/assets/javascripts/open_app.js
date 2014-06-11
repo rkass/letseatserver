@@ -1,5 +1,6 @@
 var timeout;
-function open_appstore(auth_token) {
+function open_appstore() {
+  window.location = 'itms://itunes.com/apps/letseat'
   //alert("openappstore");
   //window.location='letsEat://register/' + auth_token
 }
