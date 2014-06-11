@@ -25,9 +25,7 @@ class ApplicationController < ActionController::Base
 
   def sendInviteText(ratings, date, phoneNumber)
     date = date.strftime('%b %e, %l:%M %p')
-    typesString = ratings
-    msg = phoneNumber + " has invited you to go out for " + typesString + " on " + date + ". " + "Click here to reply and have your say about where you eat:" if typesList.length > 0
-    msg = phoneNumber + " has invited you out to eat " + " on " + date + ". " + "Click here to reply and have your say about where you eat:" if typesList.length == 0
+    msg = phoneNumber + " has invited you out to eat " + " on " + date + ". " + "Click here to reply and have your say about where you eat:"
     account_sid = 'AC2f765a199ace2dc474a668b9daa59b5c' 
     auth_token = '3f3d821890f60e0a8240cab0232be4a1' 
     msg += "  immense-fortress-7865.herokuapp.com/invited" 
