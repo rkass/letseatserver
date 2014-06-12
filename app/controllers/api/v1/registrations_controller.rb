@@ -3,15 +3,9 @@ class Api::V1::RegistrationsController < ApplicationController
  
   def validate
     user = User.where(username: params[:username])[0]
-    validated = user.device_token == params[:deviceToken]
+    validated = user.auth_token == params[:auth_token]
     render :json=> {:validated=> validated, :auth_token => user.auth_token, :username => user.username, :request=>"validate", :phone_number => user.phone_number}    , :status=>201
     return
-  end
-
-  def spamCheck(deviceToken)
-    reqsWithinTenMin = 0
-    User.where(device_token:deviceToken).each{|u| reqsWithinTenMen += u.requests}
-    reqsWithinTenMin >= 5
   end
 
   def create 
