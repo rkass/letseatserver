@@ -3,8 +3,15 @@ class Api::V1::RegistrationsController < ApplicationController
  
   def validate
     user = User.where(username: params[:username])[0]
-    render :json=> {:validated=> (user.auth_token == params[:auth_token]), :auth_token => user.auth_token, :username => user.username, :request=>"validate", :phone_number => user.phone_number}    , :status=>201
+    validated = user.device_token == params[:deviceToken]
+    render :json=> {:validated=> validated, :auth_token => user.auth_token, :username => user.username, :request=>"validate", :phone_number => user.phone_number}    , :status=>201
     return
+  end
+
+  def spamCheck(deviceToken)
+    reqsWithinTenMin = 0
+    User.where(device_token:deviceToken).each{|u| reqsWithinTenMen += u.requests}
+    reqsWithinTenMin >= 5
   end
 
   def create 
@@ -14,9 +21,20 @@ class Api::V1::RegistrationsController < ApplicationController
       password = (0...50).map { o[rand(o.length)] }.join
       username = (0...50).map { o[rand(o.length)] }.join
       user = User.new(:username => username, :password => password, 
-      :phone_number => phoneStrip(params[:phoneNumber]), :auth_token => Digest::SHA1.hexdigest(params[:username] + params[:password]))
-      puts "Username " + user.username
+      :phone_number => phoneStrip(params[:phoneNumber]), :auth_token => Digest::SHA1.hexdigest(params[:username] + params[:password]), :requests => 0, :device_token => params[:deviceToken])
+    else
+      if (((DateTime.now - 10.minutes) < user.requests_changed) and (user.requests > 4))
+        render :json=> {:success => "false", :request=>"sign_up"},  :status=>422
+        return
+      else
+        if ((params[:deviceToken] == user.device_token) and ((DateTime.now - 10.minutes) < user.requests_changed))
+          user.requests += 1
+        else  
+          user.requests = 1
+        end
+      end
     end
+    user.device_token = params[:device_token]
     invs = Invitation.where("invitees like ?", "%" + user.phone_number + "%")
     if user.save
       sendRegistrationText(user.auth_token, '+1' + user.phone_number)
