@@ -21,20 +21,8 @@ class Api::V1::RegistrationsController < ApplicationController
       password = (0...50).map { o[rand(o.length)] }.join
       username = (0...50).map { o[rand(o.length)] }.join
       user = User.new(:username => username, :password => password, 
-      :phone_number => phoneStrip(params[:phoneNumber]), :auth_token => Digest::SHA1.hexdigest(params[:username] + params[:password]), :requests => 0, :device_token => params[:deviceToken])
-    else
-      if (((DateTime.now - 10.minutes) < user.requests_changed) and (user.requests > 4))
-        render :json=> {:success => "false", :request=>"sign_up"},  :status=>422
-        return
-      else
-        if ((params[:deviceToken] == user.device_token) and ((DateTime.now - 10.minutes) < user.requests_changed))
-          user.requests += 1
-        else  
-          user.requests = 1
-        end
-      end
+      :phone_number => phoneStrip(params[:phoneNumber]), :auth_token => Digest::SHA1.hexdigest(params[:username] + params[:password]))
     end
-    user.device_token = params[:device_token]
     invs = Invitation.where("invitees like ?", "%" + user.phone_number + "%")
     if user.save
       sendRegistrationText(user.auth_token, '+1' + user.phone_number)
