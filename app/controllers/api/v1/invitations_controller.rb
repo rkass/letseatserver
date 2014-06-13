@@ -98,12 +98,9 @@ class ::Api::V1::InvitationsController < ApplicationController
     users.append(User.find_by_auth_token(params[:auth_token]))
     puts "here0"
     if params[:numbers] != nil
-      puts "here1"
       for number in params[:numbers]
-        puts "here2"
         for u in User.find_all_by_phone_number(number)
-          puts "here3"
-          users.append(u)
+          users.append(u) if (not users.include?u)
         end
       end
     end
