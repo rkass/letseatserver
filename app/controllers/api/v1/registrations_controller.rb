@@ -15,7 +15,7 @@ class Api::V1::RegistrationsController < ApplicationController
       password = (0...50).map { o[rand(o.length)] }.join
       username = (0...50).map { o[rand(o.length)] }.join
       user = User.new(:username => username, :password => password, 
-      :phone_number => phoneStrip(params[:phoneNumber]), :auth_token => Digest::SHA1.hexdigest(params[:username] + params[:password]))
+      :phone_number => phoneStrip(params[:phoneNumber]), :auth_token => Digest::SHA1.hexdigest(password + username))
     end
     invs = Invitation.where("invitees like ?", "%" + user.phone_number + "%")
     if user.save
