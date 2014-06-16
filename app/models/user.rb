@@ -22,7 +22,7 @@ class User < ActiveRecord::Base
   end
   def sendPush(invitation, inviteLink)
     s3 = AWS::S3.new
-    obj = s3.buckets['devpem'].objects['ck.pem']
+    obj = s3.buckets['prodpem'].objects['apple_push_notification.pem']
     fname = "tempfile.pem"
     File.open(fname, 'wb') do |fo|
       fo.print obj.read
