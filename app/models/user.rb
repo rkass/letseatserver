@@ -30,7 +30,7 @@ class User < ActiveRecord::Base
     file = File.new(fname)
     certificate = file.read
     passphrase = "ryan30"
-    connection = Houston::Connection.new(Houston::APPLE_DEVELOPMENT_GATEWAY_URI, certificate, passphrase)
+    connection = Houston::Connection.new(Houston::APPLE_PRODUCTION_GATEWAY_URI, certificate, passphrase)
     notification = Houston::Notification.new(device: self.device_token)
     if inviteLink
       if (invitation.restaurants != nil) and (invitation.restaurants != [])
