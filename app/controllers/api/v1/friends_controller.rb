@@ -16,7 +16,8 @@ class Api::V1::FriendsController < ApplicationController
           if ((users != nil and (users.length > 0)) == negative)
             if negative
               for u in users
-                if u.encrypted_password != params[:auth_token]
+                puts "number: " + number
+                if u.auth_token != params[:auth_token]
                   numbers.push(number)
                   break
                 end
