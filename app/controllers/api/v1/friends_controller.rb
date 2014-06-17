@@ -11,8 +11,8 @@ class Api::V1::FriendsController < ApplicationController
       numbers = []
       if contact[:phone_numbers] != nil
         for contactPhone in contact[:phone_numbers]
+          puts "914 contactPhone: " + contactPhone if contactPhone.include?"914"
           number = phoneStrip(contactPhone)
-          puts "914 number: " + number if number.include?"914"
           users = User.find_all_by_phone_number(number)
           if ((users != nil and (users.length > 0)) == negative)
             if negative
