@@ -34,7 +34,7 @@ class User < ActiveRecord::Base
     notification = Houston::Notification.new(device: self.device_token)
     if inviteLink
       if (invitation.restaurants != nil) and (invitation.restaurants != []) and (invitation.updatingRecommendations == 0)
-        notification.alert = "Your meal has been scheduled for " + invitation.restaurants.first().name + "!"
+        notification.alert = "Your meal has been scheduled!"
       else
         notification.alert = "Your meal has been scheduled!"
       end
