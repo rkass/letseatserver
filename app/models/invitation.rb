@@ -227,8 +227,8 @@ class Invitation < ActiveRecord::Base
     end
     self.restaurants.each{ |r| r.compute(3, 1, 1, 0.5)}
     self.with_lock do
-      puts "Decrementing id: #{self.id} from current value of #{self.updatingRecommendations}"     
-      self.update_attributes(:updatingRecommendations => self.updatingRecommendations - 1)
+      puts "Setting updatingRecs to 0 for invitation id: #{self.id} from current value of #{self.updatingRecommendations}"     
+      self.update_attributes(:updatingRecommendations => 0)
     end
   end
      
