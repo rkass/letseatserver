@@ -1,10 +1,11 @@
 class Preferences
-  attr_accessor :location, :ratings_dict, :minPrice, :maxPrice
-  def initialize(ratings_dict, location, minPrice, maxPrice)
+  attr_accessor :location, :ratings_dict, :minPrice, :maxPrice, :top5
+  def initialize(ratings_dict, location, minPrice, maxPrice, top5)
     @ratings_dict = ratings_dict
     @location = location
     @minPrice = minPrice
     @maxPrice = maxPrice
+    @top5 = top5
     normalizeRatingsDict
   end
 
