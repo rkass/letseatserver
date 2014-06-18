@@ -33,7 +33,7 @@ class User < ActiveRecord::Base
     connection = Houston::Connection.new(Houston::APPLE_PRODUCTION_GATEWAY_URI, certificate, passphrase)
     notification = Houston::Notification.new(device: self.device_token)
     if inviteLink
-      if (invitation.restaurants != nil) and (invitation.restaurants != [])
+      if (invitation.restaurants != nil) and (invitation.restaurants != []) and (invitation.updatingRecommendations == 0)
         notification.alert = "Your meal has been scheduled for " + invitation.restaurants.first().name + "!"
       else
         notification.alert = "Your meal has been scheduled!"
