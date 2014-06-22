@@ -211,7 +211,6 @@ class Invitation < ActiveRecord::Base
   end
 
   def updateRestaurants(withVote)
-    self.with_lock do
       rf = RestaurantFinder.new(self)
       if not withVote
         if not self.central
@@ -229,7 +228,6 @@ class Invitation < ActiveRecord::Base
       self.restaurants.each{ |r| r.compute(3, 1, 1, 0.5)}
       puts "Decrementing updating recommendations for invitation id: #{self.id} from current value of #{self.updatingRecommendations}"
       self.update_attributes(:updatingRecommendations => self.updatingRecommendations - 1)
-    end
   end
      
   def vote(user, input_url)
@@ -267,11 +265,11 @@ class Invitation < ActiveRecord::Base
     ret = nil
     self.with_lock do
       ret = self.update_attributes(:updatingRecommendations => self.updatingRecommendations + 1)
-    end
-    if delay
-      self.delay.updateRestaurants(withVote)
-    else
-      self.updateRestaurants(withVote)
+      if delay
+        self.delay.updateRestaurants(withVote)
+      else
+        self.updateRestaurants(withVote)
+      end
     end
     ret
   end
