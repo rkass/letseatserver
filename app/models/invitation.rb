@@ -265,9 +265,9 @@ class Invitation < ActiveRecord::Base
   end   
   def saveAndUpdateRecommendations(withVote, delay = true)
     ret = nil
-    self.with_lock do
-      ret = self.update_attributes(:updatingRecommendations => self.updatingRecommendations + 1)
-    end
+    #self.with_lock do
+     # ret = self.update_attributes(:updatingRecommendations => self.updatingRecommendations + 1)
+    #end
     if delay
       self.delay.updateRestaurants(withVote)
     else
