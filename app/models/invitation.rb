@@ -215,6 +215,7 @@ class Invitation < ActiveRecord::Base
   end
 
   def updateRestaurants(withVote)
+    begin
     Invitation.transaction do
       self.reload(:lock =>true)#self.with_lock do
       rf = RestaurantFinder.new(self)
