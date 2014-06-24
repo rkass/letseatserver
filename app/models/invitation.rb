@@ -211,7 +211,8 @@ class Invitation < ActiveRecord::Base
   end
 
   def updateRestaurants(withVote)
-    #self.with_lock do
+    Invitation.transaction do
+      self.reload(:lock =>true)#self.with_lock do
       rf = RestaurantFinder.new(self)
       if not withVote
         if not self.central
@@ -231,6 +232,7 @@ class Invitation < ActiveRecord::Base
       self.update_attributes(:updatingRecommendations => self.updatingRecommendations - 1)
     #end
   end
+end
      
   def vote(user, input_url)
     preferences = preferencesForUser(user)
@@ -265,9 +267,11 @@ class Invitation < ActiveRecord::Base
   end   
   def saveAndUpdateRecommendations(withVote, delay = true)
     ret = nil
-    #self.with_lock do
-     # ret = self.update_attributes(:updatingRecommendations => self.updatingRecommendations + 1)
-    #end
+    Invitation.transaction do 
+      self.reload(:lock => true)
+      ret = self.update_attributes(:updatingRecommendations => self.updatingRecommendations + 1)
+      self.save!
+    end
     if delay
       self.delay.updateRestaurants(withVote)
     else
