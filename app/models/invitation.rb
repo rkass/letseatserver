@@ -238,9 +238,11 @@ class Invitation < ActiveRecord::Base
         puts "reloading"
         self.save!
         end
-        ActiveRecord::Base.connection.disconnect!
-        ActiveRecord::Base.establish_connection
-      puts "connection reset"
+       rescue NoMethodError => e
+      puts "No method error"
+      puts e
+end
+begin
       Invitation.transaction do
         self.reload(:lock => true)
         puts "reloaded"
