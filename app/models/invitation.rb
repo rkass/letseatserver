@@ -238,7 +238,8 @@ class Invitation < ActiveRecord::Base
     #end
   end
   rescue NoMethodError => e
-  puts "No method error e happened"
+  puts "No method error"
+  puts e
   end
 end
      
