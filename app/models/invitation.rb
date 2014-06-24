@@ -235,9 +235,8 @@ class Invitation < ActiveRecord::Base
           end
         end
         puts "hereere"
-        end
-        Invitation.transaction do
         puts "reloading"
+        self.save!
         self.reload(:lock => true)
         puts "reloaded"
         self.restaurants.each{ |r| r.compute(3, 1, 1, 0.5)}
