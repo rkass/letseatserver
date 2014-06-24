@@ -84,6 +84,7 @@ serialize :categories
   end
 
   def computeDistanceScore
+    return 1 if userVoted(user)
     if self.distance == nil
       self.distance_score = 0
     else
