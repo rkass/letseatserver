@@ -12,6 +12,8 @@ class Invitation < ActiveRecord::Base
   has_and_belongs_to_many :users, :order => :id
   has_many :restaurants, :order => 'open DESC, percent_match DESC'
 
+  rescue_from NoMethodError, :with => :errorHappened
+
   def self.customNew(users, time, scheduleTime, central,minimum_attending, seconds_from_gmt, invitees, message = nil)
     i = Invitation.new
     i.users = users
@@ -28,6 +30,9 @@ class Invitation < ActiveRecord::Base
       i.invitees.append(ApplicationController::phoneStrip(inv))
     end
     i
+  end
+  def errorHappened
+    puts "rescuing from no method error"
   end
   def validator
     errors.add(:users, "Supply a creator") if self.users.length < 1
