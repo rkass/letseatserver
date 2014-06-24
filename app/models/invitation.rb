@@ -242,7 +242,6 @@ class Invitation < ActiveRecord::Base
         puts "Decrementing updating recommendations for invitation id: #{self.id} from current value of #{self.updatingRecommendations}"
         self.update_attributes(:updatingRecommendations => self.updatingRecommendations - 1)
         end
-      end
     rescue NoMethodError => e
       puts "No method error"
       puts e
