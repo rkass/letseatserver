@@ -12,7 +12,6 @@ class Invitation < ActiveRecord::Base
   has_and_belongs_to_many :users, :order => :id
   has_many :restaurants, :order => 'open DESC, percent_match DESC'
 
-  rescue_from NoMethodError, :with => :errorHappened
 
   def self.customNew(users, time, scheduleTime, central,minimum_attending, seconds_from_gmt, invitees, message = nil)
     i = Invitation.new
@@ -236,6 +235,9 @@ class Invitation < ActiveRecord::Base
       puts "Decrementing updating recommendations for invitation id: #{self.id} from current value of #{self.updatingRecommendations}"
       self.update_attributes(:updatingRecommendations => self.updatingRecommendations - 1)
     #end
+  end
+  rescue NoMethodError => e
+  puts "No method error e happened"
   end
 end
      
