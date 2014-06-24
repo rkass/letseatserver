@@ -216,32 +216,34 @@ class Invitation < ActiveRecord::Base
 
   def updateRestaurants(withVote)
     begin
-    Invitation.transaction do
-      self.reload(:lock =>true)#self.with_lock do
-      rf = RestaurantFinder.new(self)
-      if not withVote
-        if not self.central
-          rf.find(true)
-          rf.fillGaps
-        else
-          #central
-          for r in self.restaurants
-            r.destroy if ((r.votes == nil) || (r.votes == []))
+      Invitation.transaction do
+        self.reload(:lock =>true)#self.with_lock do
+        rf = RestaurantFinder.new(self)
+        if not withVote
+          if not self.central
+            puts "here1"
+            rf.find(true)
+            rf.fillGaps 
+            puts "here2"
+          else
+            #central
+            for r in self.restaurants
+              r.destroy if ((r.votes == nil) || (r.votes == []))
+            end
+            rf.find(false)
+            rf.fillGaps
           end
-          rf.find(false)
-          rf.fillGaps
         end
+        puts "hereere"
+        self.restaurants.each{ |r| r.compute(3, 1, 1, 0.5)}
+        puts "Decrementing updating recommendations for invitation id: #{self.id} from current value of #{self.updatingRecommendations}"
+        self.update_attributes(:updatingRecommendations => self.updatingRecommendations - 1)
       end
-      self.restaurants.each{ |r| r.compute(3, 1, 1, 0.5)}
-      puts "Decrementing updating recommendations for invitation id: #{self.id} from current value of #{self.updatingRecommendations}"
-      self.update_attributes(:updatingRecommendations => self.updatingRecommendations - 1)
-    #end
+    rescue NoMethodError => e
+      puts "No method error"
+      puts e
+    end
   end
-  rescue NoMethodError => e
-  puts "No method error"
-  puts e
-  end
-end
      
   def vote(user, input_url)
     preferences = preferencesForUser(user)
