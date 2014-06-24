@@ -237,8 +237,14 @@ class Invitation < ActiveRecord::Base
         puts "hereere"
         puts "reloading"
         self.save!
+        end
+        ActiveRecord::Base.connection.disconnect!
+        ActiveRecord::Base.establish_connection
+      puts "connection reset"
+      Invitation.transaction do
         self.reload(:lock => true)
         puts "reloaded"
+      
         self.restaurants.each{ |r| 
         puts "computing one rest"
         r.compute(3, 1, 1, 0.5)}
