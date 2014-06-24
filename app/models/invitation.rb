@@ -239,7 +239,9 @@ class Invitation < ActiveRecord::Base
         self.save!
         self.reload(:lock => true)
         puts "reloaded"
-        self.restaurants.each{ |r| r.compute(3, 1, 1, 0.5)}
+        self.restaurants.each{ |r| 
+        puts "computing one rest"
+        r.compute(3, 1, 1, 0.5)}
         puts "something going on around here"
         puts "Decrementing updating recommendations for invitation id: #{self.id} from current value of #{self.updatingRecommendations}"
         self.update_attributes(:updatingRecommendations => self.updatingRecommendations - 1)
