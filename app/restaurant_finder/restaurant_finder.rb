@@ -181,9 +181,14 @@ class RestaurantFinder
     res = HTTParty.get("https://maps.googleapis.com/maps/api/geocode/json?address=#{CGI::escape(address)}&sensor=false&key=AIzaSyBITjgfUC0tbWp9-0SRIRR-PYAultPKDbA")
     lat = ""
     lng = ""
+begin
     lat = res.parsed_response['results'][0]['geometry']['location']['lat'] if (res.parsed_response != nil and res.parsed_response['results'] != nil and res.parsed_response['results'][0]['geometry'] != nil)
     lng = res.parsed_response['results'][0]['geometry']['location']['lng'] if (res.parsed_response != nil and res.parsed_response['results'] != nil and res.parsed_response['results'][0]['geometry'] != nil)
     "#{lat.to_s},#{lng.to_s}"
+rescue  NoMethodError => e
+puts "no method in get coordinates"
+puts e
+end
   end
 
   def searchCategory(viableOptions, category, radius, location, dow, tod,parallel = true)
