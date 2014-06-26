@@ -69,6 +69,7 @@ serialize :categories
 
   def computeDistanceScore(user)
     return 1 if userVoted(user)
+    return 0 if self.location == nil
     loc_arr = [self.location.split(',')[0].to_f, self.location.split(',')[1].to_f]
     prefs = self.invitation.preferencesForUser(user)
     return 0 if prefs == nil
