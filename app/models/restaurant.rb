@@ -124,7 +124,7 @@ serialize :categories
     ret
   end
 
-  def getPercentVoted
+  def percentVoted
     votes = 0.0
     for u in self.invitation.users
       votes += 1 if userVoted(u)
