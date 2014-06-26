@@ -80,7 +80,7 @@ serialize :categories
     for u in self.invitation.users
       tot += computeFoodScore(u)
     end
-    self.sum_food_scores = tot / (self.invitation.responses.select{|r| r != nil}.length * self.invitation.responses.length + 1)
+    self.sum_food_scores = tot / (self.invitation.responses.select{|r| r != nil}.length * (self.invitation.responses.length + 1))
   end
 
   def computeTotalPriceScore
