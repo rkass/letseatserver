@@ -11,7 +11,7 @@ serialize :categories
   def compute(foodWeight, priceWeight, distanceWeight, restWeight)
     computeTotalFoodScore
     computeTotalPriceScore
-    computeTotalDistanceScore  
+    computeDistanceScore  
     computeRestScore
     computePercentMatch(foodWeight, priceWeight, distanceWeight, restWeight)
     self.save
@@ -67,19 +67,13 @@ serialize :categories
     return score
   end
 
-  def computeDistanceScore(user)
-    return 1 if userVoted(user)
-    return 0 if self.location == nil
-    loc_arr = [self.location.split(',')[0].to_f, self.location.split(',')[1].to_f]
-    prefs = self.invitation.preferencesForUser(user)
-    return 0 if prefs == nil
-    my_arr = [prefs.location.split(',')[0].to_f, prefs.location.split(',')[1].to_f]
-    distance = RestaurantFinder.distance(loc_arr, my_arr)
-    if self.distance == nil 
-      return 0 
+  def computeDistanceScore
+    if self.distance == nil
+      self.distance_score = 0
     else
-      return [(1 - (self.distance / 40000))**2,0].max
-    end 
+      self.distance_score = [(1 - (self.distance / 40000))**2,0].max
+    end
+  end 
   end
   
   def computeTotalFoodScore
@@ -97,21 +91,6 @@ serialize :categories
     end
     self.sum_price_scores = tot / (self.invitation.responses.length - self.invitation.responses.count(nil))
   end
-
-  def computeTotalDistanceScore
-    self.location = RestaurantFinder.getCoordinates(self.address)
-    tot = 0.0
-    if (not self.invitation.central)
-      tot = computeDistanceScore(self.invitation.users[self.invitation.creator_index])
-      self.distance_score = tot 
-    else
-      for u in self.invitation.users
-        tot += computeDistanceScore(u)
-      end
-      self.distance_score = tot / (self.invitation.responses.length - self.invitation.responses.count(nil))
-    end
-  end
-    
 
   def serialize(user)
     ret = self.attributes
