@@ -261,7 +261,7 @@ begin
       self.reload(:lock => true)
       for r in self.restaurants
         if r.url == input_url
-          r.votes.append(user.id)
+          r.votes.append(user.id) if (not r.votes.include?(user.id))
           r.save
           voted_restaurant = r.serialize(user)
         else
