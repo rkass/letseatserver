@@ -188,6 +188,8 @@ begin
 rescue  NoMethodError => e
 puts "no method in get coordinates"
 puts e
+puts res
+puts res.parsed_response
 end
   end
 
