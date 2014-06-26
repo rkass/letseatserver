@@ -70,7 +70,9 @@ serialize :categories
   def computeDistanceScore(user)
     return 1 if userVoted(user)
     loc_arr = [self.location.split(',')[0].to_f, self.location.split(',')[1].to_f]
-    distance = RestaurantFinder.distance(loc_arr, self.invitation.preferencesForUser(user).location)
+    prefs = self.invitation.preferencesForUser(user)
+    my_arr = [prefs.location.split(',')[0].to_f, prefs.location.split(',')[1].to_f]
+    distance = RestaurantFinder.distance(loc_arr, my_arr)
     if self.distance == nil 
       puts "distance nil"
       return 0 
