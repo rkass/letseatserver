@@ -56,13 +56,13 @@ serialize :categories
   end
 
   def computeFoodScore(user)
-    return self.invitation.responses.length if userVoted(user)
+    return self.invitation.responses.length + 1 if userVoted(user)
     prefs = self.invitation.preferencesForUser(user)
     return 0 if prefs == nil
     score = 0
     for category in self.categories 
-      score = self.invitation.responses.length - 1 if prefs.ratings_dict[category[1]] == 1
-      return self.invitation.responses.length if prefs.ratings_dict[category[1]] == 2
+      score = self.invitation.responses.length + 1 - 1 if prefs.ratings_dict[category[1]] == 1
+      return self.invitation.responses.length + 1 if prefs.ratings_dict[category[1]] == 2
     end
     return score
   end
@@ -79,8 +79,6 @@ serialize :categories
       puts "distance nil"
       return 0 
     else
-      puts "distance "
-      puts distance
       return [(1 - (self.distance / 40000))**2,0].max
     end 
   end
@@ -90,7 +88,7 @@ serialize :categories
     for u in self.invitation.users
       tot += computeFoodScore(u)
     end
-    self.sum_food_scores = tot / (self.invitation.responses.select{|r| r != nil}.length * self.invitation.responses.length)
+    self.sum_food_scores = tot / (self.invitation.responses.select{|r| r != nil}.length * self.invitation.responses.length + 1)
   end
 
   def computeTotalPriceScore
