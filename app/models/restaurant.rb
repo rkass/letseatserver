@@ -98,6 +98,7 @@ serialize :categories
   end
 
   def computeTotalDistanceScore
+    self.location = RestaurantFinder.getCoordinates(self.address)
     tot = 0.0
     if (not self.invitation.central)
       tot = computeDistanceScore(self.invitation.users[self.invitation.creator_index])
