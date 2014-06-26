@@ -71,6 +71,7 @@ serialize :categories
     return 1 if userVoted(user)
     loc_arr = [self.location.split(',')[0].to_f, self.location.split(',')[1].to_f]
     prefs = self.invitation.preferencesForUser(user)
+    return 0 if prefs == nil
     my_arr = [prefs.location.split(',')[0].to_f, prefs.location.split(',')[1].to_f]
     distance = RestaurantFinder.distance(loc_arr, my_arr)
     if self.distance == nil 
