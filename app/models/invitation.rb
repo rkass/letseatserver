@@ -221,10 +221,8 @@ class Invitation < ActiveRecord::Base
         rf = RestaurantFinder.new(self)
         if not withVote
           if not self.central
-            puts "here1"
             rf.find(true)
             rf.fillGaps 
-            puts "here2"
           else
             #central
             for r in self.restaurants
@@ -259,7 +257,8 @@ begin
     preferences = preferencesForUser(user)
     voted_restaurant = nil
     other_restaurants = []
-    self.with_lock do
+    Invitation.transaction do
+      self.reload(:lock => true)
       for r in self.restaurants
         if r.url == input_url
           r.votes.append(user.id)
@@ -275,7 +274,8 @@ begin
   end 
   
   def unvote(user, input_url)
-    self.with_lock do
+    Invitation.transaction do
+      self.reload(:lock => true)
       for r in self.restaurants
         if r.url == input_url 
           r.votes.delete(user.id)
