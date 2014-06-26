@@ -74,7 +74,6 @@ serialize :categories
       self.distance_score = [(1 - (self.distance / 40000))**2,0].max
     end
   end 
-  end
   
   def computeTotalFoodScore
     tot = 0.0
