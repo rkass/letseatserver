@@ -11,7 +11,7 @@ serialize :categories
   def compute(foodWeight, priceWeight, distanceWeight, restWeight)
     computeTotalFoodScore
     computeTotalPriceScore
-    computeDistanceScore  
+    computeTotalDistanceScore  
     computeRestScore
     computePercentMatch(foodWeight, priceWeight, distanceWeight, restWeight)
     self.save
@@ -27,7 +27,7 @@ serialize :categories
   end
 
   def computePercentMatch(foodWeight, priceWeight, distanceWeight, restWeight)
-    self.percent_match = (foodWeight * self.sum_food_scores + priceWeight * self.sum_price_scores + distanceWeight * self.distance_score + restWeight * self.rating_score) / (foodWeight + priceWeight + distanceWeight + restWeight)
+    self.percent_match = [percentVoted, (foodWeight * self.sum_food_scores + priceWeight * self.sum_price_scores + distanceWeight * self.distance_score + restWeight * self.rating_score) / (foodWeight + priceWeight + distanceWeight + restWeight)].max
   end
 
   def computePriceScore(user)
@@ -66,6 +66,20 @@ serialize :categories
     end
     return score
   end
+
+  def computeDistanceScore(user)
+    return 1 if userVoted(user)
+    loc_arr = [self.location.split(',')[0].to_f, self.location.split(',')[1].to_f]
+    distance = RestaurantFinder.distance(loc_arr, invitation_arr)
+    if self.distance == nil 
+      puts "distance nil"
+      return 0 
+    else
+      puts "distance "
+      puts distance
+      return [(1 - (self.distance / 40000))**2,0].max
+    end 
+  end
   
   def computeTotalFoodScore
     tot = 0.0
@@ -83,13 +97,19 @@ serialize :categories
     self.sum_price_scores = tot / (self.invitation.responses.length - self.invitation.responses.count(nil))
   end
 
-  def computeDistanceScore
-    if self.distance == nil
-      self.distance_score = 0
+  def computeTotalDistanceScore
+    tot = 0.0
+    if (not self.invitation.central)
+      tot = computeDistanceScore(self.invitation.users[self.invitation.creator_index])
+      self.distance_score = tot 
     else
-      self.distance_score = [(1 - (self.distance / 40000))**2,0].max
+      for u in self.invitation.users
+        tot += computeDistanceScore(u)
+      end
+      self.distance_score = tot / (self.invitation.responses.length - self.invitation.responses.count(nil))
     end
   end
+    
 
   def serialize(user)
     ret = self.attributes
@@ -97,6 +117,14 @@ serialize :categories
     ret['votes'] = self.votes.length
     ret['percent_match'] = (self.percent_match*100).round / 100.0
     ret
+  end
+
+  def getPercentVoted
+    votes = 0.0
+    for u in self.invitation.users
+      votes += 1 if userVoted(u)
+    end
+    return votes / (self.invitation.responses.length - self.invitation.responses.count(nil))
   end
 
   def computeRestScore
