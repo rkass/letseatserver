@@ -1,12 +1,12 @@
 Letseatserver::Application.routes.draw do
+  get "welcome/index"
   get "registrations/create"
   get "sessions/create"
   get "sessions/destroy"
   devise_for :users
-  
   get "/register", :to => 'reglink#withlink'
   get "/invited", :to => 'invitelink#withlink'
-
+  get "/download", :to => 'invitelink#withlink'
   namespace :api do
     namespace :v1 do
       devise_scope :user do
@@ -32,7 +32,7 @@ Letseatserver::Application.routes.draw do
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
-  # root 'welcome#index'
+   root 'welcome#index'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
