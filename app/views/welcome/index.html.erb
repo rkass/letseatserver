@@ -1,2 +1,84 @@
-<h1>Welcome#index</h1>
-<p>Find me in app/views/welcome/index.html.erb</p>
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Let's Eat!</title>
+		<link rel="stylesheet" type = "text/css" href = "css/main.css">
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<!--		<script src="js/main.js"></script> -->
+	</head>
+
+	<body>
+		<div id = "page-0" class = "page page-0 selected-page">
+			<div id = "container">
+				<img src = "https://s3.amazonaws.com/letseatimages/logo2.png" id = "logo"/><br/>
+			<!--	<img src = "https://s3.amazonaws.com/letseatimages/download-icon.svg"  id = "download-button"/><br/>-->
+				<div id = "download-button">
+					<span id = "download-wrapper">
+						Coming Soon to the<br/>App Store
+					</span>
+				</div>
+			</div>
+			<span id = "slogan">
+				Group dining solved.
+			</span>
+		</div>
+
+		<div id = "page-1" class = "page page-1 page-2 page-3">
+			<div class = "about-container">
+				<span id = "screenshot-container">
+					<img src = "https://s3.amazonaws.com/letseatimages/screenshot1.png" id = "screenshot-0" class = "screenshot display-screenshot">
+
+					<img src = "https://s3.amazonaws.com/letseatimages/screenshot2.png" id = "screenshot-1" class = "screenshot">
+
+					<img src = "https://s3.amazonaws.com/letseatimages/screenshot3.png" id = "screenshot-2" class = "screenshot">
+				</span>
+				
+				<span id = "about-text-container">
+					<span id = "about-text-1" class = "about-text display-text">
+						Rate each food according to how much you want it, and leave the rest to us.
+					</span>
+					<span id = "about-text-2" class = "about-text">
+						Each time someone new responds to the invitation, we'll refresh our recommendations.
+					</span>
+					<span id = "about-text-3" class = "about-text">
+						After everyone responds or the cutoff time passes, everyone on the invitation is notified and the meal is scheduled for the best matching restaurant.
+					</span>
+				</span>
+			</div>
+		</div>
+
+		<div id = "page-2" class = "page page-4">
+			<div id = "container">
+				<span class = "white-font">
+				<!--	Shoot me an email at <a href = "mailto:rck72@cornell.edu" class = "page-link">rck72@cornell.edu</a><br/><br/>-->
+					<div id = "sign-up-button">
+						<span id = "download-wrapper">
+							Click Here to<br/>Join our Listserv!
+						</span>
+					</div><br/>
+					<input id = "sign-up-input" type = "text" placeholder = "Email Address">
+				</span>
+			</div>
+		</div>
+
+		<div id = "blue-strip">
+			<div id = "circles-wrapper">
+				<div class = "arrow-left" id = "prev-arrow-0"></div>
+				<div class = "circle selected-circle clickable" id = "circle-0"></div>
+				<div class = "circle clickable" id = "circle-1"></div>
+				<div class = "circle clickable" id = "circle-2"></div>
+				<div class = "circle clickable" id = "circle-3"></div>
+				<div class = "circle clickable" id = "circle-4"></div>
+				<div class = "arrow-right clickable" id = "next-arrow-2"></div>
+			</div>
+		</div>
+
+		<div id = "footer">
+			<a href = "mailto:rck72@cornell.edu" class = "footer-link">rck72@cornell.edu</a>
+		</div>
+		
+	</body>
+
+
+</html>
