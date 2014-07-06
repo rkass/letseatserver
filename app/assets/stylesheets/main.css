@@ -1,6 +1,6 @@
 @font-face {
 	font-family: "Vagabond";
-	src: url(https://s3.amazonaws.com/letseatimages/VAGABOND.TTF);
+	src: url("https://s3.amazonaws.com/letseatimages/VAGABOND.TTF");
 	src: local("Vagabond"), url(VAGABOND.TTF); /* for firefox */
 }
 
