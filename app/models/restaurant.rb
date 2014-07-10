@@ -43,7 +43,7 @@ serialize :categories
       min = 20
       max = 49
     elsif self.price == 4
-      return (((70.0 - prefs.maxPrice))) / 60.0)**2
+      return (((70.0 - prefs.maxPrice)) / 60.0)**2
     end
     return 1 if (prefs.minPrice <= min) and (prefs.maxPrice >= max)
     if prefs.minPrice <= min
