@@ -32,11 +32,8 @@ serialize :categories
 
   def computePriceScore(user)
     return 1 if userVoted(user)
-    puts "one"
     prefs = self.invitation.preferencesForUser(user)
-    puts "two"
     return 0 if prefs == nil
-    puts "three"
     if self.price == 1
       return (((10.0 - prefs.minPrice)) / 60.0)**2
     elsif self.price == 2
@@ -46,22 +43,14 @@ serialize :categories
       min = 20
       max = 49
     elsif self.price == 4
-      return (((70.0 - prefs.maxPrice)) / 60.0)**2
+      return (((70.0 - prefs.maxPrice))) / 60.0)**2
     end
     return 1 if (prefs.minPrice <= min) and (prefs.maxPrice >= max)
-    firstComponent = 0
-    secondComponent = 0
     if prefs.minPrice <= min
-      firstComponent = 1.0/2.0
+      return (((max - prefs.maxPrice) / (max - 10.0))**2)
     else
-      firstComponent = (((prefs.minPrice - min) / (70.0 - min))**2)/2.0
+      return (((prefs.minPrice - min) / (70.0 - min))**2)
     end
-    if prefs.maxPrice >= max
-      secondComponent = 1.0/2.0
-    else
-      secondComponent = (((max - prefs.maxPrice) / (max - 10.0))**2)/2.0
-    end
-    return firstComponent + secondComponent
   end
 
   def getLECategories
