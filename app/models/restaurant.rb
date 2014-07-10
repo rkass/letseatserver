@@ -32,21 +32,29 @@ serialize :categories
 
   def computePriceScore(user)
     return 1 if userVoted(user)
+    puts "one"
     prefs = self.invitation.preferencesForUser(user)
+    puts "two"
     return 0 if prefs == nil
+    puts "three"
     if self.price == 1
       min = 7
       max = 12
+      puts "four"
     elsif self.price == 2
       min = 13
       max = 19
+      puts "five"
     elsif self.price == 3
       min = 20
       max = 49
+      puts "six"
     elsif self.price == 4
       min = 50
       max = 70
+      puts "seven"
     end
+    puts "eight"
     return 1 if (prefs.minPrice <= min) or (prefs.maxPrice >= max)
     return 0
   end
