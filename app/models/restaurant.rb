@@ -35,21 +35,19 @@ serialize :categories
     prefs = self.invitation.preferencesForUser(user)
     return 0 if prefs == nil
     if self.price == 1
-      return (((10.0 - prefs.minPrice)) / 60.0)**2
+      num = 10
     elsif self.price == 2
-      min = 13
-      max = 19
+      num = 25
     elsif self.price == 3
-      min = 20
-      max = 49
+      num = 40
     elsif self.price == 4
-      return (((70.0 - prefs.maxPrice)) / 60.0)**2
+      num = 70
     end
-    return 1 if (prefs.minPrice <= min) and (prefs.maxPrice >= max)
-    if prefs.minPrice <= min
-      return (((max - prefs.maxPrice) / (max - 10.0))**2)
+    return 1 if (prefs.minPrice <= num) and (prefs.maxPrice >= num)
+    if num > prefs.maxPrice
+      return ((60.0 - (num - prefs.maxPrice)) / 60.0)
     else
-      return (((prefs.minPrice - min) / (70.0 - min))**2)
+      return ((60.0 - (prefs.minPrice - num)) / 60.0)
     end
   end
 
