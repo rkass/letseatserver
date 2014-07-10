@@ -38,25 +38,30 @@ serialize :categories
     return 0 if prefs == nil
     puts "three"
     if self.price == 1
-      min = 7
-      max = 12
-      puts "four"
+      return (((10.0 - prefs.minPrice)) / 60.0)**2
     elsif self.price == 2
       min = 13
       max = 19
-      puts "five"
     elsif self.price == 3
       min = 20
       max = 49
-      puts "six"
     elsif self.price == 4
-      min = 50
-      max = 70
-      puts "seven"
+      return (((70.0 - prefs.maxPrice)) / 60.0)**2
     end
-    puts "eight"
-    return 1 if (prefs.minPrice <= min) or (prefs.maxPrice >= max)
-    return 0
+    return 1 if (prefs.minPrice <= min) and (prefs.maxPrice >= max)
+    firstComponent = 0
+    secondComponent = 0
+    if prefs.minPrice <= min
+      firstComponent = 1.0/2.0
+    else
+      firstComponent = (((prefs.minPrice - min) / (70.0 - min))**2)/2.0
+    end
+    if prefs.maxPrice >= max
+      secondComponent = 1.0/2.0
+    else
+      secondComponent = (((max - prefs.maxPrice) / (max - 10.0))**2)/2.0
+    end
+    return firstComponent + secondComponent
   end
 
   def getLECategories
