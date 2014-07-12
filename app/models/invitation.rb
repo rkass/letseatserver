@@ -215,11 +215,11 @@ class Invitation < ActiveRecord::Base
   end
 
   def updateRestaurants(withVote)
-    begin
-      Invitation.transaction do
-        self.reload(:lock =>true)#self.with_lock do
-        rf = RestaurantFinder.new(self)
-        if not withVote
+    Invitation.transaction do
+      self.reload(:lock =>true)#self.with_lock do
+      rf = RestaurantFinder.new(self)
+      if not withVote
+        begin
           if not self.central
             rf.find(true)
             rf.fillGaps 
@@ -231,18 +231,12 @@ class Invitation < ActiveRecord::Base
             rf.find(false)
             rf.fillGaps
           end
+        rescue Expection => e
+          puts "fahk"
         end
-        self.save!
-        end
-      rescue NoMethodError => e
-        puts "No method error"
-        puts e
       end
-      
-        Invitation.transaction do
-          self.reload(:lock => true)
-          begin
-          self.restaurants.each{ |r| r.compute(3, 1, 1, 0.2)}
+      begin
+        self.restaurants.each{ |r| r.compute(3, 1, 1, 0.2)}
       rescue Exception => e
         puts "Exception"
         puts e
@@ -252,6 +246,7 @@ class Invitation < ActiveRecord::Base
 
       end
     end
+  end
      
   def vote(user, input_url)
     preferences = preferencesForUser(user)
