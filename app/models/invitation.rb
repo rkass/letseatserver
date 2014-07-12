@@ -243,7 +243,7 @@ begin
         self.reload(:lock => true)
       
         self.restaurants.each{ |r| 
-        r.compute(3, 1, 1, 0.5)}
+        r.compute(3, 1, 1, 0.2)}
         puts "Decrementing updating recommendations for invitation id: #{self.id} from current value of #{self.updatingRecommendations}"
         self.update_attributes(:updatingRecommendations => self.updatingRecommendations - 1)
         end
