@@ -33,7 +33,7 @@ serialize :categories
   def computePriceScore(user)
     return 1 if userVoted(user)
     prefs = self.invitation.preferencesForUser(user)
-    return 0 if prefs == nil
+    return 0 if prefs == nil or prefs.minPrice == nil or prefs.maxPrice == nil
     if self.price == 1
       num = 10
     elsif self.price == 2

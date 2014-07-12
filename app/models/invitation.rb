@@ -234,24 +234,24 @@ class Invitation < ActiveRecord::Base
         end
         self.save!
         end
-       rescue NoMethodError => e
-      puts "No method error"
-      puts e
-end
-begin
-      Invitation.transaction do
-        self.reload(:lock => true)
+      rescue NoMethodError => e
+        puts "No method error"
+        puts e
+      end
       
-        self.restaurants.each{ |r| 
-        r.compute(3, 1, 1, 0.2)}
-        puts "Decrementing updating recommendations for invitation id: #{self.id} from current value of #{self.updatingRecommendations}"
-        self.update_attributes(:updatingRecommendations => self.updatingRecommendations - 1)
-        end
-    rescue NoMethodError => e
-      puts "No method error"
-      puts e
+        Invitation.transaction do
+          self.reload(:lock => true)
+          begin
+          self.restaurants.each{ |r| r.compute(3, 1, 1, 0.2)}
+      rescue Exception => e
+        puts "Exception"
+        puts e
+      ensure
+          puts "Decrementing updating recommendations for invitation id: #{self.id} from current value of #{self.updatingRecommendations}"
+          self.update_attributes(:updatingRecommendations => self.updatingRecommendations - 1)
+
+      end
     end
-  end
      
   def vote(user, input_url)
     preferences = preferencesForUser(user)
