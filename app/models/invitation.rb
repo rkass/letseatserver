@@ -215,37 +215,42 @@ class Invitation < ActiveRecord::Base
   end
 
   def updateRestaurants(withVote)
-    Invitation.transaction do
-      self.reload(:lock =>true)#self.with_lock do
-      rf = RestaurantFinder.new(self)
-      if not withVote
-        begin
-          if not self.central
-            rf.find(true)
-            rf.fillGaps 
-          else
-            #central
-            for r in self.restaurants
-              r.destroy if ((r.votes == nil) || (r.votes == []))
+    begin
+      Invitation.transaction do
+        self.reload(:lock =>true)#self.with_lock do
+        rf = RestaurantFinder.new(self)
+        if not withVote
+          begin
+            if not self.central
+              rf.find(true)
+              rf.fillGaps 
+            else
+              #central
+              for r in self.restaurants
+                r.destroy if ((r.votes == nil) || (r.votes == []))
+              end
+              rf.find(false)
+              rf.fillGaps
             end
-            rf.find(false)
-            rf.fillGaps
+          rescue Expection => e
+            puts "fahk"
           end
-        rescue Expection => e
-          puts "fahk"
         end
-      end
-      begin
-        self.restaurants.each{ |r| r.compute(3, 1, 1, 0.2)}
-      rescue Exception => e
-        puts "Exception"
-        puts e
-      ensure
+        begin
+          self.restaurants.each{ |r| r.compute(3, 1, 1, 0.2)}
+        rescue Exception => e
+          puts "Exception"
+          puts e
+        ensure
           puts "Decrementing updating recommendations for invitation id: #{self.id} from current value of #{self.updatingRecommendations}"
           self.update_attributes(:updatingRecommendations => self.updatingRecommendations - 1)
 
+        end
       end
-    end
+      rescue NoMethodError => e
+        puts "No method eror"
+        puts e
+      end
   end
      
   def vote(user, input_url)
