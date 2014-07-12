@@ -96,7 +96,6 @@ class ::Api::V1::InvitationsController < ApplicationController
   def create
     users = []
     users.append(User.find_by_auth_token(params[:auth_token]))
-    puts "here0"
     if params[:numbers] != nil
       for number in params[:numbers]
         for u in User.find_all_by_phone_number(number)
