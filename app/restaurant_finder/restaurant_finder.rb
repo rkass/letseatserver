@@ -54,21 +54,21 @@ class RestaurantFinder
       vo = 0
       if newPrefsOnly
         twos = @invitation.new_preferences.getCategoriesRated(2)
-        vo = self.searchCategory(0, twos, 2000, loc, dow, tod) if twos != ""
+        vo = self.searchCategory(0, twos, 1000, loc, dow, tod) if twos != ""
         ones = @invitation.new_preferences.getCategoriesRated(1)
-        vo = self.searchCategory(0, ones, 2000, loc, dow, tod) if ones != ""
+        vo = self.searchCategory(0, ones, 1000, loc, dow, tod) if ones != ""
       else
         responses = self.getResponses
         for r in responses#@invitation.responses.select{|r| r!= nil}
-          vo = self.searchCategory(0, r, 2000, loc, dow, tod) if r != ""
+          vo = self.searchCategory(0, r, 1000, loc, dow, tod) if r != ""
         end
       end
       if vo < 15
-        self.searchCategory(0, "restaurants", 2000, loc, dow, tod)
+        self.searchCategory(0, "restaurants", 1000, loc, dow, tod)
       end
     else
       categories.each do |category|
-        searchCategory(0, category, 2000, loc, dow, tod,false)
+        searchCategory(0, category, 1000, loc, dow, tod,false)
       end
     end
   end
