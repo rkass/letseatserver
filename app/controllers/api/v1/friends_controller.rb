@@ -3,9 +3,9 @@ class Api::V1::FriendsController < ApplicationController
   def get(negative)
     user = validateUser(params[:auth_token])
     if user == nil
-      render :json => {:error=>"Bad Login"}, :status=>422
+      render :json => {:success =false, :error=>"Bad Login"}, :status=>422
       return
-    end
+    end  
     ret = {}
     for contact in params[:contacts]
       numbers = []
@@ -40,7 +40,7 @@ class Api::V1::FriendsController < ApplicationController
         ret[name] =numbers
       end
     end
-    render :json => {:success => "True", :length => ret.length, :friends => ret}
+    render :json => {:success => true, :length => ret.length, :friends => ret}
     return
   end
 

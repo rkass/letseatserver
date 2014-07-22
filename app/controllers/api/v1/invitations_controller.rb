@@ -58,11 +58,21 @@ class ::Api::V1::InvitationsController < ApplicationController
     render :json => {:success => true, :call => call, :invitation => invitation.serialize(user, true)}
   end    
   def respondNo
+    u = User.find_by_auth_token(params[:auth_token])
+    if u == nil
+      render :json => {:success => false, :call => "respond_no"}, :status => 201
+      return
+    end
     Invitation.find(params[:id]).respondNo(User.find_by_auth_token(params[:auth_token]), params[:message])
     render :json => {:success => true, :call => "respond_no"}, :status=>201
     return
   end
   def respondYes
+    u = User.find_by_auth_token(params[:auth_token])
+    if u == nil
+      render :json => {:success => false, :call => "respond_no"}, :status => 201
+      return
+    end  
     print "responding yest"
     r = Response.new(true, nil, params[:ratingsDict], params[:location], params[:minPrice], params[:maxPrice], params[:top5])
     invitation = Invitation.find(params[:id])
@@ -74,28 +84,45 @@ class ::Api::V1::InvitationsController < ApplicationController
     respondWithInvitation("respond_yes", user, invitation)
   end
   def getInvitation
-    user = User.find_by_auth_token(params[:auth_token])
+    u = User.find_by_auth_token(params[:auth_token])
+    if u == nil
+      render :json => {:success => false, :call => "respond_no"}, :status => 201
+      return
+    end
     invitash = Invitation.find(params[:id])
-    invitash.sortScheduled(user)
-    respondWithInvitation("get_invitation", user, invitash)
+    invitash.sortScheduled(u)
+    respondWithInvitation("get_invitation", u, invitash)
   end
  def vote
-    user = User.find_by_auth_token(params[:auth_token])
+    u = User.find_by_auth_token(params[:auth_token])
+    if u == nil
+      render :json => {:success => false, :call => "respond_no"}, :status => 201
+      return
+    end
     i = Invitation.find(params[:invitation])
-    i.vote(user, params[:url])
+    i.vote(u, params[:url])
     i.saveAndUpdateRecommendations(true, false)
-    respondWithInvitation("cast_vote", user, i)
+    respondWithInvitation("cast_vote", u, i)
   end
   def unvote
-    user = User.find_by_auth_token(params[:auth_token])
+    u = User.find_by_auth_token(params[:auth_token])
+    if u == nil
+      render :json => {:success => false, :call => "respond_no"}, :status => 201
+      return
+    end
     i = Invitation.find(params[:invitation])
-    i.unvote(user, params[:url])
+    i.unvote(u, params[:url])
     i.saveAndUpdateRecommendations(true, false)
-    respondWithInvitation("cast_unvote", user, i)
+    respondWithInvitation("cast_unvote", u, i)
   end
   def create
+    u = User.find_by_auth_token(params[:auth_token])
+    if u == nil
+      render :json => {:success => false, :call => "respond_no"}, :status => 201
+      return
+    end
     users = []
-    users.append(User.find_by_auth_token(params[:auth_token]))
+    users.append(u)
     if params[:numbers] != nil
       for number in params[:numbers]
         for u in User.find_all_by_phone_number(number)
@@ -149,12 +176,16 @@ class ::Api::V1::InvitationsController < ApplicationController
     end
   end
   def getInvitationsOrMeals(call)
-    user = User.find_by_auth_token(params[:auth_token])
-    sort(user)
+    u = User.find_by_auth_token(params[:auth_token])
+    if u == nil
+      render :json => {:success => false, :call => "respond_no"}, :status => 201
+      return
+    end
+    sort(u)
     invitations = []
     meals = (call == "get_meals")
-    for invitation in user.invitations.find_all_by_scheduled(meals)
-      invitations.append(invitation.serialize(user, false)) if ((not invitation.declined(user)) or (not meals))
+    for invitation in u.invitations.find_all_by_scheduled(meals)
+      invitations.append(invitation.serialize(u, false)) if ((not invitation.declined(u)) or (not meals))
     end
     render :json => {:success => true, :invitations => invitations, :call => call}
     return
