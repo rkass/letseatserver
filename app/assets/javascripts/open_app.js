@@ -1,6 +1,6 @@
 var timeout;
 function open_appstore() {
-  window.location = 'itms://itunes.com/apps/letseat'
+  window.location = 'itms://itunes.com/apps/letseatgroupdiningrecommendations'
   //alert("openappstore");
   //window.location='letsEat://register/' + auth_token
 }

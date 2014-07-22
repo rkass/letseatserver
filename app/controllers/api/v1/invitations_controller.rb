@@ -70,7 +70,7 @@ class ::Api::V1::InvitationsController < ApplicationController
   def respondYes
     u = User.find_by_auth_token(params[:auth_token])
     if u == nil
-      render :json => {:success => false, :call => "respond_no"}, :status => 201
+      render :json => {:success => false, :call => "respond_yes"}, :status => 201
       return
     end  
     print "responding yest"
@@ -86,7 +86,7 @@ class ::Api::V1::InvitationsController < ApplicationController
   def getInvitation
     u = User.find_by_auth_token(params[:auth_token])
     if u == nil
-      render :json => {:success => false, :call => "respond_no"}, :status => 201
+      render :json => {:success => false, :call => "get_invitation"}, :status => 201
       return
     end
     invitash = Invitation.find(params[:id])
@@ -96,7 +96,7 @@ class ::Api::V1::InvitationsController < ApplicationController
  def vote
     u = User.find_by_auth_token(params[:auth_token])
     if u == nil
-      render :json => {:success => false, :call => "respond_no"}, :status => 201
+      render :json => {:success => false, :call => "vote"}, :status => 201
       return
     end
     i = Invitation.find(params[:invitation])
@@ -107,7 +107,7 @@ class ::Api::V1::InvitationsController < ApplicationController
   def unvote
     u = User.find_by_auth_token(params[:auth_token])
     if u == nil
-      render :json => {:success => false, :call => "respond_no"}, :status => 201
+      render :json => {:success => false, :call => "unvote"}, :status => 201
       return
     end
     i = Invitation.find(params[:invitation])
@@ -118,7 +118,7 @@ class ::Api::V1::InvitationsController < ApplicationController
   def create
     u = User.find_by_auth_token(params[:auth_token])
     if u == nil
-      render :json => {:success => false, :call => "respond_no"}, :status => 201
+      render :json => {:success => false, :call => "create_invitation"}, :status => 201
       return
     end
     users = []
@@ -178,7 +178,7 @@ class ::Api::V1::InvitationsController < ApplicationController
   def getInvitationsOrMeals(call)
     u = User.find_by_auth_token(params[:auth_token])
     if u == nil
-      render :json => {:success => false, :call => "respond_no"}, :status => 201
+      render :json => {:success => false, :call => call}, :status => 201
       return
     end
     sort(u)
