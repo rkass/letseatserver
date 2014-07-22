@@ -2,9 +2,8 @@ class Api::V1::RegistrationsController < ApplicationController
   respond_to :json
  
   def validate
-    debug = true
     user = User.where(username: params[:username])[0]
-    if user == nil or debug
+    if user == nil
       validated = false
       render :json => {:validated => validated, :auth_token => "nil", :username => "nil", :request => "validate", :phone_number => "nil"}, :status => 201
     else
