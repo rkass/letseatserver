@@ -3,7 +3,7 @@ class Api::V1::FriendsController < ApplicationController
   def get(negative)
     user = validateUser(params[:auth_token])
     if user == nil
-      render :json => {:success =false, :error=>"Bad Login"}, :status=>422
+      render :json => {:success =>false, :error=>"Bad Login"}, :status=>422
       return
     end  
     ret = {}
