@@ -2,9 +2,15 @@ class Api::V1::RegistrationsController < ApplicationController
   respond_to :json
  
   def validate
+    debug = true
     user = User.where(username: params[:username])[0]
-    validated = user.auth_token == params[:auth_token]
-    render :json=> {:validated=> validated, :auth_token => user.auth_token, :username => user.username, :request=>"validate", :phone_number => user.phone_number}    , :status=>201
+    if user == nil or debug
+      validated = false
+      render :json => {:validated => validated, :auth_token => "nil", :username => "nil", :request => "validate", :phone_number => "nil"}, :status => 201
+    else
+      validated = user.auth_token == params[:auth_token]
+      render :json=> {:validated=> validated, :auth_token => user.auth_token, :username => user.username, :request=>"validate", :phone_number => user.phone_number}    , :status=>201
+    end
     return
   end
 
