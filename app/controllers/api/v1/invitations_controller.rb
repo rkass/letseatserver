@@ -45,7 +45,7 @@ class ::Api::V1::InvitationsController < ApplicationController
     dayOfMonth = (split[1].gsub! monthString, '').to_i
     splitTime = split[2].split(':')
     hour = splitTime[0].to_i
-    ampm = "PM"
+    ampm = "PM" 
     ampm = "AM" unless splitTime[1].include?"PM"
     hour += 12 if ampm == "PM" and hour != 12
     hour -= 12 if ampm == "AM" and hour == 12
