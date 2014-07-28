@@ -86,6 +86,8 @@ class ::Api::V1::InvitationsController < ApplicationController
   def getInvitation
     u = User.find_by_auth_token(params[:auth_token])
     if u == nil
+      puts "user nil in get invitation"
+      puts params
       render :json => {:success => false, :call => "get_invitation"}, :status => 201
       return
     end
@@ -96,7 +98,7 @@ class ::Api::V1::InvitationsController < ApplicationController
  def vote
     u = User.find_by_auth_token(params[:auth_token])
     if u == nil
-      puts "user nil"
+      puts "user nil in vote"
       puts params
       render :json => {:success => false, :call => "vote"}, :status => 201
       return
