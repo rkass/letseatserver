@@ -96,6 +96,8 @@ class ::Api::V1::InvitationsController < ApplicationController
  def vote
     u = User.find_by_auth_token(params[:auth_token])
     if u == nil
+      puts "user nil"
+      puts params
       render :json => {:success => false, :call => "vote"}, :status => 201
       return
     end
