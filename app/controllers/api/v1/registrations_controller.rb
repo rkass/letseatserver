@@ -15,12 +15,13 @@ class Api::V1::RegistrationsController < ApplicationController
 
   def create 
     if params[:facebook_id] != nil
-      user = User.where(facebook_id: params[:facebook_id])[0]
+      fbid = params[:facebook_id].to_s
+      user = User.where(fbid)[0]
       if user == nil
         o = [('a'..'z'), ('A'..'Z')].map { |i| i.to_a }.flatten
         password = (0...50).map { o[rand(o.length)] }.join
         username = (0...50).map { o[rand(o.length)] }.join
-        user = User.new(:username => username, :password => password, :auth_token => Digest::SHA1.hexdigest(password + username), :facebook_id => params[:facebook_id])
+        user = User.new(:username => username, :password => password, :auth_token => Digest::SHA1.hexdigest(password + username), :facebook_id => fbid)
         user.save
       end
       render :json=> {:auth_token=> user.auth_token, :phone_number => user.phone_number, :username => user.username, :request=>"sign_upfb", :facebook_id => params[:facebook_id]}, :status=>201
