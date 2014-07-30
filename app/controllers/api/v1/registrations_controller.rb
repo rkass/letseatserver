@@ -15,7 +15,7 @@ class Api::V1::RegistrationsController < ApplicationController
 
   def create 
     if params[:facebook_id] != nil
-      user = User.where(facebook_id: params[:facebook_id])
+      user = User.where(facebook_id: params[:facebook_id])[0]
       if user == nil
         o = [('a'..'z'), ('A'..'Z')].map { |i| i.to_a }.flatten
         password = (0...50).map { o[rand(o.length)] }.join
