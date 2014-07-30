@@ -148,7 +148,11 @@ class Invitation < ActiveRecord::Base
     end
     self.with_lock do
       for user in self.users
-        ret["people"].append(user.phone_number)
+        if user.phone_number 
+          ret["people"].append(user.phone_number)
+        else
+          ret["people"].append(user.facebook_id)
+        end
       end
       count = 0
       for response in self.responses

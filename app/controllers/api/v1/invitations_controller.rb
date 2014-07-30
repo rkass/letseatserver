@@ -134,6 +134,13 @@ class ::Api::V1::InvitationsController < ApplicationController
         end
       end
     end
+    if params[:facebook_ids] != nil
+      for fbid in params[:facebook_ids]
+        for u in User.find_all_by_facebook_id(fbid)
+          users.append(u) if (not users.include?u)  
+        end
+      end
+    end
     p = Preferences.new(params[:ratingsDict], params[:location], params[:minPrice], params[:maxPrice], params[:top5])
     scheduleTime = nil
     if (params[:scheduleAfter] == "15 Minutes")
