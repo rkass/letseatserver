@@ -3,11 +3,12 @@ Letseatserver::Application.routes.draw do
   get "registrations/create"
   get "sessions/create"
   get "sessions/destroy"
+  get "privacy/index"
   devise_for :users
   get "/register", :to => 'reglink#withlink'
   get "/invited", :to => 'invitelink#withlink'
   get "/download", :to => 'invitelink#withlink'
-  get "/privacy_policy", :to => 'privacy#index'
+ # get "/privacy_policy", :to => 'privacy#index'
   namespace :api do
     namespace :v1 do
       devise_scope :user do
