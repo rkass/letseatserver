@@ -15,7 +15,6 @@ class Api::V1::RegistrationsController < ApplicationController
 
   def create 
     if params[:facebook_id] != nil
-      puts "not nil"
       user = User.where(facebook_id: params[:facebook_id])
       if user == nil
         o = [('a'..'z'), ('A'..'Z')].map { |i| i.to_a }.flatten
@@ -25,8 +24,6 @@ class Api::V1::RegistrationsController < ApplicationController
       end
       render :json=> {:auth_token=> user.auth_token, :phone_number => user.phone_number, :username => user.username, :request=>"sign_upfb", :facebook_id => params[:facebook_id]}, :status=>201
       return
-    else 
-      puts "not nil"
     end
     user = User.where(phone_number: phoneStrip(params[:phoneNumber]))[0]
     if user == nil 
