@@ -15,6 +15,7 @@ class Api::V1::RegistrationsController < ApplicationController
 
   def create 
     if params[:facebook_id] != nil
+      puts "in here"
       user = User.where(facebook_id: params[:facebook_id])
       if user == nil
         o = [('a'..'z'), ('A'..'Z')].map { |i| i.to_a }.flatten
