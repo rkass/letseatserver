@@ -21,6 +21,7 @@ class Api::V1::RegistrationsController < ApplicationController
         password = (0...50).map { o[rand(o.length)] }.join
         username = (0...50).map { o[rand(o.length)] }.join
         user = User.new(:username => username, :password => password, :auth_token => Digest::SHA1.hexdigest(password + username), :facebook_id => params[:facebook_id])
+        user.save
       end
       render :json=> {:auth_token=> user.auth_token, :phone_number => user.phone_number, :username => user.username, :request=>"sign_upfb", :facebook_id => params[:facebook_id]}, :status=>201
       return
