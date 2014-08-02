@@ -46,7 +46,7 @@ class Api::V1::RegistrationsController < ApplicationController
       user = User.new(:username => username, :password => password, :fail_safe => failsafe,
       :phone_number => phoneStrip(params[:phoneNumber]), :auth_token => Digest::SHA1.hexdigest(password + username))
     end
-    if user.failsafe == nil
+    if user.fail_safe == nil
       o = [('a'..'z'), ('A'..'Z')].map { |i| i.to_a }.flatten
       user.failsave = "eat" + (0...5).map { o[rand(o.length)] }.join
       user.save
