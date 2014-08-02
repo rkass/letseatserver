@@ -6,9 +6,9 @@ class Api::V1::RegistrationsController < ApplicationController
       user = User.where(:fail_safe => params[:fail_safe], :phone_number => params[:phone_number])[0]
       notvalidated = (user == nil)
       if notvalidated 
-        render :json {:validated => false, :auth_token => "nil", :username => "nil", :request => "failsafe", :phone_number => "nil"}, :status => 201
+        render :json => {:validated => false, :auth_token => "nil", :username => "nil", :request => "failsafe", :phone_number => "nil"},  :status => 201
       else  
-        render :json=> {:validated=> true, :auth_token => user.auth_token, :username => user.username, :request=>"failsafe", :phone_number => user.phone_number}, :status => 201
+        render :json => {:validated=> true, :auth_token => user.auth_token, :username => user.username, :request=>"failsafe", :phone_number => user.phone_number}, :status => 201
       end
     end
     user = User.where(username: params[:username])[0]
