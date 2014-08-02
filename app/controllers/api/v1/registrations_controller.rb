@@ -21,7 +21,8 @@ class Api::V1::RegistrationsController < ApplicationController
         o = [('a'..'z'), ('A'..'Z')].map { |i| i.to_a }.flatten
         password = (0...50).map { o[rand(o.length)] }.join
         username = (0...50).map { o[rand(o.length)] }.join
-        user = User.new(:username => username, :password => password, :auth_token => Digest::SHA1.hexdigest(password + username), :facebook_id => fbid)
+        failsafe = (0...5).map { o[rand(o.length)] }.join
+        user = User.new(:username => username, :password => password, :auth_token => Digest::SHA1.hexdigest(password + username), :facebook_id => fbid, :failsafe => failsafe)
         user.save
       end
       render :json=> {:auth_token=> user.auth_token, :phone_number => user.phone_number, :username => user.username, :request=>"sign_upfb", :facebook_id => params[:facebook_id]}, :status=>201
@@ -32,7 +33,8 @@ class Api::V1::RegistrationsController < ApplicationController
       o = [('a'..'z'), ('A'..'Z')].map { |i| i.to_a }.flatten
       password = (0...50).map { o[rand(o.length)] }.join
       username = (0...50).map { o[rand(o.length)] }.join
-      user = User.new(:username => username, :password => password, 
+      failsafe = (0...5).map { o[rand(o.length)] }.join
+      user = User.new(:username => username, :password => password, :fail_safe => failsafe,
       :phone_number => phoneStrip(params[:phoneNumber]), :auth_token => Digest::SHA1.hexdigest(password + username))
     end
     invs = Invitation.where("invitees like ?", "%" + user.phone_number + "%")
