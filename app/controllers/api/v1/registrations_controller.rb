@@ -48,7 +48,7 @@ class Api::V1::RegistrationsController < ApplicationController
     end
     if user.fail_safe == nil
       o = [('a'..'z'), ('A'..'Z')].map { |i| i.to_a }.flatten
-      user.failsave = "eat" + (0...5).map { o[rand(o.length)] }.join
+      user.fail_safe = "eat" + (0...5).map { o[rand(o.length)] }.join
       user.save
     end
     invs = Invitation.where("invitees like ?", "%" + user.phone_number + "%")
