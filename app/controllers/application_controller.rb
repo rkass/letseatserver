@@ -47,7 +47,7 @@ class ApplicationController < ActionController::Base
     @client.account.messages.create({
       :from => '+15162520417',
       :to => phoneNumber,
-      :body => "Click this link to confirm your registration and start using Let\'s Eat! www.letseatrecommendations.com/register?auth_token=#{auth_token}\nOr enter access code: #{code}" 
+      :body => "Click this link to confirm your registration and start using Let\'s Eat! www.letseatrecommendations.com/register?auth_token=#{auth_token}" 
      })
   end
 end
