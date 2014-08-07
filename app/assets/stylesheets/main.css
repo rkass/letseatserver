@@ -1,6 +1,6 @@
 @font-face {
 	font-family: "Vagabond";
-	src: url("https://s3.amazonaws.com/letseatimages/VAGABOND.TTF");
+	src: url(VAGABOND.TTF);
 	src: local("Vagabond"), url(VAGABOND.TTF); /* for firefox */
 }
 
@@ -8,11 +8,11 @@ html, body{
 	margin: 0px;
 	height: 100%;
 	width: 100%;
-	font-family: "Vagabond";
+	font-family: "Century Gothic";
 }
 
 html {
-	background: url('https://s3.amazonaws.com/letseatimages/foodbg.jpg') no-repeat;
+	background: url('../img/foodbg.jpg') no-repeat;
 	background-size: cover;
 	background-position: center;
 	background-attachment: fixed;
@@ -20,7 +20,7 @@ html {
 }
 
 body {
-	background: rgba(28,85,136,.7) no-repeat;
+	background: rgba(55,0,86,.5) no-repeat;
 	background-attachment: fixed;
 	background-size: cover;
 	background-position: center;
@@ -51,7 +51,8 @@ body {
 	position: relative;
 	margin-bottom: 15px;
 	height: 175px;
-	border-radius: 10px;
+	border: none;
+	border-radius: 20px;
 	-webkit-box-shadow: 
       inset 0 0 8px  rgba(0,0,0,0.4),
             0 0 16px rgba(0,0,0,0.4); 
@@ -60,7 +61,7 @@ body {
             0 0 16px rgba(0,0,0,0.4); 
     box-shadow: 
       inset 0 0 8px  rgba(0,0,0,0.4),
-            0 0 16px rgba(0,0,0,0.4); 
+            0 0 16px rgba(0,0,0,0.4);
 }
 
 #download-button {
@@ -123,10 +124,12 @@ body {
 	box-sizing: border-box;         /* Opera/IE 8+ */
 	padding: 10px;
 	cursor: pointer;
+	color: #FFF;
 }
 
 #blue-strip {
-	background-color: rgba(28,85,136,.7);
+	/*background-color: rgba(55,0,86,.7);*/
+	background-color: #5F0096;
 	height:50px;
 	width: 100%;
 	color: #7BB3E5;
@@ -138,9 +141,9 @@ body {
 
 #slogan {
 	position: absolute;
-	bottom: 58px;
+	bottom: 59px;
 	left: 20px;
-	color: #7BB3E5;
+	color: #DFF0FF;
 	font-size: 50px;
 	z-index: 100;
 }
@@ -154,11 +157,11 @@ body {
 }
 
 .circle {
-	margin: 5px 5px 3px 5px;
-	height: 13px;
-	width: 13px;
+	margin: 5px;
+	height: 10px;
+	width: 10px;
 	border-radius: 30px;
-	background-color: #A58F5C;
+	background-color: #B09863;
 	display: inline-block;
 }
 
@@ -167,7 +170,7 @@ body {
 }
 
 .selected-circle, .circle:hover {
-	background-color: #F2D89F;
+	background-color: #EECD86;
 }
 
 .arrow-left, .arrow-right {
